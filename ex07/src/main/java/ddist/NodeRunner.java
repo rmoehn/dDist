@@ -20,12 +20,30 @@ public class NodeRunner {
             ringSize = Integer.parseInt(args[0]);
             localHostname = args[1];
             localPort = Integer.parseInt(args[2]);
-            ChordNode node = new ChordNode(ringSize);
+            IChordNode node = new ChordNode(ringSize);
+
             try {
-                IChordNode stub = (IChordNode) UnicastRemoteObject.exportObject(node, localPort);
-                Registry registry = LocateRegistry.getRegistry();
-                registry.rebind(Integer.toString(node.getID()), stub);
-                System.out.printf("New server started on %s:%d%n", localHostname, localPort);
+                node.newNetwork();
+                IChordNode stub = (IChordNode) UnicastRemoteObject.exportObject(node, 1099);
+                Registry registry = LocateRegistry.createRegistry(1099);
+                
+                String[] regList = registry.list();
+                System.out.printf("Registry: %n");
+                for (String reg : regList) {
+                    System.out.printf("Item: %s%n", reg);
+                }
+
+                
+                registry.rebind("CORDNAME", node);
+
+                String[] regList2 = registry.list();
+                System.out.printf("Registry: %n");
+                for (String reg : regList2) {
+                    System.out.printf("Item: %s%n", reg);
+                }
+
+                System.out.printf("New server started on %s:%d With ID %s%n", localHostname, localPort,
+                                  node.getID());
             } catch(Exception e) {
                 System.err.println("CordNode exception:");
                 e.printStackTrace();
@@ -33,9 +51,27 @@ public class NodeRunner {
         }
 
         if (args.length == 5) {
+            ringSize = Integer.parseInt(args[0]);
+            localHostname = args[1];
+            localPort = Integer.parseInt(args[2]);
             firstNodeHostname = args[3];
             firstNodePort = Integer.parseInt(args[4]);
-            //Create server and node.join(localHostname, localPort, firstNodeHostname, firstNodePort);
+            ChordNode node = new ChordNode(ringSize);
+            try {
+                Registry registry = LocateRegistry.getRegistry("localhost", 1099);
+                String[] regList = registry.list();
+                for (String reg : regList) {
+                     System.out.printf("Item: %s%n", reg);
+                 }
+                // IChordNode stub = (IChordNode) registry.lookup("CORDNAME");
+                // System.out.printf("Contactet node whith ID %d%n", stub.getID());
+
+                //Create server and node.join(localHostname, localPort, firstNodeHostname, firstNodePort);
+            } catch(Exception e) {
+                System.err.println("CordNode exception:");
+                e.printStackTrace();
+            }
+
         }
 
     }
