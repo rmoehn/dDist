@@ -2,41 +2,23 @@ package ddist;
 
 import ddist.ChordRing;
 import java.util.Comparator;
+import ddist.IChordNode;
+import java.rmi.RemoteException;
 
-public class ChordNode implements IChordNode, Comparable<ChordNode> {
+public class ChordNode implements IChordNode {
     private ChordNode successor;
     private ChordNode predecessor;
     private final ChordRing ring;
     private int id;
-    private String hostname;
-    private int port;
 
-    public ChordNode(String hostname, int port) {
-        this.ring = new ChordRing(4);
-        this.hostname = hostname;
-        this.port = port;
-    }
-
-    public int compareTo(ChordNode other) {
-        return Integer.compare(id, other.getId());
+    public ChordNode(int ringSize) {
+        this.ring = new ChordRing(ringSize);
     }
 
     public void newNetwork() throws RemoteException {
         id          = ring.random();
         successor   = this;
         predecessor = this;
-    }
-
-    public ChordNode lookup(int k) throws RemoteException {
-        if (ring.between(k, predecessor.getId(), id)) {
-            return this;
-        }
-
-        return successor.lookup(k);
-    }
-
-    public int getId() throws RemoteException {
-        return id;
     }
 
     /**
@@ -47,7 +29,7 @@ public class ChordNode implements IChordNode, Comparable<ChordNode> {
         ChordNode potentialSucc = firstNode.lookup(potentialId);
 
         // Try and get an unused ID
-        while (potentialSucc.getId() == potentialId) { // Should stop when all taken.
+        while (potentialSucc.getID() == potentialId) { // Should stop when all taken.
             potentialId   = ring.random();
             potentialSucc = firstNode.lookup(potentialId);
         }
@@ -66,8 +48,12 @@ public class ChordNode implements IChordNode, Comparable<ChordNode> {
         return;
     }
 
-    public int getID() throws RemoteException {
-        return this.id;
+    public ChordNode lookup(int k) throws RemoteException {
+        if (ring.between(k, predecessor.getID(), id)) {
+            return this;
+        }
+
+        return successor.lookup(k);
     }
 
     public void setSuccessor(ChordNode succ) throws RemoteException {
@@ -77,6 +63,10 @@ public class ChordNode implements IChordNode, Comparable<ChordNode> {
 
     public void setPredecessor(ChordNode pred) throws RemoteException {
         this.predecessor = pred;
+    }
+
+    public int getID() throws RemoteException {
+        return this.id;
     }
 
     public ChordNode getSuccessor() throws RemoteException {
@@ -90,7 +80,18 @@ public class ChordNode implements IChordNode, Comparable<ChordNode> {
 
     @Override
     public String toString() {
-        return String.format("PredID: %2d\nID:     %2d\nSuccID: %2d",
-                   predecessor.getId(), id, successor.getId());
+        String ret = "";
+        try {
+        ret = String.format("PredID: %2d\nID:     %2d\nSuccID: %2d",
+                             predecessor.getID(), id, successor.getID());
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.exit(1);
+        }
+        return ret;
     }
+
+ //    public int compareTo(ChordNode other) {
+//         return Integer.compare(id, other.getID());
+//     }
 }

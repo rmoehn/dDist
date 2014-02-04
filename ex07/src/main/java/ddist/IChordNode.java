@@ -2,13 +2,10 @@ package ddist;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+
 public interface IChordNode extends Remote {
     
     public void newNetwork() throws RemoteException;
-
-    public ChordNode lookup(int k) throws RemoteException;
-
-    public int getId() throws RemoteException;
 
     /**
      * @param firstNode the first ChordNode this ChordNode knows about
@@ -17,11 +14,13 @@ public interface IChordNode extends Remote {
 
     public void leave() throws RemoteException;
 
-    public int getID() throws RemoteException;
+    public ChordNode lookup(int k) throws RemoteException;
 
     public void setSuccessor(ChordNode succ) throws RemoteException;
 
     public void setPredecessor(ChordNode pred) throws RemoteException;
+
+    public int getID() throws RemoteException;
 
     public ChordNode getSuccessor() throws RemoteException;
 
