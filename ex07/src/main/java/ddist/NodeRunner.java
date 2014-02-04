@@ -4,6 +4,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.rmi.*;
 import ddist.IChordNode;
 
 public class NodeRunner {
@@ -24,8 +25,8 @@ public class NodeRunner {
 
             try {
                 node.newNetwork();
-                IChordNode stub = (IChordNode) UnicastRemoteObject.exportObject(node, 1099);
-                Registry registry = LocateRegistry.createRegistry(1099);
+                IChordNode stub = (IChordNode) UnicastRemoteObject.exportObject(node, localPort);
+                Registry registry = LocateRegistry.getRegistry();
                 
                 String[] regList = registry.list();
                 System.out.printf("Registry: %n");
@@ -58,13 +59,9 @@ public class NodeRunner {
             firstNodePort = Integer.parseInt(args[4]);
             ChordNode node = new ChordNode(ringSize);
             try {
-                Registry registry = LocateRegistry.getRegistry("localhost", 1099);
-                String[] regList = registry.list();
-                for (String reg : regList) {
-                     System.out.printf("Item: %s%n", reg);
-                 }
-                // IChordNode stub = (IChordNode) registry.lookup("CORDNAME");
-                // System.out.printf("Contactet node whith ID %d%n", stub.getID());
+                
+                IChordNode stub = (IChordNode) Naming.lookup("CORDNAME");
+                System.out.printf("Contactet node whith ID %d%n", stub.getID());
 
                 //Create server and node.join(localHostname, localPort, firstNodeHostname, firstNodePort);
             } catch(Exception e) {
