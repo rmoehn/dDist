@@ -43,12 +43,24 @@ public class NodeRunner {
         }
     }
 
-    private static void createServer(IChordNode node, String localHostname, int localPort) throws Exception {
+    private static void createServer(final IChordNode node, String localHostname, int localPort) throws Exception {
         LocateRegistry.createRegistry(localPort);
         Naming.rebind("//localhost:" + localPort + "/" + CORDNODE, node);
 
         System.out.printf("New server started on %s:%d With ID %s%n",
                           localHostname, localPort, node.getID());
+
+        Runtime.getRuntime().addShutdownHook(new Thread() {
+                public void run() {
+                    try {
+                        node.leave();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+            });
+
 
         while (true) {
             System.out.println("#########");
