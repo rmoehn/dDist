@@ -5,26 +5,32 @@ import java.rmi.RemoteException;
 
 public interface IChordNode extends Remote {
     
-    public void newNetwork() throws RemoteException;
+    public void newNetwork(int ringBitSize) throws RemoteException;
 
     /**
      * @param firstNode the first ChordNode this ChordNode knows about
      */
-    public void join(ChordNode firstNode) throws RemoteException;
+    public void join(IChordNode firstNode) throws RemoteException;
 
     public void leave() throws RemoteException;
 
-    public ChordNode lookup(int k) throws RemoteException;
+    public IChordNode lookup(int k) throws RemoteException;
 
-    public void setSuccessor(ChordNode succ) throws RemoteException;
+    public String ringToString() throws RemoteException;
 
-    public void setPredecessor(ChordNode pred) throws RemoteException;
+    public String ringToStringHelper(int firstID) throws RemoteException;
+
+    public void setSuccessor(IChordNode succ) throws RemoteException;
+
+    public void setPredecessor(IChordNode pred) throws RemoteException;
 
     public int getID() throws RemoteException;
 
-    public ChordNode getSuccessor() throws RemoteException;
+    public int getRingBitSize() throws RemoteException;
 
-    public ChordNode getPredecessor() throws RemoteException;
+    public IChordNode getSuccessor() throws RemoteException;
+
+    public IChordNode getPredecessor() throws RemoteException;
 
 
 }

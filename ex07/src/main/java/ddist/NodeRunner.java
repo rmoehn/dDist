@@ -6,10 +6,14 @@ import java.rmi.registry.Registry;
 import java.rmi.*;
 import ddist.IChordNode;
 
+
 public class NodeRunner {
-    public static void main(final String[] args) throws RemoteException {
-        int PORT_NUMBER = 40499;
-        int ringSize;
+
+    private static final String CORDNODE = "cordnode";
+
+    public static void main(final String[] args) throws Exception {
+
+        int ringBitSize;
         String localHostname = "";
         int localPort;
         String firstNodeHostname = "";
@@ -17,45 +21,40 @@ public class NodeRunner {
 
 
         if (args.length == 3) {
-            ringSize = Integer.parseInt(args[0]);
-            localHostname = args[1];
-            localPort = Integer.parseInt(args[2]);
-            ChordNode node = new ChordNode(ringSize);
-
-            try {
-                node.newNetwork();
-                LocateRegistry.createRegistry(PORT_NUMBER);
-                Naming.rebind("//localhost:" + PORT_NUMBER + "/firstNode", node);
-
-                System.out.printf("New server started on %s:%d With ID %s%n", localHostname, localPort,
-                                  node.getID());
-            } catch(Exception e) {
-                System.err.println("CordNode exception:");
-                e.printStackTrace();
-            }
-
-            while (true) {}
+            ringBitSize = Integer.parseInt(args[0]);
+            ChordNode node = new ChordNode();
+            node.newNetwork(ringBitSize);
+            createServer(node, args[1], Integer.parseInt(args[2]));
         }
 
         if (args.length == 5) {
-            ringSize = Integer.parseInt(args[0]);
-            localHostname = args[1];
-            localPort = Integer.parseInt(args[2]);
+            ringBitSize = Integer.parseInt(args[0]);
             firstNodeHostname = args[3];
             firstNodePort = Integer.parseInt(args[4]);
-            ChordNode node = new ChordNode(ringSize);
-            try {
-                IChordNode remoteNode
-                    = (IChordNode) Naming.lookup("//localhost:" + PORT_NUMBER + "/firstNode");
-                System.out.printf("Contactet node whith ID %d%n", remoteNode.getID());
 
-                //Create server and node.join(localHostname, localPort, firstNodeHostname, firstNodePort);
-            } catch(Exception e) {
-                System.err.println("CordNode exception:");
-                e.printStackTrace();
-            }
+            IChordNode remoteNode
+                = (IChordNode) Naming.lookup("//" + firstNodeHostname + ":"
+                                             + firstNodePort + "/" + CORDNODE);
+            System.out.printf("Contactet node whith ID %d%n", remoteNode.getID());
 
+            ChordNode node = new ChordNode();
+            node.join(remoteNode);
+            createServer(node, args[1], Integer.parseInt(args[2]));
         }
+    }
 
+    private static void createServer(IChordNode node, String localHostname, int localPort) throws Exception {
+        LocateRegistry.createRegistry(localPort);
+        Naming.rebind("//localhost:" + localPort + "/" + CORDNODE, node);
+
+        System.out.printf("New server started on %s:%d With ID %s%n",
+                          localHostname, localPort, node.getID());
+
+        while (true) {
+            System.out.println("#########");
+            System.out.println(node.ringToString());
+            System.out.println("#########");
+            Thread.sleep(3000);
+        } // Keep the server alive.
     }
 }

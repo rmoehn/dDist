@@ -9,17 +9,17 @@ import java.rmi.server.UnicastRemoteObject;
 public class ChordNode extends UnicastRemoteObject implements IChordNode {
     public static final long serialVersionUID = 327L;
 
-    private ChordNode successor;
-    private ChordNode predecessor;
-    private final ChordRing ring;
+    private IChordNode successor;
+    private IChordNode predecessor;
+    private ChordRing ring;
     private int id;
 
-    public ChordNode(int ringSize) throws RemoteException {
+    public ChordNode() throws RemoteException {
         super();
-        this.ring = new ChordRing(ringSize);
     }
 
-    public void newNetwork() throws RemoteException {
+    public void newNetwork(int ringBitSize) throws RemoteException {
+        this.ring = new ChordRing(ringBitSize);
         id          = ring.random();
         successor   = this;
         predecessor = this;
@@ -28,9 +28,10 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
     /**
      * @param firstNode the first ChordNode this ChordNode knows about
      */
-    public void join(ChordNode firstNode) throws RemoteException {
+    public void join(IChordNode firstNode) throws RemoteException {
+        this.ring = new ChordRing(firstNode.getRingBitSize());
         int potentialId         = ring.random();
-        ChordNode potentialSucc = firstNode.lookup(potentialId);
+        IChordNode potentialSucc = firstNode.lookup(potentialId);
 
         // Try and get an unused ID
         while (potentialSucc.getID() == potentialId) { // Should stop when all taken.
@@ -52,7 +53,7 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
         return;
     }
 
-    public ChordNode lookup(int k) throws RemoteException {
+    public IChordNode lookup(int k) throws RemoteException {
         if (ring.between(k, predecessor.getID(), id)) {
             return this;
         }
@@ -60,25 +61,40 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
         return successor.lookup(k);
     }
 
-    public void setSuccessor(ChordNode succ) throws RemoteException {
+    public String ringToString() throws RemoteException {
+        return ringToStringHelper(predecessor.getID());
+    }
+
+    public String ringToStringHelper(int firstID) throws RemoteException {
+        if (firstID == this.id) {
+            return "" + this.toString() + "\n";
+        }
+        return "" + this.toString() + "\n" + successor.ringToStringHelper(firstID);
+    }
+
+    public void setSuccessor(IChordNode succ) throws RemoteException {
         this.successor = succ;
 
     }
 
-    public void setPredecessor(ChordNode pred) throws RemoteException {
+    public void setPredecessor(IChordNode pred) throws RemoteException {
         this.predecessor = pred;
     }
 
     public int getID() throws RemoteException {
         return this.id;
     }
+    
+    public int getRingBitSize() throws RemoteException {
+        return this.ring.getBitSize();
+    }
 
-    public ChordNode getSuccessor() throws RemoteException {
+    public IChordNode getSuccessor() throws RemoteException {
         return successor;
 
     }
 
-    public ChordNode getPredecessor() throws RemoteException {
+    public IChordNode getPredecessor() throws RemoteException {
         return predecessor;
     }
 
@@ -86,7 +102,7 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
     public String toString() {
         String ret = "";
         try {
-        ret = String.format("PredID: %2d\nID:     %2d\nSuccID: %2d",
+        ret = String.format("PredID: %2d ID:     %2d SuccID: %2d",
                              predecessor.getID(), id, successor.getID());
         } catch (Exception e) {
             e.printStackTrace();
