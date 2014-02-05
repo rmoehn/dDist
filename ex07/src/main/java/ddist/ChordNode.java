@@ -4,14 +4,18 @@ import ddist.ChordRing;
 import java.util.Comparator;
 import ddist.IChordNode;
 import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 
-public class ChordNode implements IChordNode {
+public class ChordNode extends UnicastRemoteObject implements IChordNode {
+    public static final long serialVersionUID = 327L;
+
     private ChordNode successor;
     private ChordNode predecessor;
     private final ChordRing ring;
     private int id;
 
-    public ChordNode(int ringSize) {
+    public ChordNode(int ringSize) throws RemoteException {
+        super();
         this.ring = new ChordRing(ringSize);
     }
 
