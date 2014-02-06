@@ -65,9 +65,9 @@ public class NodeRunner {
 
         // Continuously print network information, keeping server alive
         while (true) {
-            System.out.println("#########");
+            System.out.printf("### %4d ####%n", node.getID());
             System.out.println( node.ringToString() );
-            System.out.println("#########");
+            System.out.println();
             Thread.sleep(3000);
         }
     }

@@ -67,7 +67,7 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
 
     public String ringToStringHelper(int firstID) throws RemoteException {
         if (firstID == this.id) {
-            return "" + this.toString() + "\n";
+            return "" + this.toString();
         }
         return "" + this.toString() + "\n" + successor.ringToStringHelper(firstID);
     }
@@ -84,7 +84,7 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
     public int getID() throws RemoteException {
         return this.id;
     }
-    
+
     public int getRingBitSize() throws RemoteException {
         return this.ring.getBitSize();
     }
@@ -102,7 +102,7 @@ public class ChordNode extends UnicastRemoteObject implements IChordNode {
     public String toString() {
         String ret = "";
         try {
-        ret = String.format("PredID: %2d ID:     %2d SuccID: %2d",
+        ret = String.format("PredID: %4d   ID: %4d   SuccID: %4d",
                              predecessor.getID(), id, successor.getID());
         } catch (Exception e) {
             e.printStackTrace();
