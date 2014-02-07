@@ -11,8 +11,10 @@ use Time::HiRes qw(usleep);
 
 
 Readonly my $RING_BITS      => 5;
-Readonly my $RING_SIZE      => 2**$RING_BITS;
 Readonly my $FILL_DEGREE    => 0.9;
+Readonly my $SLEEP_MS       => 300;
+
+Readonly my $RING_SIZE      => 2**$RING_BITS;
 Readonly my $NUM_PEERS      => $FILL_DEGREE * $RING_SIZE;
 Readonly my $FIRST_PORT     => 20_000;
 
@@ -23,7 +25,7 @@ start_peer($RING_BITS, $FIRST_PORT);
 
 # Start other peers
 for my $port ( ($FIRST_PORT + 1) .. ($FIRST_PORT + $NUM_PEERS) ) {
-    usleep(200_000);
+    usleep($SLEEP_MS * 1000);
     my $connect_port = random_uniform_integer(1, $FIRST_PORT, $port - 1);
     say "Starting peer on port $port. Connecting to port $connect_port.";
     start_peer($RING_BITS, $port, 'localhost', $connect_port, '> /dev/null');
