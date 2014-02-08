@@ -1,6 +1,8 @@
+package ddist;
+
 public class QuizServer {
     private final int _port;
-    private final BlockingQueue<QA> = new LinkedBlockingQueue<>();
+    private final BlockingQueue<QA> _qaQueue = new LinkedBlockingQueue<>();
 
     /**
      * @param port the port on which this server should accept new clients
