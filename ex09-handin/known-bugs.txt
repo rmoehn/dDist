@@ -1,0 +1,2 @@
+- When listening, the menu doesn't hang around anymore, but the
+  interface freezes nonetheless.
