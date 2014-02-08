@@ -2,6 +2,7 @@ package ddist;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -156,23 +157,29 @@ public class DistributedTextEditor extends JFrame {
                 ex.printStackTrace();
                 System.exit(1);
             }
-            int port        = Integer.parseInt(portNumber.getText());
+            final int port = Integer.parseInt(portNumber.getText());
 	    	setTitle(
                 String.format("I'm listening on %s:%d.", address, port));
 
-            // Wait for an incoming connection
-            Socket socket = null;
-	    	try {
-	    	    ServerSocket servSock = new ServerSocket(port);
-	    	    socket = servSock.accept();
-	    	    servSock.close();
-	    	}
-	    	catch (IOException ex) {
-	    	    ex.printStackTrace();
-	    	    System.exit(1);
-	    	}
+            EventQueue.invokeLater( new Runnable() {
+                public void run() {
+                    // Wait for an incoming connection
+                    Socket socket = null;
+                    try {
+                        ServerSocket servSock = new ServerSocket(port);
+                        socket = servSock.accept();
+                        servSock.close();
+                    }
+                    catch (IOException ex) {
+                        ex.printStackTrace();
+                        System.exit(1);
+                    }
 
-            startCommunication(socket, inEventQueue, outEventQueue);
+                    startCommunication(socket, inEventQueue, outEventQueue);
+
+                    setTitle("Connected to other editor.");
+                }
+            } );
 	    }
 	};
 
