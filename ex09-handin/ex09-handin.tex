@@ -1,0 +1,74 @@
+\documentclass{scrartcl}
+
+\usepackage{xltxtra}
+\setmonofont[Scale=MatchLowercase]{DejaVuSansMono}
+
+\usepackage[babelshorthands]{polyglossia}
+\setmainlanguage[variant=uk]{english}
+
+\usepackage[final]{microtype}
+
+\usepackage{xltxtra}
+\setmonofont[Scale=MatchLowercase]{DejaVuSansMono}
+
+\usepackage{csquotes}
+% Damit die komischen Klammern weggehen.
+\renewcommand*{\mkcitation}[1]{ #1}
+\renewcommand*{\mkccitation}[1]{ #1}
+
+\usepackage[
+  language=english,
+  backend=biber,
+  sortcites=true,
+  hyperref=true,
+]{biblatex}
+
+\usepackage{hyperref}
+\hypersetup{hidelinks}
+
+\usepackage[
+    copy-decimal-marker,
+    exponent-product=\cdot,
+    binary-units
+]{siunitx}
+\newcommand*{\uPerc}[1]{\SI{#1}{\percent}}
+
+\usepackage{fancyvrb}
+\DefineShortVerb{\§}
+
+\newcommand*{\beffont}{\ttfamily}
+\usepackage{marvosym}
+\usepackage[final]{listings}
+\lstloadlanguages{Java}
+\lstdefinestyle{default}{
+    language=Java,
+    captionpos=b,
+    escapeinside={--+}{+--},
+    tabsize=4,
+    fancyvrb=true,
+    showstringspaces=false,
+    breaklines=true,
+    basicstyle=\beffont\small,
+    prebreak=\space\scriptsize\RightTorque,
+    postbreak=\space\space,
+    xleftmargin=3em,
+    rulecolor=\color{gray},
+    commentstyle=\color{DarkBlue},
+    stringstyle=\color{DarkRed},
+    keywordstyle=[1]\color{DarkGreen},
+    keywordstyle=[2]\color{DarkSlateGrey},
+}
+
+\begin{document}
+\subject{dDist 2014}
+\title{Handin for Exercise 9}
+\author{Mathias Dannesbo ( , \uPerc{50}) \and Richard Möhn (201311231,
+\uPerc{50})}
+
+\maketitle
+
+\section{Introduction}
+
+Blabla.
+    
+\end{document}
