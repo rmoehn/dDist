@@ -1,33 +1,38 @@
 package ddist;
 
-import javax.swing.JTextArea;
 import java.awt.EventQueue;
+import java.util.concurrent.BlockingQueue;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextArea;
 
 /**
  *
  * Takes the event recorded by the DocumentEventCapturer and replays
- * them in a JTextArea. The delay of 1 sec is only to make the individual
- * steps in the reply visible to humans.
+ * them in a JTextArea.
  *
  * @author Jesper Buus Nielsen
  *
  */
 public class EventReplayer implements Runnable {
 
-    private DocumentEventCapturer dec;
+    private BlockingQueue<MyTextEvent> eventQueue;
     private JTextArea area;
+    private JFrame frame;
 
-    public EventReplayer(DocumentEventCapturer dec, JTextArea area) {
-	this.dec = dec;
+    public EventReplayer(BlockingQueue<MyTextEvent> eventQueue,
+            JTextArea area, JFrame frame) {
+	this.eventQueue = eventQueue;
 	this.area = area;
+    this.frame = frame;
     }
 
     public void run() {
 	boolean wasInterrupted = false;
 	while (!wasInterrupted) {
-	    waitForOneSecond();
 	    try {
-		MyTextEvent mte = dec.take();
+		MyTextEvent mte = eventQueue.take();
 		if (mte instanceof TextInsertEvent) {
 		    final TextInsertEvent tie = (TextInsertEvent)mte;
 		    EventQueue.invokeLater(new Runnable() {
@@ -57,17 +62,18 @@ public class EventReplayer implements Runnable {
 			    }
 			});
 		}
+        else if (mte instanceof DisconnectEvent) {
+            JOptionPane.showMessageDialog(frame, "Disconnected.");
+            frame.setTitle("Disconnected");
+        }
+        else {
+            System.err.println("Illegal event received.");
+            System.exit(1);
+        }
 	    } catch (Exception _) {
 		wasInterrupted = true;
 	    }
 	}
 	System.out.println("I'm the thread running the EventReplayer, now I die!");
-    }
-
-    public void waitForOneSecond() {
-	try {
-	    Thread.sleep(1000);
-	} catch(InterruptedException _) {
-	}
     }
 }

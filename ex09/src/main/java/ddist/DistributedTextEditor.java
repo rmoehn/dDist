@@ -1,20 +1,57 @@
 package ddist;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.text.*;
-import javax.swing.event.*;
-import java.util.concurrent.*;
+import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.ActionMap;
+import javax.swing.BoxLayout;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.DefaultEditorKit;
 
 public class DistributedTextEditor extends JFrame {
     private static final long serialVersionUID = 4813L;
 
-    private JTextArea area1 = new JTextArea(20,120);
-    private JTextArea area2 = new JTextArea(20,120);
-    private JTextField ipaddress = new JTextField("IP address here");
-    private JTextField portNumber = new JTextField("Port number here");
+    private JTextArea area1 = new JTextArea(10,120);
+    private JTextArea area2 = new JTextArea(10,120);
+    private JTextField ipaddress = new JTextField("localhost");
+    private JTextField portNumber = new JTextField("20000");
+
+    /*
+     * Queue for holding events coming in from the other editor to be written
+     * to the lower text area.
+     */
+    private BlockingQueue<MyTextEvent> inEventQueue
+        = new LinkedBlockingQueue<>();
+
+    /*
+     * Queue for holding events coming from the upper text area to be sent to
+     * the other editor.
+     */
+    private BlockingQueue<MyTextEvent> outEventQueue
+        = new LinkedBlockingQueue<>();
 
     private EventReplayer er;
     private Thread ert;
@@ -25,7 +62,8 @@ public class DistributedTextEditor extends JFrame {
     private String currentFile = "Untitled";
     private boolean changed = false;
     private boolean connected = false;
-    private DocumentEventCapturer dec = new DocumentEventCapturer();
+    private DocumentEventCapturer dec
+        = new DocumentEventCapturer(outEventQueue);
 
     public DistributedTextEditor() {
     	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
@@ -84,7 +122,7 @@ public class DistributedTextEditor extends JFrame {
 		     "Try to type and delete stuff in the top area.\n" +
 		     "Then figure out how it works.\n", 0);
 
-	er = new EventReplayer(dec, area2);
+	er = new EventReplayer(inEventQueue, area2, this);
 	ert = new Thread(er);
 	ert.start();
     }
@@ -102,12 +140,39 @@ public class DistributedTextEditor extends JFrame {
 
 	    public void actionPerformed(ActionEvent e) {
 	    	saveOld();
+
+            // Prepare for connection
 	    	area1.setText("");
-		// TODO: Become a server listening for connections on some port.
-	    	setTitle("I'm listening on xxx.xxx.xxx:zzzz");
 	    	changed = false;
 	    	Save.setEnabled(false);
 	    	SaveAs.setEnabled(false);
+
+            // Display information about the listening
+            String address = null;
+            try {
+                address = InetAddress.getLocalHost().getHostAddress();
+            }
+            catch (UnknownHostException ex) {
+                ex.printStackTrace();
+                System.exit(1);
+            }
+            int port        = Integer.parseInt(portNumber.getText());
+	    	setTitle(
+                String.format("I'm listening on %s:%d.", address, port));
+
+            // Wait for an incoming connection
+            Socket socket = null;
+	    	try {
+	    	    ServerSocket servSock = new ServerSocket(port);
+	    	    socket = servSock.accept();
+	    	    servSock.close();
+	    	}
+	    	catch (IOException ex) {
+	    	    ex.printStackTrace();
+	    	    System.exit(1);
+	    	}
+
+            startCommunication(socket, inEventQueue, outEventQueue);
 	    }
 	};
 
@@ -117,10 +182,27 @@ public class DistributedTextEditor extends JFrame {
 	    public void actionPerformed(ActionEvent e) {
 	    	saveOld();
 	    	area1.setText("");
-	    	setTitle("Connecting to " + ipaddress.getText() + ":" + portNumber.getText() + "...");
 	    	changed = false;
 	    	Save.setEnabled(false);
 	    	SaveAs.setEnabled(false);
+
+            String address = ipaddress.getText();
+            int port = Integer.parseInt( portNumber.getText() );
+	    	setTitle(
+	    	    String.format("Connecting to %s:%d...", address, port));
+
+            Socket socket = null;
+            try {
+                socket = new Socket(address, port);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+                System.exit(1);
+            }
+
+            startCommunication(socket, inEventQueue, outEventQueue);
+
+	    	setTitle(
+	    	    String.format("Connected to %s:%d.", address, port));
 	    }
 	};
 
@@ -129,7 +211,7 @@ public class DistributedTextEditor extends JFrame {
 
 	    public void actionPerformed(ActionEvent e) {
 	    	setTitle("Disconnected");
-	    	// TODO
+            outEventQueue.add( new DisconnectEvent() );
 	    }
 	};
 
@@ -189,6 +271,22 @@ public class DistributedTextEditor extends JFrame {
 	}
 	catch(IOException e) {
 	}
+    }
+
+    private void startCommunication(Socket socket,
+            BlockingQueue<MyTextEvent> inEventQueue,
+            BlockingQueue<MyTextEvent> outEventQueue) {
+            // Start thread for adding incoming events to the inqueue
+            EventReceiver rec
+                = new EventReceiver(socket, inEventQueue, outEventQueue);
+            Thread receiverThread = new Thread(rec);
+            receiverThread.start();
+
+            // Start thread for taking outgoing events from the outqueue
+            EventSender sender
+                = new EventSender(socket, inEventQueue, outEventQueue);
+            Thread senderThread = new Thread(sender);
+            senderThread.start();
     }
 
     public static void main(String[] arg) {
