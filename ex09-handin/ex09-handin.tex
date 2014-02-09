@@ -228,6 +228,31 @@ of process of closing the connection.
 \chapter{Conclusion}
 \fxerror{List of concepts}
 
+We have changed the provided rudimental text editor so that instances of
+it are capable of sending editing events over a network to each other
+and replaying them locally. The underlying means of communication is
+TCP, since it offers reliable and ordered transmission of data. Our
+application comprises two layers on top of the already layered TCP/IP
+stack and establishes persistent asynchronous communication by means of
+message queueing.
+
+The hardest part in developing the system was to figure out how four
+threads and a networking connection should be torn down in a clean and
+ordered way. It is also here where some unexpected and yet unexplained
+behaviour still occurs.
+
+There are some more points that might be improved: When an editor
+listens for connections, it does so in the main thread, so that the
+\textsc{gui} freezes. The \mil{DisconnectEvent} extending
+\mil{MyTextEvent} is a case of implementation inheritance which isn't
+appropriate in this case. Instead, both should implement a common
+\mil{Event} interface. Instead of handling exceptions, the editor
+terminates. Classes are tagged Serializabl without caring for the
+implications of this.
+
+All in all, however, we came up with a rather elegant design, which
+should make clearing up the above issues easy.
+
 %\clearpage
 % \listoftables
 % \listoffigures
