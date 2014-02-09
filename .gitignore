@@ -1,5 +1,14 @@
 *.DS_Store
+
 *.class
 *.jar
 */target/
-ex09-handin.pdf
+
+*/auto/
+*.pdf
+*.aux
+*.lof
+*.log
+*.lol
+*.lot
+*.out
