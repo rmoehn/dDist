@@ -196,17 +196,20 @@ public class DistributedTextEditor extends JFrame {
         private static final long serialVersionUID = 135098L;
 
 	    public void actionPerformed(ActionEvent e) {
+            // Prepare for connection
 	    	saveOld();
 	    	area1.setText("");
 	    	changed = false;
 	    	Save.setEnabled(false);
 	    	SaveAs.setEnabled(false);
 
+            // Find out with whom to connect
             String address = ipaddress.getText();
             int port = Integer.parseInt( portNumber.getText() );
 	    	setTitle(
 	    	    String.format("Connecting to %s:%d...", address, port));
 
+            // Initiate connection with other editor
             Socket socket = null;
             try {
                 socket = new Socket(address, port);
@@ -215,8 +218,10 @@ public class DistributedTextEditor extends JFrame {
                 System.exit(1);
             }
 
+            // Set up the event sending and receiving
             startCommunication(socket, inEventQueue, outEventQueue);
 
+            // Give the editor a better title
 	    	setTitle(
 	    	    String.format("Connected to %s:%d.", address, port));
 	    }
@@ -227,6 +232,8 @@ public class DistributedTextEditor extends JFrame {
 
 	    public void actionPerformed(ActionEvent e) {
 	    	setTitle("Disconnected");
+
+            // Initiate disconnecting process
             outEventQueue.add( new DisconnectEvent() );
 	    }
 	};
@@ -289,6 +296,10 @@ public class DistributedTextEditor extends JFrame {
 	}
     }
 
+    /**
+     * Start threads for handling the transportation of events between the
+     * network and the local event queues.
+     */
     private void startCommunication(Socket socket,
             BlockingQueue<MyTextEvent> inEventQueue,
             BlockingQueue<MyTextEvent> outEventQueue) {
