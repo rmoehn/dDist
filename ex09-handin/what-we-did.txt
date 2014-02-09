@@ -1,0 +1,35 @@
+- Move the event queue for outgoing events out of the
+  DocumentEventCapturer. This way it can be used by other objects
+  without giving them the whole DocumentEventCapturer.
+
+- Create an EventSender that sends out the events captured by the
+  DocumentEventCapturer.
+
+- Create a queue for incoming events and an EventReceiver that receives
+  events from the network and puts them in the queue.
+
+- Remove delay from the EventReplayer and make it use the newly created
+  queue for incoming events instead of the DocumentEventCapturer.
+
+- Overall action is this: DocumentEventCapturer and EventReplayer worked
+  together directly and communicated over one queue for propagating
+  events propagated from upper to lower pane. Now two upper and lower
+  panes, therefore effectively two event queues. However, head and tail
+  of event queues would have to be on different editors. Therefore four
+  event queues in all: EventSender and EventReceiver responsible for
+  connecting heads and tails over the network.
+
+- Queues not absolutely necessary because network can play the role of
+  blocking communication. Two reasons against that:
+  
+   - Would have to change DocumentEventCapturer and EventReplayer
+     drastically: Build in network communication code. -- Bad because of
+     multiple responsibilities.  
+
+   - With blocking I/O blocking write calls in the DocumentEventCapturer
+     could also block/slow down UI. -- Against distribution
+     transparency.
+
+- Add detection of DisconnectEvents to the EventReplayer so that it can
+  do disconnection work in the editor where the DisconnectEvent was not
+  initiated.
