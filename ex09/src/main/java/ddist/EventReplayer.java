@@ -21,6 +21,12 @@ public class EventReplayer implements Runnable {
     private JTextArea area;
     private JFrame frame;
 
+    /**
+     * @param eventQueue the blocking queue from which to take events to
+     * replay them in the on the second argument
+     * @param area the text area in which to replay the events
+     * @param frame the overall frame of the program (might be done better)
+     */
     public EventReplayer(BlockingQueue<MyTextEvent> eventQueue,
             JTextArea area, JFrame frame) {
 	this.eventQueue = eventQueue;

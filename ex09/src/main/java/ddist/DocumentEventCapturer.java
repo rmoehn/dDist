@@ -29,6 +29,10 @@ public class DocumentEventCapturer extends DocumentFilter {
      */
     protected BlockingQueue<MyTextEvent> eventHistory;
 
+    /**
+     * @param eventHistory the queue this object should write the captured
+     * events to
+     */
     public DocumentEventCapturer(BlockingQueue<MyTextEvent> eventHistory) {
         this.eventHistory = eventHistory;
     }

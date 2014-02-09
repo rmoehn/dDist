@@ -30,24 +30,26 @@ public class EventReceiver implements Runnable {
 
     public void run() {
         try {
-            // Wait for edit events from the other editor
+            // Open connection to other editor
             ObjectInputStream objIn
                 = new ObjectInputStream( _socket.getInputStream() );
+
+            // Put edit events from the other editor in the queue
             while (true) {
                 MyTextEvent event = (MyTextEvent) objIn.readObject();
                 _inEventQueue.put(event);
 
                 // Cleanup and close thread if client wants to disconnect
                 if (event instanceof DisconnectEvent) {
-
                     DisconnectEvent disconnectEvent = (DisconnectEvent) event;
+
+                    // Do more cleanup if the other thread is dead already
                     if ( disconnectEvent.shouldClose() ) {
                         _inEventQueue.clear();
                         _outEventQueue.clear();
-                        
-                        
                         _socket.close();
                     }
+                    // Otherwise say that the others should do more cleanup
                     else {
                         disconnectEvent.setShouldClose();
                         _outEventQueue.put(event);

@@ -34,19 +34,17 @@ public class EventSender implements Runnable {
             ObjectOutputStream objOut
             = new ObjectOutputStream( _socket.getOutputStream() );
 
-            // Take events arriving in the queue
+            // Send events arriving in the queue to other editor
             while (true) {
                 MyTextEvent event = _outEventQueue.take();
                 objOut.writeObject(event);
 
                 // Cleanup and close thread if we want to disconnect
                 if (event instanceof DisconnectEvent) {
-
+                    // Do more cleanup if receiver thread already dead
                     if ( ((DisconnectEvent) event).shouldClose() ) {
                         _inEventQueue.clear();
                         _outEventQueue.clear();
-                        
-                        
                         _socket.close();
                     }
 
