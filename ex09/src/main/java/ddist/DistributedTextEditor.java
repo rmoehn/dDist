@@ -161,6 +161,7 @@ public class DistributedTextEditor extends JFrame {
 	    	setTitle(
                 String.format("I'm listening on %s:%d.", address, port));
 
+            // "Asynchronously" wait for a connection
             EventQueue.invokeLater( new Runnable() {
                 public void run() {
                     // Wait for an incoming connection
@@ -175,9 +176,17 @@ public class DistributedTextEditor extends JFrame {
                         System.exit(1);
                     }
 
+                    // Set up the event sending and receiving
                     startCommunication(socket, inEventQueue, outEventQueue);
 
-                    setTitle("Connected to other editor.");
+                    // Give the editor a better title
+                    setTitle(
+                        String.format(
+                            "Connected to %s:%d.",
+                            socket.getInetAddress().toString(),
+                            socket.getPort()
+                        )
+                    );
                 }
             } );
 	    }
