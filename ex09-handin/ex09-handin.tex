@@ -74,34 +74,34 @@ We used pairprogramming for all the code and ``pairreporting'' for the report, s
 
 In this report we present an editor the instances of which are able to
 connect to each other and to capture editing actions in one editor and
-replay the in another. For this we were provided with an editor that
+replay them in another. For this we were provided with an editor that
 already captured editing events in one text pane and replayed them in
-another. Our contribution was to split this capture and replay between
-two editors.
+another. Our contribution was to enable capture and replay between
+two editors over a \textsc{tcp/ip} connection.
 
 The report describes how we filled previously meaningless menu items
 with life, so that users can set up and tear down connections with them.
 It also shows our design for transmitting events between editors and for
-the process of disconnecting two connected editors cleanly. It also
-discusses some of the decisions we made in developing the editor. The
-conclusion contains a list of issues with the editor that still need to
-be addressed.
+the process of disconnecting two connected editors cleanly. It discusses
+some of the decisions we made in developing the editor. The conclusion
+contains a list of issues with the editor that still need to be
+addressed.
 
-\chapter{Code overview}
-We need to preform actions when the \mil{Listen}, \mil{Connect} and \mil{Disconnect} items are clicked in the menus. The items represent \mil{javax.swing.Actions} whose \mil{actionPerformed()} methods with our code.
+\chapter{Code Overview}
+We need to preform actions when the \mil{Listen}, \mil{Connect} and \mil{Disconnect} items are clicked in the menus. The items represent \mil{javax.swing.Action}s whose \mil{actionPerformed} methods we filled with code.
 
 \section{Listen}
 
-The \mil{Listen} is parsing the server information from the \textsc{gui} and putting a new Runnable in the \textsc{awt} system \mil{EventQueue} whitch start up a new \mil{ServerSocket} for listening for another editor to connect as a client. Then it calls \mil{startCommunication} which is described in section \ref{sec:com}. Finally it set the title of the editor.
+The \mil{Listen} is parsing the server information from the \textsc{gui} and putting a new Runnable in the \textsc{awt} system \mil{EventQueue} which starts up a new \mil{ServerSocket} for listening for another editor to connect as a client. After having set up the \textsc{tcp} connection, it calls \mil{startCommunication}, to start the communication at a higher level. This is described in section \ref{sec:com}. Finally it sets the title of the editor.
 
 \inmnt{139}{193}{DistributedTextEditor.java}
 
 \section{Connect}
-The \mil{Connect} first clears the textareas, then parses the server information from the \textsc{gui} and connect to the corresponding socket. When the \textsc{tcp/ip} connection is etablished, it calls the \mil{startCommunication} which is described in section \ref{sec:com}. Finally it set the title of the editor.
+The \mil{Connect} first clears the text areas, then parses the server information from the \textsc{gui} and connects to the corresponding socket. When the \textsc{tcp/ip} connection is established, it calls \mil{startCommunication} which is described in section \ref{sec:com}. Finally it sets the title of the editor.
 
 \inmnt{195}{228}{DistributedTextEditor.java}
 
-\section{Communication between editors}
+\section{Communication Between Editors}
 \label{sec:com}
 \tikzset{
   global/.style={draw=black,line width=1pt, inner sep=.5em, minimum height=2em, minimum width=11em, text centered},
@@ -116,22 +116,23 @@ The \mil{Connect} first clears the textareas, then parses the server information
 }
 \begin{figure}[hbp]
   \centering
-  \caption{\mil{MyTestEvent} path through the system.}
+  \caption{\mil{MyTextEvent}'s path through the system in the editor as
+  provided and in our version.}
   \begin{tikzpicture}[node distance=1cm, auto]
     \footnotesize
     \node[c] (net) {Network};
     \node[b, above=1em of net] (esen) {EventSender};
-    \node[g, above=1.5em of esen] (oqueue) {Outbound queue};
+    \node[g, above=1.5em of esen] (oqueue) {outbound queue};
     \node[r, above=1.5em of oqueue] (dec2) {DocumentEventCapturer};
     \node[b, below=1em of net] (erec) {EventReceiver};
-    \node[g, below=1.5em of erec] (iqueue) {Inbound queue};
+    \node[g, below=1.5em of erec] (iqueue) {inbound queue};
     \node[r, below=1.5em of iqueue] (erep2) {EventReplayer};
     \node[r, left=3em of dec2] (dec) {DocumentEventCapturer};
     \node[g, left=3em of net] (queue) {Queue};
     \node[r, left=3em of erep2] (erep) {EventReplayer};
 
     \node[above=1em of dec] (bef) {Provided};
-    \node[above=1em of dec2] (aft) {Network enabled};
+    \node[above=1em of dec2] (aft) {Network-enabled};
 
 
     \draw[sa] (dec2.south) --  (oqueue.north);
@@ -146,12 +147,12 @@ The \mil{Connect} first clears the textareas, then parses the server information
   \end{tikzpicture}
   \label{fig:event}
 \end{figure}
-In the not-networked editor the \mil{DocumentEventCapturer} and the
+In the not-networked editor, the \mil{DocumentEventCapturer} and the
 \mil{EventReplayer} worked together directly and communicated over one
 queue: When the user wrote in the upper pane, the
 \mil{DocumentEventCapturer} recorded the edit events and put them in the
 queue. The \mil{EventReplayer} retrieved them from the queue and applied
-them to the lower pane.
+them to the lower pane. See the left part of figure \ref{fig:event}.
 
 Now we have two editors (\textsc{a} and \textsc{b}) with one lower and
 one upper pane on each of them. Edit events from the upper pane of
@@ -166,12 +167,12 @@ one of the peers and a tail on the other.  Not using \textsc{rmi},
 \mil{EventSender} and \mil{EventReceiver} establish the connection
 between the queues over the network manually. Overall it works like
 this: \mil{DocumentEventCapturer} puts events in a queue as before and
-\mil{EventReplayer} retrieves events from a queue like before. But
+\mil{EventReplayer} retrieves events from a queue as before. But
 now, those are different queues.  \mil{EventSender} retrieves the
 elements \mil{DocumentEventCapturer} put in an outbound queue and
 sends them over the network.  \mil{EventReceiver} receives events from
-the network and puts them in an inbound queue from which
-\mil{EventReplayer} feeds. This establishes a persistent an
+the network and puts them in an inbound queue off which
+\mil{EventReplayer} feeds. This establishes a persistent and
 asynchronous way of communication.
 
 Since the network operations \mil{writeObject} and \mil{readObject} can
@@ -188,9 +189,9 @@ style also prevents the \textsc{ui} thread from being blocked or slowed
 down by network communication and thereby increases distribution
 transparency.
 
-Continuing to use queues enable us to leave \mil{EventReplayer} and
+Continuing to use queues enables us to leave \mil{EventReplayer} and
 \mil{DocumentEventCapturer} largely unchanged. We just had to pull out
-the queue the latter had contained before and make the former take
+the queue the latter had contained before and to make the former take
 events directly from a queue instead of indirectly through the
 \mil{DocumentEventCapturer}. The following listings show the results of
 these changes.
@@ -204,8 +205,8 @@ these changes.
 To set up the communication, the \mil{Listen} and \mil{Connect} actions
 call the method \mil{startCommunication} of the
 \mil{DistributedTextEditor} shown below. It starts the \mil{EventSender}
-and \mil{EventReceiver} as new threads as they have to send and receive
-events asynchronously.
+and \mil{EventReceiver} as new threads since they have to send and
+receive events asynchronously.
 
 \inmnt{300}{318}{DistributedTextEditor.java}
 
@@ -234,7 +235,7 @@ introduce a special event, the \mil{DisconnectEvent}. By putting it in
 the outbound queue, the \mil{Disconnect} menu action triggers a rather
 complicated process of closing the connection. The following listing
 contains the code of the \mil{DisconnectEvent} along with a description
-of process of closing the connection.
+of the process of closing the connection.
 
 \inmnt{1}{1000}{DisconnectEvent.java}
 
@@ -247,8 +248,8 @@ of process of closing the connection.
 We have changed the provided rudimental text editor so that instances of
 it are capable of sending editing events over a network to each other
 and replaying them locally. The underlying means of communication is
-TCP, since it offers reliable and ordered transmission of data. Our
-application comprises two layers on top of the already layered TCP/IP
+\textsc{tcp}, since it offers reliable and ordered transmission of data. Our
+application comprises two layers on top of the already layered \textsc{tcp/ip}
 stack and establishes persistent asynchronous communication by means of
 message queueing.
 
@@ -263,7 +264,7 @@ listens for connections, it does so in the main thread, so that the
 \mil{MyTextEvent} is a case of implementation inheritance which isn't
 appropriate in this case. Instead, both should implement a common
 \mil{Event} interface. Instead of handling exceptions, the editor
-terminates. Classes are tagged Serializabl without caring for the
+terminates. Classes are tagged \mil{Serializable} without caring for the
 implications of this.
 
 All in all, however, we came up with a rather elegant design, which
