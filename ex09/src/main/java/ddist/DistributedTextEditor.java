@@ -187,6 +187,11 @@ public class DistributedTextEditor extends JFrame {
                             socket.getPort()
                         )
                     );
+=======
+                    startCommunication(socket, inEventQueue, outEventQueue);
+
+                    setTitle("Connected to other editor.");
+>>>>>>> c90e32b89524eb8fd36f97c7d3c4e36343321072
                 }
             } );
 	    }
