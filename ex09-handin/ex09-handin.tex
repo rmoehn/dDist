@@ -53,7 +53,7 @@
 \usemintedstyle{tango}
 
 \newcommand{\srcpath}{../ex09/src/main/java/ddist}
-\newcommand{\inmnt}[3]{\noindent\texttt{\color{gray}File: #3}\vspace{-1em}\inputminted[tabsize=4,firstline=#1,firstnumber=#1,lastline=#2,linenos]{java}{\srcpath/#3}}
+\newcommand{\inmnt}[3]{\vspace{1em}\noindent\texttt{\color{gray}File: #3}\vspace{-1em}\inputminted[tabsize=4,firstline=#1,firstnumber=#1,lastline=#2,linenos]{java}{\srcpath/#3}}
 \newcommand{\mil}[1]{\mintinline{java}{#1}}
 
 %% Help
@@ -89,8 +89,8 @@ The \mil{Connect} first clears the textareas, then parses the server information
 \section{Communication between editors}
 \label{sec:com}
 \tikzset{
-  global/.style={draw=black,line width=1pt, inner sep=.5em, minimum height=3em, minimum width=11em, text centered},
-  c/.style={global, cloud, aspect=1.5, cloud puffs=15,},
+  global/.style={draw=black,line width=1pt, inner sep=.5em, minimum height=2em, minimum width=11em, text centered},
+  c/.style={global, cloud, aspect=2, cloud puffs=16,},
   n/.style={global, rectangle},
   r/.style={n, fill=red!20},
   g/.style={n, fill=green!20},
@@ -99,24 +99,24 @@ The \mil{Connect} first clears the textareas, then parses the server information
   l/.style={>=latex',line width=1.5pt},
   sa/.style={l,->,shorten >=1pt},
 }
-
 \begin{figure}[hbp]
   \centering
   \caption{\mil{MyTestEvent} path through the system.}
-  \begin{tikzpicture}[node distance=1cm, auto, scale=0.8]
+  \begin{tikzpicture}[node distance=1cm, auto]
+    \footnotesize
     \node[c] (net) {Network};
-    \node[b, above=2em of net] (esen) {EventSender};
-    \node[g, above=2em of esen] (oqueue) {Outbound queue};
-    \node[r, above=2em of oqueue] (dec2) {DocumentEventCapturer};
-    \node[b, below=2em of net] (erec) {EventReceiver};
-    \node[g, below=2em of erec] (iqueue) {Inbound queue};
-    \node[r, below=2em of iqueue] (erep2) {EventReplayer};
-    \node[r, left=2em of dec2] (dec) {DocumentEventCapturer};
-    \node[g, left=2em of net] (queue) {Queue};
-    \node[r, left=2em of erep2] (erep) {EventReplayer};
+    \node[b, above=1em of net] (esen) {EventSender};
+    \node[g, above=1.5em of esen] (oqueue) {Outbound queue};
+    \node[r, above=1.5em of oqueue] (dec2) {DocumentEventCapturer};
+    \node[b, below=1em of net] (erec) {EventReceiver};
+    \node[g, below=1.5em of erec] (iqueue) {Inbound queue};
+    \node[r, below=1.5em of iqueue] (erep2) {EventReplayer};
+    \node[r, left=3em of dec2] (dec) {DocumentEventCapturer};
+    \node[g, left=3em of net] (queue) {Queue};
+    \node[r, left=3em of erep2] (erep) {EventReplayer};
 
-    \node[above=1.5em of dec] (bef) {Provided};
-    \node[above=1.5em of dec2] (aft) {Network enabled};
+    \node[above=1em of dec] (bef) {Provided};
+    \node[above=1em of dec2] (aft) {Network enabled};
 
 
     \draw[sa] (dec2.south) --  (oqueue.north);
@@ -138,24 +138,26 @@ queue: When the user wrote in the upper pane, the
 queue. The \mil{EventReplayer} retrieved them from the queue and applied
 them to the lower pane.
 
-Now we have two editors (A and B) with one lower and one upper pane on
-each of them. Edit events from the upper pane of A have to be
-transmitted to the lower pane of B and vice versa. We therefore need two
-queues: One for the transmission from A to B and one for the
-transmission from B to A.
+Now we have two editors (\textsc{a} and \textsc{b}) with one lower and
+one upper pane on each of them. Edit events from the upper pane of
+\textsc{a} have to be transmitted to the lower pane of \textsc{b} and
+vice versa. We therefore need two queues: One for the transmission
+from \textsc{a} to \textsc{b} and one for the transmission from
+\textsc{b} to \textsc{a}.
 
-However, since the editors are different processes on possibly different
-machines, the queues have to be split up: Each has a head on one of the
-peers and a tail on the other.  Not using RMI, \mil{EventSender} and
-\mil{EventReceiver} establish the connection between the queues over the
-network manually. Overall it works like this:
-\mil{DocumentEventCapturer} puts events in a queue as before and
-\mil{EventReplayer} retrieves events from a queue like before. But now,
-those are different queues.  \mil{EventSender} retrieves the elements
-\mil{DocumentEventCapturer} put in an outbound queue and sends them over
-the network.  \mil{EventReceiver} receives events from the network and
-puts them in an inbound queue from which \mil{EventReplayer} feeds. This
-establishes a persistent an asynchronous way of communication.
+However, since the editors are different processes on possibly
+different machines, the queues have to be split up: Each has a head on
+one of the peers and a tail on the other.  Not using \textsc{rmi},
+\mil{EventSender} and \mil{EventReceiver} establish the connection
+between the queues over the network manually. Overall it works like
+this: \mil{DocumentEventCapturer} puts events in a queue as before and
+\mil{EventReplayer} retrieves events from a queue like before. But
+now, those are different queues.  \mil{EventSender} retrieves the
+elements \mil{DocumentEventCapturer} put in an outbound queue and
+sends them over the network.  \mil{EventReceiver} receives events from
+the network and puts them in an inbound queue from which
+\mil{EventReplayer} feeds. This establishes a persistent an
+asynchronous way of communication.
 
 Since the network operations \mil{writeObject} and \mil{readObject} can
 play the role of blocking communication, queues are not absolutely
