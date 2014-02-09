@@ -159,7 +159,24 @@ above.
 \inmnt{1}{1000}{EventReceiver.java}
 
 \section{Disconnect}
+
+\mil{Disconnect} is a menu item like \mil{Listen} and \mil{Connect} and
+after it is clicked, the corresponding \mil{actionPerformed} method
+printed below resets the editor to a disconnected state and kicks off
+the teardown of the connection.
+
 \inmnt{230}{240}{DistributedTextEditor.java}
+
+Surprisingly, connection teardown is much more difficult to implement
+than connection setup, because a number of threads have to be notified
+that they should end their life. Since the only way to reach all threads
+is the events we already use for communicating text edit actions, we
+introduce a special event, the \mil{DisconnectEvent}. By putting it in
+the outbound queue, the \mil{Disconnect} menu action triggers a rather
+complicated process of closing the connection. The following listing
+contains the code of the \mil{DisconnectEvent} along with a description
+of process of closing the connection.
+
 \inmnt{1}{1000}{DisconnectEvent.java}
 
 %\inmnt{1}{10}{MyTextEvent.java}
