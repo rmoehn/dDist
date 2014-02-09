@@ -72,6 +72,21 @@
 \chapter{Introduction}
 We used pairprogramming for all the code and ``pairreporting'' for the report, so we share the workload at 50\% each.
 
+In this report we present an editor the instances of which are able to
+connect to each other and to capture editing actions in one editor and
+replay the in another. For this we were provided with an editor that
+already captured editing events in one text pane and replayed them in
+another. Our contribution was to split this capture and replay between
+two editors.
+
+The report describes how we filled previously meaningless menu items
+with life, so that users can set up and tear down connections with them.
+It also shows our design for transmitting events between editors and for
+the process of disconnecting two connected editors cleanly. It also
+discusses some of the decisions we made in developing the editor. The
+conclusion contains a list of issues with the editor that still need to
+be addressed.
+
 \chapter{Code overview}
 We need to preform actions when the \mil{Listen}, \mil{Connect} and \mil{Disconnect} items are clicked in the menus. The items represent \mil{javax.swing.Actions} whose \mil{actionPerformed()} methods with our code.
 
@@ -228,7 +243,6 @@ of process of closing the connection.
 %\inmnt{1}{10}{TextRemoveEvent.java}
 
 \chapter{Conclusion}
-\fxerror{List of concepts}
 
 We have changed the provided rudimental text editor so that instances of
 it are capable of sending editing events over a network to each other
@@ -254,6 +268,16 @@ implications of this.
 
 All in all, however, we came up with a rather elegant design, which
 should make clearing up the above issues easy.
+
+\appendix
+
+\chapter{Finding the Code and Running the Editor}
+
+The file Code1864.zip contains a Maven repository with the source code
+and a JAR file being the executable editor. From the root directory it
+can be run with \mil{java -jar
+target/ex09-1.0-SNAPSHOT-jar-with-dependencies.jar}.
+The code can also be found online at \fxerror{URL!}
 
 %\clearpage
 % \listoftables
