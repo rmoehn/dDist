@@ -53,6 +53,8 @@
 \usemintedstyle{tango}
 
 \newcommand{\srcpath}{../ex09/src/main/java/ddist}
+\newcommand{\inmnt}[3]{\noindent\texttt{\color{gray}File: #3}\vspace{-1em}\inputminted[tabsize=4,firstline=#1,firstnumber=#1,lastline=#2,linenos]{java}{\srcpath/#3}}
+\newcommand{\mil}[1]{\mintinline{java}{#1}}
 
 %% Help
 \usepackage{lipsum}
@@ -62,25 +64,60 @@
 \supertitle{Distributed Systems}
 \title{Exercise 9}
 %\subtitle{}
-\author{Richard~Möhn \and Mathias~Dannesbo}
-\stunum{201311231, 201206106}
+\author{Richard~Möhn~\small{(201311231)} \and Mathias~Dannesbo~\small{(201206106)}}
+%\stunum{201311231, 201206106}
 \date{\today}
 \maketitle
 
-\inputminted[tabsize=4]{java}{\srcpath/DisconnectEvent.java}
-\inputminted[tabsize=4]{java}{\srcpath/EventReceiver.java}
-\inputminted[tabsize=4]{java}{\srcpath/MyTextEvent.java}
-\inputminted[tabsize=4]{java}{\srcpath/DistributedTextEditor.java}
-\inputminted[tabsize=4]{java}{\srcpath/EventReplayer.java}
-\inputminted[tabsize=4]{java}{\srcpath/TextInsertEvent.java}
-\inputminted[tabsize=4]{java}{\srcpath/DocumentEventCapturer.java}
-\inputminted[tabsize=4]{java}{\srcpath/EventSender.java}
-\inputminted[tabsize=4]{java}{\srcpath/TextRemoveEvent.java}
+\chapter{Introduction}
+We used pairprogramming for all the code and ``pairreporting'' for the report, so we share the workload at 50\% each.
 
-\begin{minted}{java}
-1234567890123456789012345678901234567890123456789012345678901234567890123456789X
-1234567890123456789012345678901234567890123456789012345678901234567890123456789X123456789012345678901234567890
-\end{minted}
+\chapter{Code overview}
+We need to preform actions when the \mil{Listen}, \mil{Connect} and \mil{Disconnect} items are clicked in the menus. The items represent \mil{javax.swing.Actions} whose \mil{actionPerformed()} methods with our code.
+
+\section{Listen}
+
+The \mil{Listen} is parsing the server information from the \textsc{gui} and putting a new Runnable in the \textsc{awt} system \mil{EventQueue} whitch start up a new \mil{ServerSocket} for listening for another editor to connect as a client. Then it calls \mil{startCommunication} which is described in section \ref{sec:com}. Finally it set the title of the editor.
+
+\inmnt{139}{193}{DistributedTextEditor.java}
+
+\section{Connect}
+The \mil{Connect} first clears the textareas, then parses the server information from the \textsc{gui} and connect to the corresponding socket. When the \textsc{tcp/ip} connection is etablished, it calls the \mil{startCommunication} which is described in section \ref{sec:com}. Finally it set the title of the editor.
+
+\inmnt{195}{228}{DistributedTextEditor.java}
+
+\section{Communication between editors}
+\label{sec:com}
+Before the editor was network-enabled, there was one queue where the information from the upper textarea was stored before it was displayed on the lower textarea. I our network-enabled editor there are effectivly two queues. Each effective queue is implemented with a queue on each side of the network connection.
+
+When a \mil{MyTextEvent} is send over the network it leaves the queue on the sending side and enters the queue on the reciving side. 
+
+
+Witout \textsc{rmi} we cannot put object in queue on the 
+is implemented in the \texttt{EventReciever.java}
+
+\inmnt{43}{67}{DistributedTextEditor.java}
+
+\inmnt{300}{318}{DistributedTextEditor.java}
+
+\inmnt{1}{1000}{EventReplayer.java}
+
+\inmnt{30}{39}{DocumentEventCapturer.java}
+
+\inmnt{1}{1000}{EventReceiver.java}
+
+\inmnt{1}{1000}{EventSender.java}
+
+\section{Disconnect}
+\inmnt{230}{240}{DistributedTextEditor.java}
+\inmnt{1}{1000}{DisconnectEvent.java}
+
+%\inmnt{1}{10}{MyTextEvent.java}
+%\inmnt{1}{10}{TextInsertEvent.java}
+%\inmnt{1}{10}{TextRemoveEvent.java}
+
+\chapter{Conclusion}
+\fxerror{List of concepts}
 
 %\clearpage
 % \listoftables
