@@ -131,28 +131,94 @@ The \mil{Connect} first clears the textareas, then parses the server information
   \end{tikzpicture}
   \label{fig:event}
 \end{figure}
-Before the editor was network-enabled, there was one queue where the information from the upper textarea was stored before it was displayed on the lower textarea. I our network-enabled editor there are effectivly two queues. Each effective queue is implemented with a queue on each side of the network connection.
+In the not-networked editor the \mil{DocumentEventCapturer} and the
+\mil{EventReplayer} worked together directly and communicated over one
+queue: When the user wrote in the upper pane, the
+\mil{DocumentEventCapturer} recorded the edit events and put them in the
+queue. The \mil{EventReplayer} retrieved them from the queue and applied
+them to the lower pane.
 
-When a \mil{MyTextEvent} is send over the network it leaves the queue on the sending side and enters the queue on the reciving side. 
+Now we have two editors (A and B) with one lower and one upper pane on
+each of them. Edit events from the upper pane of A have to be
+transmitted to the lower pane of B and vice versa. We therefore need two
+queues: One for the transmission from A to B and one for the
+transmission from B to A.
 
+However, since the editors are different processes on possibly different
+machines, the queues have to be split up: Each has a head on one of the
+peers and a tail on the other.  Not using RMI, \mil{EventSender} and
+\mil{EventReceiver} establish the connection between the queues over the
+network manually. Overall it works like this:
+\mil{DocumentEventCapturer} puts events in a queue as before and
+\mil{EventReplayer} retrieves events from a queue like before. But now,
+those are different queues.  \mil{EventSender} retrieves the elements
+\mil{DocumentEventCapturer} put in an outbound queue and sends them over
+the network.  \mil{EventReceiver} receives events from the network and
+puts them in an inbound queue from which \mil{EventReplayer} feeds. This
+establishes a persistent an asynchronous way of communication.
 
-Witout \textsc{rmi} we cannot put object in queue on the 
-is implemented in the \texttt{EventReciever.java}
+Since the network operations \mil{writeObject} and \mil{readObject} can
+play the role of blocking communication, queues are not absolutely
+necessary. -- We could have modified the \mil{DocumentEventCapturer} so
+that it sends events over the network instead of putting them in a queue
+and we could have modified the \mil{EventReplayer} so that it receives
+events from the network instead of taking them out of a queue. But
+adding a layer (layered architecture) between those classes and the
+network had the advantage that we didn't have to change them very much.
+On top of that, it would have been a bad design: Classes should only be
+responsible for one thing at a time. The message-queueing communication
+style also prevents the \textsc{ui} thread from being blocked or slowed
+down by network communication and thereby increases distribution
+transparency.
+
+Continuing to use queues enable us to leave \mil{EventReplayer} and
+\mil{DocumentEventCapturer} largely unchanged. We just had to pull out
+the queue the latter had contained before and make the former take
+events directly from a queue instead of indirectly through the
+\mil{DocumentEventCapturer}. The following listings show the results of
+these changes.
+
+\inmnt{1}{1000}{EventReplayer.java}
 
 \inmnt{43}{67}{DistributedTextEditor.java}
 
+\inmnt{30}{39}{DocumentEventCapturer.java}
+
+To set up the communication, the \mil{Listen} and \mil{Connect} actions
+call the method \mil{startCommunication} of the
+\mil{DistributedTextEditor} shown below. It starts the \mil{EventSender}
+and \mil{EventReceiver} as new threads as they have to send and receive
+events asynchronously.
+
 \inmnt{300}{318}{DistributedTextEditor.java}
 
-\inmnt{1}{1000}{EventReplayer.Java}
-
-\inmnt{30}{39}{DocumentEventCapturer.Java}
-
-\inmnt{1}{1000}{EventReceiver.java}
+The following two listings show the \mil{EventSender} and
+\mil{EventReceiver} which connect queues over the network as described
+above.
 
 \inmnt{1}{1000}{EventSender.java}
 
+\inmnt{1}{1000}{EventReceiver.java}
+
 \section{Disconnect}
+
+\mil{Disconnect} is a menu item like \mil{Listen} and \mil{Connect} and
+after it is clicked, the corresponding \mil{actionPerformed} method
+printed below resets the editor to a disconnected state and kicks off
+the teardown of the connection.
+
 \inmnt{230}{240}{DistributedTextEditor.java}
+
+Surprisingly, connection teardown is much more difficult to implement
+than connection setup, because a number of threads have to be notified
+that they should end their life. Since the only way to reach all threads
+is the events we already use for communicating text edit actions, we
+introduce a special event, the \mil{DisconnectEvent}. By putting it in
+the outbound queue, the \mil{Disconnect} menu action triggers a rather
+complicated process of closing the connection. The following listing
+contains the code of the \mil{DisconnectEvent} along with a description
+of process of closing the connection.
+
 \inmnt{1}{1000}{DisconnectEvent.java}
 
 %\inmnt{1}{10}{MyTextEvent.java}
