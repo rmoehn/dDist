@@ -38,8 +38,8 @@
 \pagestyle{articlehead}
 
 %% Grapics
-%\usepackage{tikz,pgfplots,tikz-timing}
-%\usetikzlibrary{mindmap,arrows,positioning,shapes}
+\usepackage{tikz,pgfplots,tikz-timing}
+\usetikzlibrary{mindmap,arrows,positioning,shapes}
 
 %% TÅGEKAMMERET
 %\usepackage{tket,tkvc}
@@ -88,6 +88,49 @@ The \mil{Connect} first clears the textareas, then parses the server information
 
 \section{Communication between editors}
 \label{sec:com}
+\tikzset{
+  global/.style={draw=black,line width=1pt, inner sep=.5em, minimum height=3em, minimum width=11em, text centered},
+  c/.style={global, cloud, aspect=1.5, cloud puffs=15,},
+  n/.style={global, rectangle},
+  r/.style={n, fill=red!20},
+  g/.style={n, fill=green!20},
+  b/.style={n, fill=blue!20},
+  y/.style={n, fill=yellow!20},
+  l/.style={>=latex',line width=1.5pt},
+  sa/.style={l,->,shorten >=1pt},
+}
+
+\begin{figure}[hbp]
+  \centering
+  \caption{\mil{MyTestEvent} path through the system.}
+  \begin{tikzpicture}[node distance=1cm, auto, scale=0.8]
+    \node[c] (net) {Network};
+    \node[b, above=2em of net] (esen) {EventSender};
+    \node[g, above=2em of esen] (oqueue) {Outbound queue};
+    \node[r, above=2em of oqueue] (dec2) {DocumentEventCapturer};
+    \node[b, below=2em of net] (erec) {EventReceiver};
+    \node[g, below=2em of erec] (iqueue) {Inbound queue};
+    \node[r, below=2em of iqueue] (erep2) {EventReplayer};
+    \node[r, left=2em of dec2] (dec) {DocumentEventCapturer};
+    \node[g, left=2em of net] (queue) {Queue};
+    \node[r, left=2em of erep2] (erep) {EventReplayer};
+
+    \node[above=1.5em of dec] (bef) {Provided};
+    \node[above=1.5em of dec2] (aft) {Network enabled};
+
+
+    \draw[sa] (dec2.south) --  (oqueue.north);
+    \draw[sa] (oqueue.south) --  (esen.north);
+    \draw[sa] (esen.south) --  (net.north);
+    \draw[sa] (net.south) --  (erec.north);
+    \draw[sa] (erec.south) --  (iqueue.north);
+    \draw[sa] (iqueue.south) --  (erep2.north);
+
+    \draw[sa] (dec.south) --  (queue.north);
+    \draw[sa] (queue.south) --  (erep.north);
+  \end{tikzpicture}
+  \label{fig:event}
+\end{figure}
 Before the editor was network-enabled, there was one queue where the information from the upper textarea was stored before it was displayed on the lower textarea. I our network-enabled editor there are effectivly two queues. Each effective queue is implemented with a queue on each side of the network connection.
 
 When a \mil{MyTextEvent} is send over the network it leaves the queue on the sending side and enters the queue on the reciving side. 
@@ -100,9 +143,9 @@ is implemented in the \texttt{EventReciever.java}
 
 \inmnt{300}{318}{DistributedTextEditor.java}
 
-\inmnt{1}{1000}{EventReplayer.java}
+\inmnt{1}{1000}{EventReplayer.Java}
 
-\inmnt{30}{39}{DocumentEventCapturer.java}
+\inmnt{30}{39}{DocumentEventCapturer.Java}
 
 \inmnt{1}{1000}{EventReceiver.java}
 
