@@ -70,7 +70,8 @@
 \maketitle
 
 \chapter{Introduction}
-We used pairprogramming for all the code and ``pairreporting'' for the report, so we share the workload at 50\% each.
+We used pairprogramming for all the code and ``pairreporting'' for the
+report, so we share the workload at 50\% each.
 
 In this report we present an editor the instances of which are able to
 connect to each other and to capture editing actions in one editor and
@@ -88,23 +89,33 @@ contains a list of issues with the editor that still need to be
 addressed.
 
 \chapter{Code Overview}
-We need to preform actions when the \mil{Listen}, \mil{Connect} and \mil{Disconnect} items are clicked in the menus. The items represent \mil{javax.swing.Action}s whose \mil{actionPerformed} methods we filled with code.
+We need to preform actions when the \mil{Listen}, \mil{Connect} and
+\mil{Disconnect} items are clicked in the menus. The items represent
+\mil{javax.swing.Action}s whose \mil{actionPerformed()} methods we filled with code.
 
 \section{Listen}
 
-The \mil{Listen} is parsing the server information from the \textsc{gui} and putting a new Runnable in the \textsc{awt} system \mil{EventQueue} which starts up a new \mil{ServerSocket} for listening for another editor to connect as a client. After having set up the \textsc{tcp} connection, it calls \mil{startCommunication}, to start the communication at a higher level. This is described in section \ref{sec:com}. Finally it sets the title of the editor.
+The \mil{Listen} is parsing the server information from the
+\textsc{gui} and putting a new Runnable in the \textsc{awt} system
+\mil{EventQueue} which start up a new \mil{ServerSocket} for
+listening for another editor to connect as a client. Then it calls
+\mil{startCommunication}, which is described in section
+\ref{sec:com}. Finally it sets the title of the editor.
 
 \inmnt{139}{193}{DistributedTextEditor.java}
 
 \section{Connect}
-The \mil{Connect} first clears the text areas, then parses the server information from the \textsc{gui} and connects to the corresponding socket. When the \textsc{tcp/ip} connection is established, it calls \mil{startCommunication} which is described in section \ref{sec:com}. Finally it sets the title of the editor.
+The \mil{Connect} first clears the textareas, then parses the server
+information from the \textsc{gui} and connect to the corresponding
+socket. When the \textsc{tcp/ip} connection is etablished, it calls \mil{startCommunication} which is described in section
+\ref{sec:com}. Finally it set the title of the editor.
 
 \inmnt{195}{228}{DistributedTextEditor.java}
 
 \section{Communication Between Editors}
 \label{sec:com}
-\tikzset{
-  global/.style={draw=black,line width=1pt, inner sep=.5em, minimum height=2em, minimum width=11em, text centered},
+\tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
+    minimum height=2em, minimum width=11em, text centered},
   c/.style={global, cloud, aspect=2, cloud puffs=16,},
   n/.style={global, rectangle},
   r/.style={n, fill=red!20},
@@ -122,17 +133,17 @@ The \mil{Connect} first clears the text areas, then parses the server informatio
     \footnotesize
     \node[c] (net) {Network};
     \node[b, above=1em of net] (esen) {EventSender};
-    \node[g, above=1.5em of esen] (oqueue) {outbound queue};
+    \node[g, above=1.5em of esen] (oqueue) {Outbound queue};
     \node[r, above=1.5em of oqueue] (dec2) {DocumentEventCapturer};
     \node[b, below=1em of net] (erec) {EventReceiver};
-    \node[g, below=1.5em of erec] (iqueue) {inbound queue};
+    \node[g, below=1.5em of erec] (iqueue) {Inbound queue};
     \node[r, below=1.5em of iqueue] (erep2) {EventReplayer};
     \node[r, left=3em of dec2] (dec) {DocumentEventCapturer};
     \node[g, left=3em of net] (queue) {Queue};
     \node[r, left=3em of erep2] (erep) {EventReplayer};
 
     \node[above=1em of dec] (bef) {Provided};
-    \node[above=1em of dec2] (aft) {Network-enabled};
+    \node[above=1em of dec2] (aft) {Network enabled};
 
 
     \draw[sa] (dec2.south) --  (oqueue.north);
@@ -144,15 +155,24 @@ The \mil{Connect} first clears the text areas, then parses the server informatio
 
     \draw[sa] (dec.south) --  (queue.north);
     \draw[sa] (queue.south) --  (erep.north);
+    \node[right=0.3 of dec2.north east] (a1) {};
+    \node[right=0.3 of esen.south east] (a2) {};
+    \draw[line width=1pt] (a1) -- (a2);
+    \node[right=0.5 of oqueue] (a3) {Sending editor};
+
+    \node[right=0.3 of erec.north east] (b1) {};
+    \node[right=0.3 of erep2.south east] (b2) {};
+    \draw[line width=1pt] (b1) -- (b2);
+    \node[right=0.5 of iqueue] (b3) {Receiving editor};
   \end{tikzpicture}
   \label{fig:event}
 \end{figure}
 In the not-networked editor, the \mil{DocumentEventCapturer} and the
 \mil{EventReplayer} worked together directly and communicated over one
 queue: When the user wrote in the upper pane, the
-\mil{DocumentEventCapturer} recorded the edit events and put them in the
-queue. The \mil{EventReplayer} retrieved them from the queue and applied
-them to the lower pane. See the left part of figure \ref{fig:event}.
+\mil{DocumentEventCapturer} recorded the edit events and put them in
+the queue. Afterwards the \mil{EventReplayer} retrieved them from the
+queue and applied them to the lower pane. See the left part of figure \ref{fig:event}.
 
 Now we have two editors (\textsc{a} and \textsc{b}) with one lower and
 one upper pane on each of them. Edit events from the upper pane of
@@ -175,26 +195,26 @@ the network and puts them in an inbound queue off which
 \mil{EventReplayer} feeds. This establishes a persistent and
 asynchronous way of communication.
 
-Since the network operations \mil{writeObject} and \mil{readObject} can
-play the role of blocking communication, queues are not absolutely
-necessary. -- We could have modified the \mil{DocumentEventCapturer} so
-that it sends events over the network instead of putting them in a queue
-and we could have modified the \mil{EventReplayer} so that it receives
-events from the network instead of taking them out of a queue. But
-adding a layer (layered architecture) between those classes and the
-network had the advantage that we didn't have to change them very much.
-On top of that, it would have been a bad design: Classes should only be
-responsible for one thing at a time. The message-queueing communication
-style also prevents the \textsc{ui} thread from being blocked or slowed
-down by network communication and thereby increases distribution
-transparency.
+Since the network operations \mil{writeObject} and \mil{readObject}
+can play the role of blocking communication, queues are not absolutely
+necessary. Instead we could just have modified the
+\mil{DocumentEventCapturer} so that it sends events over the network
+instead of putting them in a queue and we could have modified the
+\mil{EventReplayer} so that it receives events from the network
+instead of taking them out of a queue. But adding a layer (layered
+architecture) between those classes and the network had the advantage
+that we didn't have to change them very much.  On top of that, it
+would have been a bad design: Classes should only be responsible for
+one thing at a time. The message-queueing communication style also
+prevents the \textsc{ui} thread from being blocked or slowed down by
+network communication and thereby increases distribution transparency.
 
-Continuing to use queues enables us to leave \mil{EventReplayer} and
-\mil{DocumentEventCapturer} largely unchanged. We just had to pull out
-the queue the latter had contained before and to make the former take
-events directly from a queue instead of indirectly through the
-\mil{DocumentEventCapturer}. The following listings show the results of
-these changes.
+Continuing to use queues enable us to leave \mil{EventReplayer} and
+\mil{DocumentEventCapturer} largely unchanged. We just had to take the
+queue out of the latter, and make the former take events directly from
+a queue instead of indirectly through the
+\mil{DocumentEventCapturer}. The following listings show the results
+of these changes.
 
 \inmnt{1}{1000}{EventReplayer.java}
 
@@ -202,7 +222,7 @@ these changes.
 
 \inmnt{30}{39}{DocumentEventCapturer.java}
 
-To set up the communication, the \mil{Listen} and \mil{Connect} actions
+To set up the communication threads, the \mil{Listen} and \mil{Connect} actions
 call the method \mil{startCommunication} of the
 \mil{DistributedTextEditor} shown below. It starts the \mil{EventSender}
 and \mil{EventReceiver} as new threads since they have to send and
