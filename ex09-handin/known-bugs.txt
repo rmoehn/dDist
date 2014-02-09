@@ -1,0 +1,16 @@
+- When listening, the menu doesn't hang around anymore, but the
+  interface freezes nonetheless.
+
+- Because the DisconnectEvent MyTextEvent, it has to call its
+  constructor with a length. This is ugly and a result of implementation
+  inheritance. Bad.
+
+- Exceptions are propagated further or editor is killed after printing
+  stacktrace. -- No error handling.
+
+- Just tagged stuff as Serializable without caring for the implications.
+
+- Sometimes upon connecting after a disconnect:
+  IllegalArgumentException: Invalid remove
+
+- Sometimes after disconnecting message in both editors, sometimes not.
