@@ -1,74 +1,99 @@
-\documentclass{scrartcl}
+\RequirePackage[l2tabu, orthodox]{nag}
+\documentclass[a4paper,draft,12pt,oneside,article,table]{memoir}
 
-\usepackage{xltxtra}
-\setmonofont[Scale=MatchLowercase]{DejaVuSansMono}
+%% Geometry
+\isopage[10]
+\setlength{\topskip}{1.6\topskip} % for \sloppybuttom
+\checkandfixthelayout
+\sloppybottom
 
-\usepackage[babelshorthands]{polyglossia}
-\setmainlanguage[variant=uk]{english}
+%% Typography
+\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor,natbib}
+\definecolor{zen-red}{HTML}{B23333}    \definecolor{zen-orange}{HTML}{E57A33}
+\definecolor{zen-yellow}{HTML}{F0DFAF} \definecolor{zen-green}{HTML}{5F7F5F}
+\definecolor{zen-cyan}{HTML}{93E0E3}   \definecolor{zen-blue}{HTML}{336CB2}
+\setdefaultlanguage{english} %polyglossia
 
-\usepackage[final]{microtype}
+\hypersetup{colorlinks=true,linkcolor=zen-red,citecolor=zen-green,urlcolor=zen-orange} % hyperref
+\microtypesetup{final,verbose=silent} 
+\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Arno Pro} % fontspec
+\setmonofont[Scale=MatchLowercase]{DejaVuSansMono} % fontspec
 
-\usepackage{xltxtra}
-\setmonofont[Scale=MatchLowercase]{DejaVuSansMono}
+\unimathsetup{math-style=ISO,bold-style=ISO} % unicode-math
+\setmathfont[Scale=MatchLowercase]{Cambria Math} % unicode-math
 
-\usepackage{csquotes}
-% Damit die komischen Klammern weggehen.
-\renewcommand*{\mkcitation}[1]{ #1}
-\renewcommand*{\mkccitation}[1]{ #1}
 
-\usepackage[
-  language=english,
-  backend=biber,
-  sortcites=true,
-  hyperref=true,
-]{biblatex}
+%% Titlepage
+\setlength{\droptitle}{-3em}
+\pretitle{\LARGE\par} \posttitle{\vskip 0.5em}
+\newcommand{\supertitle}[1]{\gdef\suP{#1}}
+\renewcommand{\maketitlehooka}{\ifx\suP\undefined\begin{center}\else\begin{center} {\scshape\suP}\fi}
+\newcommand{\subtitle}[1]{\gdef\suB{#1}}
+\renewcommand{\maketitlehookb}{\ifx\suB\undefined \end{center}\else\par {\large\scshape\suB}\par\end{center}\fi}
 
-\usepackage{hyperref}
-\hypersetup{hidelinks}
+%% Header
+\newcommand{\stunum}[1]{\gdef\stuN{#1}}
+\copypagestyle{articlehead}{plain}
+\makeoddhead{articlehead}{\color{gray}\theauthor\ifx\stuN\undefined\else\ifx\stuN\empty\else~(\stuN)\fi\fi}{}{\color{gray}\thedate}
+\pagestyle{articlehead}
 
-\usepackage[
-    copy-decimal-marker,
-    exponent-product=\cdot,
-    binary-units
-]{siunitx}
-\newcommand*{\uPerc}[1]{\SI{#1}{\percent}}
+%% Grapics
+%\usepackage{tikz,pgfplots,tikz-timing}
+%\usetikzlibrary{mindmap,arrows,positioning,shapes}
 
-\usepackage{fancyvrb}
-\DefineShortVerb{\§}
+%% TÅGEKAMMERET
+%\usepackage{tket,tkvc}
+%\newfontface\bbface[Scale=0.87]{TeX Gyre Termes Math} \TKsetup{C = {\bbface\kern-0.1exℂ}} % fontspec,tket
 
-\newcommand*{\beffont}{\ttfamily}
-\usepackage{marvosym}
-\usepackage[final]{listings}
-\lstloadlanguages{Java}
-\lstdefinestyle{default}{
-    language=Java,
-    captionpos=b,
-    escapeinside={--+}{+--},
-    tabsize=4,
-    fancyvrb=true,
-    showstringspaces=false,
-    breaklines=true,
-    basicstyle=\beffont\small,
-    prebreak=\space\scriptsize\RightTorque,
-    postbreak=\space\space,
-    xleftmargin=3em,
-    rulecolor=\color{gray},
-    commentstyle=\color{DarkBlue},
-    stringstyle=\color{DarkRed},
-    keywordstyle=[1]\color{DarkGreen},
-    keywordstyle=[2]\color{DarkSlateGrey},
-}
+%% resten
+\usepackage{threeparttable,siunitx,pdfpages,algpseudocode,algorithm}
+\sisetup{per-mode=symbol}
+\makeatletter \renewcommand{\ALG@name}{Algoritme}\makeatother
+\usepackage{minted} % requires minted > 2.0-alpha2
+\usemintedstyle{tango}
+
+\newcommand{\srcpath}{../ex09/src/main/java/ddist}
+
+%% Help
+\usepackage{lipsum}
+\usepackage[margin,draft]{fixme} \fxusetheme{color}
 
 \begin{document}
-\subject{dDist 2014}
-\title{Handin for Exercise 9}
-\author{Mathias Dannesbo ( , \uPerc{50}) \and Richard Möhn (201311231,
-\uPerc{50})}
-
+\supertitle{Distributed Systems}
+\title{Exercise 9}
+%\subtitle{}
+\author{Richard~Möhn \and Mathias~Dannesbo}
+\stunum{201311231, 201206106}
+\date{\today}
 \maketitle
 
-\section{Introduction}
+\inputminted[tabsize=4]{java}{\srcpath/DisconnectEvent.java}
+\inputminted[tabsize=4]{java}{\srcpath/EventReceiver.java}
+\inputminted[tabsize=4]{java}{\srcpath/MyTextEvent.java}
+\inputminted[tabsize=4]{java}{\srcpath/DistributedTextEditor.java}
+\inputminted[tabsize=4]{java}{\srcpath/EventReplayer.java}
+\inputminted[tabsize=4]{java}{\srcpath/TextInsertEvent.java}
+\inputminted[tabsize=4]{java}{\srcpath/DocumentEventCapturer.java}
+\inputminted[tabsize=4]{java}{\srcpath/EventSender.java}
+\inputminted[tabsize=4]{java}{\srcpath/TextRemoveEvent.java}
 
-Blabla.
-    
+\begin{minted}{java}
+1234567890123456789012345678901234567890123456789012345678901234567890123456789X
+1234567890123456789012345678901234567890123456789012345678901234567890123456789X123456789012345678901234567890
+\end{minted}
+
+%\clearpage
+% \listoftables
+% \listoffigures
+% \listoflistings
+%\nocite{*}
+%\bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
+%\clearpage \appendix
+
 \end{document}
+
+%%% Local Variables:
+%%% coding: utf-8
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% End:
