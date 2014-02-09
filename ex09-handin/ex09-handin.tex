@@ -91,7 +91,8 @@ addressed.
 \chapter{Code Overview}
 We need to preform actions when the \mil{Listen}, \mil{Connect} and
 \mil{Disconnect} items are clicked in the menus. The items represent
-\mil{javax.swing.Action}s whose \mil{actionPerformed()} methods we filled with code.
+\mil{javax.swing.Action}s whose \mil{actionPerformed()} methods we
+filled with code.
 
 \section{Listen}
 
@@ -107,7 +108,8 @@ listening for another editor to connect as a client. Then it calls
 \section{Connect}
 The \mil{Connect} first clears the textareas, then parses the server
 information from the \textsc{gui} and connect to the corresponding
-socket. When the \textsc{tcp/ip} connection is etablished, it calls \mil{startCommunication} which is described in section
+socket. As soon as the \textsc{tcp/ip} connection is etablished, it calls
+\mil{startCommunication} which is described in section
 \ref{sec:com}. Finally it set the title of the editor.
 
 \inmnt{195}{228}{DistributedTextEditor.java}
@@ -132,15 +134,15 @@ socket. When the \textsc{tcp/ip} connection is etablished, it calls \mil{startCo
   \begin{tikzpicture}[node distance=1cm, auto]
     \footnotesize
     \node[c] (net) {Network};
-    \node[b, above=1em of net] (esen) {EventSender};
+    \node[b, above=1em of net] (esen) {\texttt{EventSender}};
     \node[g, above=1.5em of esen] (oqueue) {Outbound queue};
-    \node[r, above=1.5em of oqueue] (dec2) {DocumentEventCapturer};
-    \node[b, below=1em of net] (erec) {EventReceiver};
+    \node[r, above=1.5em of oqueue] (dec2) {\texttt{DocumentEventCapturer}};
+    \node[b, below=1em of net] (erec) {\texttt{EventReceiver}};
     \node[g, below=1.5em of erec] (iqueue) {Inbound queue};
-    \node[r, below=1.5em of iqueue] (erep2) {EventReplayer};
-    \node[r, left=3em of dec2] (dec) {DocumentEventCapturer};
+    \node[r, below=1.5em of iqueue] (erep2) {\texttt{EventReplayer}};
+    \node[r, left=3em of dec2] (dec) {\texttt{DocumentEventCapturer}};
     \node[g, left=3em of net] (queue) {Queue};
-    \node[r, left=3em of erep2] (erep) {EventReplayer};
+    \node[r, left=3em of erep2] (erep) {\texttt{EventReplayer}};
 
     \node[above=1em of dec] (bef) {Provided};
     \node[above=1em of dec2] (aft) {Network enabled};
@@ -181,7 +183,7 @@ vice versa. We therefore need two queues: One for the transmission
 from \textsc{a} to \textsc{b} and one for the transmission from
 \textsc{b} to \textsc{a}.
 
-However, since the editors are different processes on possibly
+However, as the editors are different processes on possibly
 different machines, the queues have to be split up: Each has a head on
 one of the peers and a tail on the other.  Not using \textsc{rmi},
 \mil{EventSender} and \mil{EventReceiver} establish the connection
@@ -230,8 +232,8 @@ receive events asynchronously.
 
 \inmnt{300}{318}{DistributedTextEditor.java}
 
-The following two listings show the \mil{EventSender} and
-\mil{EventReceiver} which connect queues over the network as described
+The following listings show the \mil{EventSender} and
+\mil{EventReceiver}, which connect queues over the network as described
 above.
 
 \inmnt{1}{1000}{EventSender.java}
@@ -294,10 +296,10 @@ should make clearing up the above issues easy.
 
 \chapter{Finding the Code and Running the Editor}
 
-The file Code1864-ex09.zip contains a Maven repository with the source
+The file \texttt{Code1864-ex09.zip} contains a Maven repository with the source
 code and a \textsc{jar} file being the executable editor. From the
 root directory it can be run with \texttt{./run.sh}. The code can also
-be found online at \url{wiply.neic.dk/au/ddist/Code1864-ex09.zip}
+be found online at \url{wiply.neic.dk/au/ddist/Code1864-ex09.zip}.
 
 %\clearpage
 % \listoftables
