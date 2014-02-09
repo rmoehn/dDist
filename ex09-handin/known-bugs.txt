@@ -9,3 +9,8 @@
   stacktrace. -- No error handling.
 
 - Just tagged stuff as Serializable without caring for the implications.
+
+- Sometimes upon connecting after a disconnect:
+  IllegalArgumentException: Invalid remove
+
+- Sometimes after disconnecting message in both editors, sometimes not.

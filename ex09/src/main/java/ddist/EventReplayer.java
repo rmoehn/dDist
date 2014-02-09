@@ -71,6 +71,7 @@ public class EventReplayer implements Runnable {
         else if (mte instanceof DisconnectEvent) {
             JOptionPane.showMessageDialog(frame, "Disconnected.");
             frame.setTitle("Disconnected");
+            area.setText("");
         }
         else {
             System.err.println("Illegal event received.");

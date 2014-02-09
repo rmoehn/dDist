@@ -232,6 +232,7 @@ public class DistributedTextEditor extends JFrame {
 
 	    public void actionPerformed(ActionEvent e) {
 	    	setTitle("Disconnected");
+            area2.setText("");
 
             // Initiate disconnecting process
             outEventQueue.add( new DisconnectEvent() );
