@@ -3,7 +3,7 @@ package ddist;
 /**
  * Event indicating that someone wants to disconnect.
  */
-public class DisconnectEvent extends MyTextEvent {
+public class DisconnectEvent implements Event {
     /*
      * There are six threads that have to be notified when one user wants to
      * disconnect:
@@ -53,9 +53,7 @@ public class DisconnectEvent extends MyTextEvent {
     // Indicates whether threads that see this event may close the socket
     private boolean _shouldClose = false;
 
-    public DisconnectEvent() {
-        super(-1);
-    }
+    public DisconnectEvent() { }
 
     public void setShouldClose() {
         _shouldClose = true;

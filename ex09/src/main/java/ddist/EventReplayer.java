@@ -17,7 +17,7 @@ import javax.swing.JTextArea;
  */
 public class EventReplayer implements Runnable {
 
-    private BlockingQueue<MyTextEvent> eventQueue;
+    private BlockingQueue<Event> eventQueue;
     private JTextArea area;
     private JFrame frame;
 
@@ -27,7 +27,7 @@ public class EventReplayer implements Runnable {
      * @param area the text area in which to replay the events
      * @param frame the overall frame of the program (might be done better)
      */
-    public EventReplayer(BlockingQueue<MyTextEvent> eventQueue,
+    public EventReplayer(BlockingQueue<Event> eventQueue,
                          JTextArea area, JFrame frame) {
         this.eventQueue = eventQueue;
         this.area = area;
@@ -38,7 +38,7 @@ public class EventReplayer implements Runnable {
         boolean wasInterrupted = false;
         while (!wasInterrupted) {
             try {
-                MyTextEvent mte = eventQueue.take();
+                Event mte = eventQueue.take();
                 if (mte instanceof TextInsertEvent) {
                     final TextInsertEvent tie = (TextInsertEvent)mte;
                     EventQueue.invokeLater(new Runnable() {

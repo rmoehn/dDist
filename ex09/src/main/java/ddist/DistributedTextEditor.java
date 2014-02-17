@@ -43,14 +43,14 @@ public class DistributedTextEditor extends JFrame {
      * Queue for holding events coming in from the other editor to be written
      * to the lower text area.
      */
-    private BlockingQueue<MyTextEvent> inEventQueue
+    private BlockingQueue<Event> inEventQueue
         = new LinkedBlockingQueue<>();
 
     /*
      * Queue for holding events coming from the upper text area to be sent to
      * the other editor.
      */
-    private BlockingQueue<MyTextEvent> outEventQueue
+    private BlockingQueue<Event> outEventQueue
         = new LinkedBlockingQueue<>();
 
     private EventReplayer er;
@@ -301,8 +301,8 @@ public class DistributedTextEditor extends JFrame {
      * network and the local event queues.
      */
     private void startCommunication(Socket socket,
-            BlockingQueue<MyTextEvent> inEventQueue,
-            BlockingQueue<MyTextEvent> outEventQueue) {
+            BlockingQueue<Event> inEventQueue,
+            BlockingQueue<Event> outEventQueue) {
             // Start thread for adding incoming events to the inqueue
             EventReceiver rec
                 = new EventReceiver(socket, inEventQueue, outEventQueue);

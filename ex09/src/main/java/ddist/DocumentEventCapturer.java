@@ -27,13 +27,13 @@ public class DocumentEventCapturer extends DocumentFilter {
      *    empty, then take() will wait until new elements arrive, which is what
      *    we want, as we then don't need to keep asking until there are new elements.
      */
-    protected BlockingQueue<MyTextEvent> eventHistory;
+    protected BlockingQueue<Event> eventHistory;
 
     /**
      * @param eventHistory the queue this object should write the captured
      * events to
      */
-    public DocumentEventCapturer(BlockingQueue<MyTextEvent> eventHistory) {
+    public DocumentEventCapturer(BlockingQueue<Event> eventHistory) {
         this.eventHistory = eventHistory;
     }
 

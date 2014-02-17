@@ -11,8 +11,8 @@ import java.util.concurrent.BlockingQueue;
  */
 public class EventReceiver implements Runnable {
     Socket _socket;
-    BlockingQueue<MyTextEvent> _inEventQueue;
-    BlockingQueue<MyTextEvent> _outEventQueue;
+    BlockingQueue<Event> _inEventQueue;
+    BlockingQueue<Event> _outEventQueue;
 
     /**
      * @param sock a Socket representing the connection to the other editor
@@ -21,8 +21,8 @@ public class EventReceiver implements Runnable {
      * @param outEventQueue a BlockingQueue from which to take events for
      * sending to the other editor
      */
-    public EventReceiver(Socket sock, BlockingQueue<MyTextEvent> inEventQueue,
-            BlockingQueue<MyTextEvent> outEventQueue) {
+    public EventReceiver(Socket sock, BlockingQueue<Event> inEventQueue,
+            BlockingQueue<Event> outEventQueue) {
         _socket        = sock;
         _inEventQueue  = inEventQueue;
         _outEventQueue = outEventQueue;
@@ -36,7 +36,7 @@ public class EventReceiver implements Runnable {
 
             // Put edit events from the other editor in the queue
             while (true) {
-                MyTextEvent event = (MyTextEvent) objIn.readObject();
+                Event event = (Event) objIn.readObject();
                 _inEventQueue.put(event);
 
                 // Cleanup and close thread if client wants to disconnect
