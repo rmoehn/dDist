@@ -2,7 +2,6 @@ package ddist;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -161,8 +160,8 @@ public class DistributedTextEditor extends JFrame {
 	    	setTitle(
                 String.format("I'm listening on %s:%d.", address, port));
 
-            // "Asynchronously" wait for a connection
-            EventQueue.invokeLater( new Runnable() {
+            // Asynchronously wait for a connection
+            new Thread( new Runnable() {
                 public void run() {
                     // Wait for an incoming connection
                     Socket socket = null;
@@ -188,7 +187,7 @@ public class DistributedTextEditor extends JFrame {
                         )
                     );
                 }
-            } );
+            } ).start();
 	    }
 	};
 

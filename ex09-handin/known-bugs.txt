@@ -1,4 +1,4 @@
-- When listening, the menu doesn't hang around anymore, but the
+x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.
 
 - Because the DisconnectEvent MyTextEvent, it has to call its
