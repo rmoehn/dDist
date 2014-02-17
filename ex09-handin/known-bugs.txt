@@ -12,6 +12,8 @@ x Because the DisconnectEvent MyTextEvent, it has to call its
 
 - Sometimes upon connecting after a disconnect:
   IllegalArgumentException: Invalid remove
+  -- Does area.setText("") trigger TextRemoveEvent? Make an event
+  instead, but also difficult.
 
 - Some of the queue stuff would be better done with observer pattern.
 
