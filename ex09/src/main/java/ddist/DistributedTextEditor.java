@@ -230,9 +230,6 @@ public class DistributedTextEditor extends JFrame {
         private static final long serialVersionUID = 983498L;
 
 	    public void actionPerformed(ActionEvent e) {
-	    	setTitle("Disconnected");
-            area2.setText("");
-
             // Initiate disconnecting process
             outEventQueue.add( new DisconnectEvent() );
 	    }

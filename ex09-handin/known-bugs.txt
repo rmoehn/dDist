@@ -13,4 +13,6 @@ x Because the DisconnectEvent MyTextEvent, it has to call its
 - Sometimes upon connecting after a disconnect:
   IllegalArgumentException: Invalid remove
 
-- Sometimes after disconnecting message in both editors, sometimes not.
+- Some of the queue stuff would be better done with observer pattern.
+
+x Sometimes after disconnecting message in both editors, sometimes not.

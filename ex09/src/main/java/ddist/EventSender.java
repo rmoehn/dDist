@@ -43,7 +43,6 @@ public class EventSender implements Runnable {
                 if (event instanceof DisconnectEvent) {
                     // Do more cleanup if receiver thread already dead
                     if ( ((DisconnectEvent) event).shouldClose() ) {
-                        _inEventQueue.clear();
                         _outEventQueue.clear();
                         _socket.close();
                     }

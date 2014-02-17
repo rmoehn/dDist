@@ -21,7 +21,7 @@ public class DisconnectEvent implements Event {
      * MI -> OI ------------------------> IR -> MR
      *                                     |
      *                                     v
-     *       II <------------------------ OR
+     * MI <- II <------------------------ OR
      *
      *  1. The main thread at the initiator creates a DisconnectEvent and puts
      *     it in the queue for outgoing events (outqueue). It also takes the
@@ -42,10 +42,17 @@ public class DisconnectEvent implements Event {
      *
      *  4. OR takes the DisconnectEvent event from the outqueue and sends it
      *     on. The DisconnectEvent now indicates that the socket should be
-     *     closed. OR complies and then shuts itself down.
+     *     closed. OR complies and then shuts itself down. OR doesn't need to
+     *     flush the inqueue since all pending events will be processed by the
+     *     EventReplayer.
      *
      *  5. II receives the DisconnectEvent event from the network, shuts the
-     *     socket down as told and terminates.
+     *     socket down as told and terminates. II doesn't need to flush the
+     *     inqueue since all pending events will be processed by the
+     *     EventReplayer.
+     *
+     *  MR and MI take the DisconnectEvent(s) from their inqueues and do the
+     *  necessary shutdown actions for the main thread.
      */
 
     private static final long serialVersionUID = -3411878142976145233L;

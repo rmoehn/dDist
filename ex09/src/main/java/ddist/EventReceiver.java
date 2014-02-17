@@ -45,7 +45,6 @@ public class EventReceiver implements Runnable {
 
                     // Do more cleanup if the other thread is dead already
                     if ( disconnectEvent.shouldClose() ) {
-                        _inEventQueue.clear();
                         _outEventQueue.clear();
                         _socket.close();
                     }
