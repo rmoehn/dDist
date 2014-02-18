@@ -17,6 +17,7 @@ import javax.swing.text.DocumentFilter;
  *
  */
 public class DocumentEventCapturer extends DocumentFilter {
+    private boolean isGenerateEvents;
 
     /*
      * We are using a blocking queue for two reasons:
@@ -40,29 +41,47 @@ public class DocumentEventCapturer extends DocumentFilter {
     public void insertString(FilterBypass fb, int offset,
 			     String str, AttributeSet a)
 	throws BadLocationException {
-
-	/* Queue a copy of the event and then modify the textarea */
-	eventHistory.add(new TextInsertEvent(offset, str));
-	super.insertString(fb, offset, str, a);
+	/* Queue a copy of the event or modify the textarea */
+        if (isGenerateEvents) {
+            eventHistory.add(new TextInsertEvent(offset, str));
+        }
+        else {
+            super.insertString(fb, offset, str, a);
+        }
     }
 
     public void remove(FilterBypass fb, int offset, int length)
 	throws BadLocationException {
-	/* Queue a copy of the event and then modify the textarea */
-	eventHistory.add(new TextRemoveEvent(offset, length));
-	super.remove(fb, offset, length);
+	/* Queue a copy of the event or modify the textarea */
+        if (isGenerateEvents) {
+            eventHistory.add(new TextRemoveEvent(offset, length));
+        }
+        else {
+            super.remove(fb, offset, length);
+        }
     }
 
     public void replace(FilterBypass fb, int offset,
 			int length,
 			String str, AttributeSet a)
 	throws BadLocationException {
-
-	/* Queue a copy of the event and then modify the text */
-	if (length > 0) {
-	    eventHistory.add(new TextRemoveEvent(offset, length));
-	}
-	eventHistory.add(new TextInsertEvent(offset, str));
-	super.replace(fb, offset, length, str, a);
+        /* Queue a copy of the event or modify the text */
+        if (isGenerateEvents) {
+            if (length > 0) {
+                eventHistory.add(new TextRemoveEvent(offset, length));
+            }
+            eventHistory.add(new TextInsertEvent(offset, str));
+        }
+        else {
+            super.replace(fb, offset, length, str, a);
+        }
+    }
+    
+    public void enableEventGeneration() {
+        this.isGenerateEvents = true;
+    }
+    
+    public void disableEventGeneration() {
+        this.isGenerateEvents = false;
     }
 }

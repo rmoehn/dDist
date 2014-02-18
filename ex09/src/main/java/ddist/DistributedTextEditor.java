@@ -35,13 +35,12 @@ public class DistributedTextEditor extends JFrame {
     private static final long serialVersionUID = 4813L;
 
     private JTextArea area1 = new JTextArea(10,120);
-    private JTextArea area2 = new JTextArea(10,120);
     private JTextField ipaddress = new JTextField("localhost");
     private JTextField portNumber = new JTextField("20000");
 
     /*
-     * Queue for holding events coming in from the other editor to be written
-     * to the lower text area.
+     * Queue for holding events coming in from the upper text area or the
+     * other editor to be sent to the Jupiter algorithm.
      */
     private BlockingQueue<Event> inEventQueue
         = new LinkedBlockingQueue<>();
@@ -51,6 +50,13 @@ public class DistributedTextEditor extends JFrame {
      * the other editor.
      */
     private BlockingQueue<Event> outEventQueue
+        = new LinkedBlockingQueue<>();
+
+    /*
+     * Queue on which the Jupiter algorithm sends processed events to the
+     * upper text area.
+     */
+    private BlockingQueue<Event> replayQueue
         = new LinkedBlockingQueue<>();
 
     private EventReplayer er;
@@ -63,14 +69,12 @@ public class DistributedTextEditor extends JFrame {
     private boolean changed = false;
     private boolean connected = false;
     private DocumentEventCapturer dec
-        = new DocumentEventCapturer(outEventQueue);
+        = new DocumentEventCapturer(inEventQueue);
 
     public DistributedTextEditor() {
+        dec.enableEventGeneration();
     	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
-
-    	area2.setFont(new Font("Monospaced",Font.PLAIN,12));
     	((AbstractDocument)area1.getDocument()).setDocumentFilter(dec);
-    	area2.setEditable(false);
 
     	Container content = getContentPane();
     	content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
@@ -80,12 +84,6 @@ public class DistributedTextEditor extends JFrame {
     					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
     					JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
     	content.add(scroll1,BorderLayout.CENTER);
-
-    	JScrollPane scroll2 =
-    			new JScrollPane(area2,
-    					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-    					JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-		content.add(scroll2,BorderLayout.CENTER);
 
 		content.add(ipaddress,BorderLayout.CENTER);
 		content.add(portNumber,BorderLayout.CENTER);
@@ -122,7 +120,7 @@ public class DistributedTextEditor extends JFrame {
 		     "Try to type and delete stuff in the top area.\n" +
 		     "Then figure out how it works.\n", 0);
 
-	er = new EventReplayer(inEventQueue, area2, this);
+	er = new EventReplayer(replayQueue, area1, this);
 	ert = new Thread(er);
 	ert.start();
     }
@@ -176,7 +174,8 @@ public class DistributedTextEditor extends JFrame {
                     }
 
                     // Set up the event sending and receiving
-                    startCommunication(socket, inEventQueue, outEventQueue);
+                    startCommunication(
+                        socket, inEventQueue, outEventQueue, replayQueue);
 
                     // Give the editor a better title
                     setTitle(
@@ -218,7 +217,8 @@ public class DistributedTextEditor extends JFrame {
             }
 
             // Set up the event sending and receiving
-            startCommunication(socket, inEventQueue, outEventQueue);
+            startCommunication(
+                socket, inEventQueue, outEventQueue, replayQueue);
 
             // Give the editor a better title
 	    	setTitle(
@@ -299,18 +299,25 @@ public class DistributedTextEditor extends JFrame {
      */
     private void startCommunication(Socket socket,
             BlockingQueue<Event> inEventQueue,
-            BlockingQueue<Event> outEventQueue) {
-            // Start thread for adding incoming events to the inqueue
-            EventReceiver rec
-                = new EventReceiver(socket, inEventQueue, outEventQueue);
-            Thread receiverThread = new Thread(rec);
-            receiverThread.start();
+            BlockingQueue<Event> outEventQueue,
+            BlockingQueue<Event> replayQueue) {
+        // Start thread containing the Jupiter client/server
+        JupiterClient jc
+            = new JupiterClient(inEventQueue, outEventQueue, replayQueue);
+        Thread jupiterThread = new Thread(jc);
+        jupiterThread.start();
 
-            // Start thread for taking outgoing events from the outqueue
-            EventSender sender
-                = new EventSender(socket, inEventQueue, outEventQueue);
-            Thread senderThread = new Thread(sender);
-            senderThread.start();
+        // Start thread for adding incoming events to the inqueue
+        EventReceiver rec
+            = new EventReceiver(socket, inEventQueue, outEventQueue);
+        Thread receiverThread = new Thread(rec);
+        receiverThread.start();
+
+        // Start thread for taking outgoing events from the outqueue
+        EventSender sender
+            = new EventSender(socket, inEventQueue, outEventQueue);
+        Thread senderThread = new Thread(sender);
+        senderThread.start();
     }
 
     public static void main(String[] arg) {
