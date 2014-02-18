@@ -12,12 +12,21 @@ public class JupiterTime implements Serializable {
     private long _otherTime;
 
     public JupiterTime() { }
+    
+    private JupiterTime(long localTime, long otherTime) {
+        _localTime = localTime;
+        _otherTime = otherTime;
+    }
 
     /**
      * A received time/state (this) knows about a local time/state (other).
      */
     public boolean knowsAbout(JupiterTime other) {
         return _otherTime > other._localTime;
+    }
+    
+    public JupiterTime getCopy() {
+        return new JupiterTime(_localTime, _otherTime);
     }
 
     public void incLocalTime() {

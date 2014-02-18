@@ -41,7 +41,7 @@ public class JupiterClient implements Runnable {
 
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent
-                    = new JupiterEvent(localOp, _currentTime, _isServer);
+                    = new JupiterEvent(localOp, _currentTime.getCopy(), _isServer);
                 _toServer.add(jupiterEvent);
 
                 // add (op, my Msgs) to outgoing
