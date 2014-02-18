@@ -1,0 +1,161 @@
+\RequirePackage[l2tabu, orthodox]{nag}
+\documentclass[a4paper,draft,12pt,oneside,article,table]{memoir}
+
+%% Geometry
+\isopage[10]
+\setlength{\topskip}{1.6\topskip} % for \sloppybuttom
+\checkandfixthelayout
+\sloppybottom
+
+%% Typography
+\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor,natbib}
+\definecolor{zen-red}{HTML}{B23333}    \definecolor{zen-orange}{HTML}{E57A33}
+\definecolor{zen-yellow}{HTML}{F0DFAF} \definecolor{zen-green}{HTML}{5F7F5F}
+\definecolor{zen-cyan}{HTML}{93E0E3}   \definecolor{zen-blue}{HTML}{336CB2}
+\setdefaultlanguage{english} %polyglossia
+
+\hypersetup{colorlinks=true,linkcolor=zen-red,citecolor=zen-green,urlcolor=zen-orange} % hyperref
+\microtypesetup{final,verbose=silent} 
+\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Arno Pro} % fontspec
+\setmonofont[Scale=MatchLowercase]{DejaVuSansMono} % fontspec
+
+\unimathsetup{math-style=ISO,bold-style=ISO} % unicode-math
+\setmathfont[Scale=MatchLowercase]{Cambria Math} % unicode-math
+
+
+%% Titlepage
+\setlength{\droptitle}{-3em}
+\pretitle{\LARGE\par} \posttitle{\vskip 0.5em}
+\newcommand{\supertitle}[1]{\gdef\suP{#1}}
+\renewcommand{\maketitlehooka}{\ifx\suP\undefined\begin{center}\else\begin{center} {\scshape\suP}\fi}
+\newcommand{\subtitle}[1]{\gdef\suB{#1}}
+\renewcommand{\maketitlehookb}{\ifx\suB\undefined \end{center}\else\par {\large\scshape\suB}\par\end{center}\fi}
+
+%% Header
+\newcommand{\stunum}[1]{\gdef\stuN{#1}}
+\copypagestyle{articlehead}{plain}
+\makeoddhead{articlehead}{\color{gray}\theauthor\ifx\stuN\undefined\else\ifx\stuN\empty\else~(\stuN)\fi\fi}{}{\color{gray}\thedate}
+\pagestyle{articlehead}
+
+%% Grapics
+\usepackage{tikz,pgfplots,tikz-timing}
+\usetikzlibrary{mindmap,arrows,positioning,shapes}
+
+%% TÅGEKAMMERET
+%\usepackage{tket,tkvc}
+%\newfontface\bbface[Scale=0.87]{TeX Gyre Termes Math} \TKsetup{C = {\bbface\kern-0.1exℂ}} % fontspec,tket
+
+%% resten
+\usepackage{threeparttable,siunitx,pdfpages,algpseudocode,algorithm}
+\sisetup{per-mode=symbol}
+\makeatletter \renewcommand{\ALG@name}{Algoritme}\makeatother
+\usepackage{minted} % requires minted > 2.0-alpha2
+\usemintedstyle{tango}
+
+\newcommand{\srcpath}{../ex09/src/main/java/ddist}
+\newcommand{\inmnt}[3]{\vspace{1em}\noindent\texttt{\color{gray}File: #3}\vspace{-1em}\inputminted[tabsize=4,firstline=#1,firstnumber=#1,lastline=#2,linenos]{java}{\srcpath/#3}}
+\newcommand{\mil}[1]{\mintinline{java}{#1}}
+
+%% Help
+\usepackage{lipsum}
+\usepackage[margin,draft]{fixme} \fxusetheme{color}
+
+\begin{document}
+\supertitle{Distributed Systems}
+\title{Exercise 11}
+%\subtitle{}
+\author{Richard~Möhn~\small{(201311231)} \and Mathias~Dannesbo~\small{(201206106)}}
+%\stunum{201311231, 201206106}
+\date{\today}
+\maketitle
+
+
+\tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
+    minimum height=2em, minimum width=11em, text centered},
+  c/.style={global, cloud, aspect=2, cloud puffs=16,},
+  n/.style={global, rectangle},
+  r/.style={n, fill=red!20},
+  g/.style={n, fill=green!20},
+  b/.style={n, fill=blue!20},
+  y/.style={n, fill=yellow!20},
+  l/.style={>=latex',line width=1.5pt},
+  sa/.style={l,->,shorten >=1pt},
+}
+\begin{figure}[hbp]
+  \centering
+  \caption{\mil{MyTextEvent}'s path through the system in the editor as
+  provided and in our version.}
+  \begin{tikzpicture}[node distance=1cm, auto]
+    \footnotesize
+    \node[c] (net) {Network};
+    \node[b, above right=2.5em of net.north] (esen) {\texttt{EventSender}};
+    \node[g, above=2.5em of esen] (oqueue) {Outbound queue};
+    \node[r, above=12em of net] (jc) {\texttt{JupterClient}};
+    \node[b, above left=2.5em of net.north] (erec) {\texttt{EventReceiver}};
+    \node[g, above=2.5em of erec] (iqueue) {Inbound queue};
+    \node[g, above right=2.5em of jc.north] (dqueue) {Display queue};
+    \node[r, above=2.5em of dqueue] (edis) {\texttt{EventDisplayer}};
+    \node[r, left=2.5em of jc] (dec) {\texttt{DocumentEventCapturer}};
+
+    \node[r, above=2.5em of dec] (ta) {Text area};
+
+%    \node[above=1em of dec] (aft) {Network enabled};
+
+    \draw[sa] (net.north west) --  (erec.south);
+    \draw[sa] (erec.north) --  (iqueue.south);
+    \draw[sa] (iqueue.20) --  (jc.200);
+    \draw[sa] (jc.340) --  (oqueue.160);
+    \draw[sa] (oqueue.south) --  (esen.north);
+    \draw[sa] (esen.south) --  (net.north east);
+    \draw[sa] (dec.340) --  (iqueue.160);
+
+    \draw[sa] (jc.20) --  (dqueue.200);
+    \draw[sa] (dqueue.north) --  (edis.south);
+
+    \draw[sa] (edis.west) --  (dec.north east);
+
+    \draw[sa] (ta.200) --  (dec.160);
+
+    \draw[sa] (dec.20) --  (ta.340);
+
+    % \node[right=0.3 of dec.north east] (a1) {};
+    % \node[right=0.3 of esen.south east] (a2) {};
+    % \draw[line width=1pt] (a1) -- (a2);
+    % \node[right=0.5 of oqueue] (a3) {Sending editor};
+
+    % \node[right=0.3 of erec.north east] (b1) {};
+    % \node[right=0.3 of erep2.south east] (b2) {};
+    % \draw[line width=1pt] (b1) -- (b2);
+    % \node[right=0.5 of iqueue] (b3) {Receiving editor};
+  \end{tikzpicture}
+  \label{fig:event}
+\end{figure}
+
+
+\chapter{Conclusion}
+
+
+\appendix
+
+\chapter{Finding the Code and Running the Editor}
+
+The file \texttt{Code1864-ex09.zip} contains a Maven repository with the source
+code and a \textsc{jar} file being the executable editor. From the
+root directory it can be run with \texttt{./run.sh}. The code can also
+be found online at \url{wiply.neic.dk/au/ddist/Code1864-ex09.zip}.
+
+%\clearpage
+% \listoftables
+% \listoffigures
+% \listoflistings
+%\nocite{*}
+%\bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
+%\clearpage \appendix
+
+\end{document}
+
+%%% Local Variables:
+%%% coding: utf-8
+%%% mode: latex
+%%% TeX-engine: xetex
+%%% End:
