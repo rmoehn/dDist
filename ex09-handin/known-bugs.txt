@@ -18,3 +18,9 @@ x Because the DisconnectEvent MyTextEvent, it has to call its
 - Some of the queue stuff would be better done with observer pattern.
 
 x Sometimes after disconnecting message in both editors, sometimes not.
+
+- Rename MyTextEvent to something
+
+- Rename *replay* to *display*
+
+- Make display queue and outqueue more specific
