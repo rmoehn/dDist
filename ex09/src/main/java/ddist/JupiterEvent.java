@@ -4,6 +4,8 @@ package ddist;
  * Events exchanged between Jupiter clients and the server.
  */
 class JupiterEvent implements Event {
+    private static final long serialVersionUID = 8124416967036144277L;
+    
     private final Event _containedEvent;
     private final JupiterTime _timestamp;
 
@@ -12,11 +14,19 @@ class JupiterEvent implements Event {
         _timestamp      = time;
     }
 
-    public Event getContainedEvent() {
-        return _containedEvent;
+    /**
+     * This event was sent out when its sender already knew about the other
+     * event.
+     */
+    public boolean knowsAbout( JupiterEvent other ) {
+        return _timestamp.knowsAbout( other.getTimestamp() );
     }
 
-    public boolean moreCurrent( JupiterEvent other ) {
-        return _timestamp.getOther
+    public JupiterTime getTimestamp() {
+        return _timestamp;
+    }
+
+    public Event getContainedEvent() {
+        return _containedEvent;
     }
 }

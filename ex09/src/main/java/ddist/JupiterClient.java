@@ -1,13 +1,20 @@
-public class JupiterClient {
+package ddist;
+
+import java.util.LinkedList;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+
+public class JupiterClient implements Runnable {
     private JupiterTime _currentTime     = new JupiterTime();
     private List<JupiterEvent> _outgoing = new LinkedList<>();
+    private Transformer transformer      = new Transformer();
 
-    private BufferedQueue<Event> _inqueue;
-    private BufferedQueue<Event> _toServer;
-    private BufferedQueue<Event> _toReplayer;
+    private BlockingQueue<Event> _inqueue;
+    private BlockingQueue<Event> _toServer;
+    private BlockingQueue<Event> _toReplayer;
 
-    public JupiterClient(BufferedQueue<Event> inqueue, BufferedQueue<Event>
-            toServer, BufferedQueue<Event> _toReplayer) {
+    public JupiterClient(BlockingQueue<Event> inqueue, BlockingQueue<Event>
+            toServer, BlockingQueue<Event> toReplayer) {
         _inqueue    = inqueue;
         _toServer   = toServer;
         _toReplayer = toReplayer;
@@ -15,7 +22,13 @@ public class JupiterClient {
 
     public void run() {
         while (true) {
-            Event event = inqueue.take();
+            Event event = null;
+            try {
+                event = _inqueue.take();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+                System.exit(1);
+            }
 
             // Generate(op)
             if (event instanceof MyTextEvent) {
@@ -27,7 +40,7 @@ public class JupiterClient {
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent
                     = new JupiterEvent(localOp, _currentTime);
-                toServer.add(jupiterEvent);
+                _toServer.add(jupiterEvent);
 
                 // add (op, my Msgs) to outgoing
                 _outgoing.add(jupiterEvent);
@@ -41,7 +54,7 @@ public class JupiterClient {
 
                 // Discard acknowledged messages.
                 while (_outgoing.size() > 0
-                        && received.moreCurrent( _outgoing.get(0) )) {
+                        && received.knowsAbout( _outgoing.get(0) )) {
                     _outgoing.remove(0);
                 }
 
@@ -50,8 +63,8 @@ public class JupiterClient {
                     // {msg, outgoing[i]} = xform(msg, outgoing[i])
                     TransformedPair tp
                         = transformer.transform(received, _outgoing.get(i));
-                    received = tp.getFirst();
-                    _outgoing.set(i, tp.getSecond();
+                    received = tp.getReceived();
+                    _outgoing.set(i, tp.getLocal());
                 }
 
                 // apply msg.op locally
