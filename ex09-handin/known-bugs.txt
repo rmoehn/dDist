@@ -24,3 +24,6 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 - Rename *replay* to *display*
 
 - Make display queue and outqueue more specific
+
+- With the boolean server flag, edits close to each other can be
+  unintuitive. Priorities might fix it.

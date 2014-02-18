@@ -175,7 +175,12 @@ public class DistributedTextEditor extends JFrame {
 
                     // Set up the event sending and receiving
                     startCommunication(
-                        socket, inEventQueue, outEventQueue, replayQueue);
+                        socket,
+                        inEventQueue,
+                        outEventQueue,
+                        replayQueue,
+                        true
+                    );
 
                     // Give the editor a better title
                     setTitle(
@@ -218,7 +223,12 @@ public class DistributedTextEditor extends JFrame {
 
             // Set up the event sending and receiving
             startCommunication(
-                socket, inEventQueue, outEventQueue, replayQueue);
+                socket,
+                inEventQueue,
+                outEventQueue,
+                replayQueue,
+                false
+            );
 
             // Give the editor a better title
 	    	setTitle(
@@ -300,10 +310,15 @@ public class DistributedTextEditor extends JFrame {
     private void startCommunication(Socket socket,
             BlockingQueue<Event> inEventQueue,
             BlockingQueue<Event> outEventQueue,
-            BlockingQueue<Event> replayQueue) {
+            BlockingQueue<Event> replayQueue,
+            boolean isServer) {
         // Start thread containing the Jupiter client/server
-        JupiterClient jc
-            = new JupiterClient(inEventQueue, outEventQueue, replayQueue);
+        JupiterClient jc = new JupiterClient(
+                               inEventQueue,
+                               outEventQueue,
+                               replayQueue,
+                               isServer
+                           );
         Thread jupiterThread = new Thread(jc);
         jupiterThread.start();
 

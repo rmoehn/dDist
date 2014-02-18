@@ -12,12 +12,14 @@ public class JupiterClient implements Runnable {
     private BlockingQueue<Event> _inqueue;
     private BlockingQueue<Event> _toServer;
     private BlockingQueue<Event> _toReplayer;
+    private final boolean _isServer; // Makes sense in the 1-1 case
 
     public JupiterClient(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toReplayer) {
+            toServer, BlockingQueue<Event> toReplayer, boolean isServer) {
         _inqueue    = inqueue;
         _toServer   = toServer;
         _toReplayer = toReplayer;
+        _isServer   = isServer;
     }
 
     public void run() {
@@ -39,7 +41,7 @@ public class JupiterClient implements Runnable {
 
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent
-                    = new JupiterEvent(localOp, _currentTime);
+                    = new JupiterEvent(localOp, _currentTime, _isServer);
                 _toServer.add(jupiterEvent);
 
                 // add (op, my Msgs) to outgoing
