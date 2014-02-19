@@ -36,6 +36,8 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 - The transformer is not correct. -- Invalid inserts and removals
   happen.
 
+- Consider passing 'this' to the EventReplayer instead of everything
+  separately.
 
 - When a connected editor is shut down, the other side dies, too. There
   is no simple fix for that since we'd have to wait for the connection
