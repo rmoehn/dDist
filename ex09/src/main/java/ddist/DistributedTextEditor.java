@@ -67,7 +67,6 @@ public class DistributedTextEditor extends JFrame {
 
     private String currentFile = "Untitled";
     private boolean changed = false;
-    private boolean connected = false;
     private DocumentEventCapturer dec
         = new DocumentEventCapturer(inEventQueue);
 
@@ -327,7 +326,7 @@ public class DistributedTextEditor extends JFrame {
 
         // Start thread for taking outgoing events from the outqueue
         EventSender sender
-            = new EventSender(socket, inEventQueue, outEventQueue);
+            = new EventSender(socket, outEventQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
     }

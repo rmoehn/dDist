@@ -185,7 +185,7 @@ public class Transformer {
             }
         }
         else {
-            throw new AssertionError("Got wrong events.");
+            throw new IllegalArgumentException("Got wrong events.");
         }
 
 
