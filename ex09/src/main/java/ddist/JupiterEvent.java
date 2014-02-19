@@ -35,4 +35,13 @@ class JupiterEvent implements Event {
     public boolean isFromServer() {
         return _isFromServer;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s, fromServer: %b, contains: %s",
+                   _timestamp.toString(),
+                   _isFromServer,
+                   _containedEvent.toString()
+               );
+    }
 }
