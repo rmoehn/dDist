@@ -27,3 +27,11 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 
 - With the boolean server flag, edits close to each other can be
   unintuitive. Priorities might fix it.
+
+- Inserts into region to be deleted are thrown away. -- Not very nice.
+
+- If the TextRemoveEvent were more intelligent (fx understand negative
+  lengths), we might be able to merge some cases in xform.
+
+- The transformer is not correct. -- Invalid inserts and removals
+  happen.
