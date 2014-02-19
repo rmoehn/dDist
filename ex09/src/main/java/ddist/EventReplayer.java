@@ -34,7 +34,7 @@ public class EventReplayer implements Runnable {
         this.eventQueue = eventQueue;
         this.area = area;
         this.frame = frame;
-        
+
         AbstractDocument doc = (AbstractDocument) area.getDocument();
         this.filter = (DocumentEventCapturer) doc.getDocumentFilter();
     }
@@ -50,11 +50,12 @@ public class EventReplayer implements Runnable {
                             public void run() {
                                 try {
                                     /*
-                                     * Only things running in the main thread
-                                     * can access the text area, so the filter
-                                     * won't be accessed by anything else
-                                     * between disabling and enabling the
-                                     * event generation.
+                                     * The text area should be modified only
+                                     * by user input and this EventReplayer.
+                                     * Both use the EDT, so the filter won't
+                                     * be accessed by anything else between
+                                     * disabling and enabling the event
+                                     * generation.
                                      */
                                     filter.disableEventGeneration();
                                     area.insert(tie.getText(), tie.getOffset());
@@ -90,9 +91,14 @@ public class EventReplayer implements Runnable {
                         });
                 }
                 else if (mte instanceof DisconnectEvent) {
-                    JOptionPane.showMessageDialog(frame, "Disconnected.");
-                    frame.setTitle("Disconnected");
-                    area.setText("");
+                    EventQueue.invokeLater(new Runnable() {
+                        public void run() {
+                            JOptionPane.showMessageDialog(
+                                frame, "Disconnected.");
+                            frame.setTitle("Disconnected");
+                            area.setText("");
+                        }
+                    } );
                 }
                 else {
                     System.err.println("Illegal event received.");

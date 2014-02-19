@@ -75,6 +75,15 @@ public class JupiterClient implements Runnable {
                 // otherMsgs = otherMsgs + 1
                 _currentTime.incOtherTime();
             }
+            // Want to disconnect
+            else if (event instanceof DisconnectEvent) {
+                // Pass event on and stop work
+                _toReplayer.add(event);
+                break;
+            }
+            else {
+                throw new IllegalArgumentException("Got unknown event.");
+            }
         }
     }
 }
