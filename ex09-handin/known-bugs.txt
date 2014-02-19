@@ -12,8 +12,6 @@
 
 - Rename *replay* to *display*
 
-- Make display queue and outqueue more specific
-
 - With the boolean server flag, edits close to each other can be
   unintuitive. Priorities might fix it.
 
@@ -48,3 +46,5 @@ x Because the DisconnectEvent MyTextEvent, it has to call its
 x Sometimes after disconnecting message in both editors, sometimes not.
 
 x Rename MyTextEvent to something
+
+x Make display queue and outqueue more specific
