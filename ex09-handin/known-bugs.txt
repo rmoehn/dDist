@@ -1,10 +1,3 @@
-x When listening, the menu doesn't hang around anymore, but the
-  interface freezes nonetheless.
-
-x Because the DisconnectEvent MyTextEvent, it has to call its
-  constructor with a length. This is ugly and a result of implementation
-  inheritance. Bad.
-
 - Exceptions are propagated further or editor is killed after printing
   stacktrace. -- No error handling.
 
@@ -16,10 +9,6 @@ x Because the DisconnectEvent MyTextEvent, it has to call its
   instead, but also difficult.
 
 - Some of the queue stuff would be better done with observer pattern.
-
-x Sometimes after disconnecting message in both editors, sometimes not.
-
-- Rename MyTextEvent to something
 
 - Rename *replay* to *display*
 
@@ -48,3 +37,14 @@ x Sometimes after disconnecting message in both editors, sometimes not.
   disconnect immediately after the next connection setup.
 
 - There is no indication that an editor is listening or connected.
+
+x When listening, the menu doesn't hang around anymore, but the
+  interface freezes nonetheless.
+
+x Because the DisconnectEvent MyTextEvent, it has to call its
+  constructor with a length. This is ugly and a result of implementation
+  inheritance. Bad.
+
+x Sometimes after disconnecting message in both editors, sometimes not.
+
+x Rename MyTextEvent to something

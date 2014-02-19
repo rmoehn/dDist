@@ -5,15 +5,15 @@ public class Transformer {
 
     public TransformedPair transform(JupiterEvent received, JupiterEvent
             local) {
-        MyTextEvent recTE       = (MyTextEvent) received.getContainedEvent();
+        TextChangeEvent recTE   = (TextChangeEvent) received.getContainedEvent();
         JupiterTime recTS       = received.getTimestamp();
         boolean isRecFromServer = received.isFromServer();
-        MyTextEvent transRecTE  = null;
+        TextChangeEvent transRecTE = null;
 
-        MyTextEvent locTE       = (MyTextEvent) local.getContainedEvent();
+        TextChangeEvent locTE   = (TextChangeEvent) local.getContainedEvent();
         JupiterTime locTS       = local.getTimestamp();
         boolean isLocFromServer = local.isFromServer();
-        MyTextEvent transLocTE  = null;
+        TextChangeEvent transLocTE = null;
 
         /*
          * Take care that all if's have else's!

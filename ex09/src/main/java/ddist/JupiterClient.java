@@ -33,8 +33,8 @@ public class JupiterClient implements Runnable {
             }
 
             // Generate(op)
-            if (event instanceof MyTextEvent) {
-                MyTextEvent localOp = (MyTextEvent) event;
+            if (event instanceof TextChangeEvent) {
+                TextChangeEvent localOp = (TextChangeEvent) event;
 
                 // apply op locally
                 _toReplayer.add(localOp);

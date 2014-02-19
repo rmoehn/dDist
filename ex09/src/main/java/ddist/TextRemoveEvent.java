@@ -1,6 +1,6 @@
 package ddist;
 
-public class TextRemoveEvent extends MyTextEvent {
+public class TextRemoveEvent extends TextChangeEvent {
     private static final long serialVersionUID = -6053913376936143486L;
     
     private int length;
