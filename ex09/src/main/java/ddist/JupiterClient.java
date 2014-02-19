@@ -60,11 +60,14 @@ public class JupiterClient implements Runnable {
                     _outgoing.remove(0);
                 }
 
+                System.err.println("Received: " + received);
+
                 // Transform new message and the ones in the queue.
                 for (int i = 0; i < _outgoing.size(); ++i) {
                     // {msg, outgoing[i]} = xform(msg, outgoing[i])
                     TransformedPair tp
                         = transformer.transform(received, _outgoing.get(i));
+                    System.err.println("Transformed to: " + tp);
                     received = tp.getReceived();
                     _outgoing.set(i, tp.getLocal());
                 }
