@@ -17,7 +17,7 @@ import javax.swing.text.AbstractDocument;
  *
  */
 public class EventReplayer implements Runnable {
-
+    private DocumentEventCapturer documentEventCapturer;
     private BlockingQueue<Event> eventQueue;
     private JTextArea area;
     private JFrame frame;
@@ -29,8 +29,9 @@ public class EventReplayer implements Runnable {
      * @param area the text area in which to replay the events
      * @param frame the overall frame of the program (might be done better)
      */
-    public EventReplayer(BlockingQueue<Event> eventQueue,
-                         JTextArea area, JFrame frame) {
+    public EventReplayer(DocumentEventCapturer dec, BlockingQueue<Event>
+            eventQueue, JTextArea area, JFrame frame) {
+        this.documentEventCapturer = dec;
         this.eventQueue = eventQueue;
         this.area = area;
         this.frame = frame;
@@ -97,6 +98,7 @@ public class EventReplayer implements Runnable {
                                 frame, "Disconnected.");
                             frame.setTitle("Disconnected");
                             area.setText("");
+                            documentEventCapturer.disableEventGeneration();
                         }
                     } );
                 }

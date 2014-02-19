@@ -71,7 +71,6 @@ public class DistributedTextEditor extends JFrame {
         = new DocumentEventCapturer(inEventQueue);
 
     public DistributedTextEditor() {
-        dec.enableEventGeneration();
     	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
     	((AbstractDocument)area1.getDocument()).setDocumentFilter(dec);
 
@@ -116,7 +115,7 @@ public class DistributedTextEditor extends JFrame {
 	setTitle("Disconnected");
 	setVisible(true);
 
-	er = new EventReplayer(replayQueue, area1, this);
+	er = new EventReplayer(dec, replayQueue, area1, this);
 	ert = new Thread(er);
 	ert.start();
     }
@@ -171,6 +170,7 @@ public class DistributedTextEditor extends JFrame {
 
                     // Set up the event sending and receiving
                     startCommunication(
+                        dec,
                         socket,
                         inEventQueue,
                         outEventQueue,
@@ -219,6 +219,7 @@ public class DistributedTextEditor extends JFrame {
 
             // Set up the event sending and receiving
             startCommunication(
+                dec,
                 socket,
                 inEventQueue,
                 outEventQueue,
@@ -303,7 +304,7 @@ public class DistributedTextEditor extends JFrame {
      * Start threads for handling the transportation of events between the
      * network and the local event queues.
      */
-    private void startCommunication(Socket socket,
+    private void startCommunication(DocumentEventCapturer dec, Socket socket,
             BlockingQueue<Event> inEventQueue,
             BlockingQueue<Event> outEventQueue,
             BlockingQueue<Event> replayQueue,
@@ -329,6 +330,8 @@ public class DistributedTextEditor extends JFrame {
             = new EventSender(socket, outEventQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
+
+        dec.enableEventGeneration();
     }
 
     public static void main(String[] arg) {

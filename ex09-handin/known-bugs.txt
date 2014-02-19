@@ -35,3 +35,6 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 
 - The transformer is not correct. -- Invalid inserts and removals
   happen.
+
+- Consider passing 'this' to the EventReplayer and startCommunications
+  instead of everything separately.
