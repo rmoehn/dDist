@@ -15,8 +15,10 @@
 \setdefaultlanguage{english} %polyglossia
 
 \hypersetup{colorlinks=true,linkcolor=zen-red,citecolor=zen-green,urlcolor=zen-orange} % hyperref
-\microtypesetup{final,verbose=silent} 
-\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Arno Pro} % fontspec
+\microtypesetup{final,verbose=silent}
+\newcommand{\lining}{\setmainfont[Ligatures=TeX,Numbers=Lining]{Arno Pro}} % fontspec
+\newcommand{\oldstyle}{\setmainfont[Ligatures=TeX,Numbers=OldStyle]{Arno Pro}} % fontspec
+\oldstyle
 \setmonofont[Scale=MatchLowercase]{DejaVuSansMono} % fontspec
 
 \unimathsetup{math-style=ISO,bold-style=ISO} % unicode-math
@@ -28,8 +30,8 @@
 \pretitle{\LARGE\par} \posttitle{\vskip 0.5em}
 \newcommand{\supertitle}[1]{\gdef\suP{#1}}
 \renewcommand{\maketitlehooka}{\ifx\suP\undefined\begin{center}\else\begin{center} {\scshape\suP}\fi}
-\newcommand{\subtitle}[1]{\gdef\suB{#1}}
-\renewcommand{\maketitlehookb}{\ifx\suB\undefined \end{center}\else\par {\large\scshape\suB}\par\end{center}\fi}
+    \newcommand{\subtitle}[1]{\gdef\suB{#1}}
+    \renewcommand{\maketitlehookb}{\ifx\suB\undefined \end{center}\else\par {\large\scshape\suB}\par\end{center}\fi}
 
 %% Header
 \newcommand{\stunum}[1]{\gdef\stuN{#1}}
@@ -38,12 +40,12 @@
 \pagestyle{articlehead}
 
 %% Grapics
-\usepackage{tikz,pgfplots,tikz-timing}
-\usetikzlibrary{mindmap,arrows,positioning,shapes}
+\usepackage{tikz,pgfplots,tikz-timing,rotating}
+\usetikzlibrary{mindmap,arrows,positioning,shapes,matrix}
 
 %% TÅGEKAMMERET
-%\usepackage{tket,tkvc}
-%\newfontface\bbface[Scale=0.87]{TeX Gyre Termes Math} \TKsetup{C = {\bbface\kern-0.1exℂ}} % fontspec,tket
+% \usepackage{tket,tkvc}
+% \newfontface\bbface[Scale=0.87]{TeX Gyre Termes Math} \TKsetup{C = {\bbface\kern-0.1exℂ}} % fontspec,tket
 
 %% resten
 \usepackage{threeparttable,siunitx,pdfpages,algpseudocode,algorithm}
@@ -63,9 +65,9 @@
 \begin{document}
 \supertitle{Distributed Systems}
 \title{Exercise 11}
-%\subtitle{}
+% \subtitle{}
 \author{Richard~Möhn~\small{(201311231)} \and Mathias~Dannesbo~\small{(201206106)}}
-%\stunum{201311231, 201206106}
+% \stunum{201311231, 201206106}
 \date{\today}
 \maketitle
 
@@ -88,9 +90,6 @@ list of issues with the editor that still need to be addressed.
 \chapter{Operational transformation}
 \fxwarning{Write something about the techniques.}
 
-\chapter{Code Overview}
-Our main addition of code was in and around the \mil{JupiterClient}-class. We changed the flow of the event to go trough it. It is most easily show on figure \ref{fig:event}.
-
 \tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
     minimum height=2em, minimum width=11em, text centered},
   c/.style={global, cloud, aspect=2, cloud puffs=16,},
@@ -101,14 +100,69 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   y/.style={n, fill=yellow!20},
   l/.style={>=latex',line width=1.5pt},
   sa/.style={l,->,shorten >=1pt},
-  st/.style={sa,red!90!black},
-  sj/.style={sa,blue!70!black},
+  st/.style={sa,orange},
+  sj/.style={sa,green!70!black},
   sb/.style={sa, shorten <=1pt,black!30!white!90!red},
-}\fxwarning{Are all the names here in the figure the right ones?}
+  jm/.style={sa, line width=1pt,shorten >=.35cm,shorten <=.35cm},
+  jr/.style={jm, red!90!black, text=black},
+  jb/.style={jm, blue!70!black, text=black, },
+  jne/.style={shift={(2pt,2pt)}},
+  jnw/.style={shift={(-2pt,2pt)}},
+  jsw/.style={shift={(-2pt,-2pt)}},
+  jse/.style={shift={(2pt,-2pt)}},
+}
+
+\begin{figure}[hbp]
+  \centering
+  \caption{The state space in the Jupiter algorithm.}
+  \lining
+  \begin{turn}{-45}
+    \begin{tikzpicture}[rotate=45,row sep=0.5cm, column sep=0.5cm,nodes={rotate=45},]
+
+      \matrix (jup) [matrix of nodes]
+      {
+        0,0 & 0,1 & 0,2 & 0,3 \\
+        1,0 & 1,1 & 1,2 & 1,3 \\
+        2,0 & 2,1 & 2,2 & 2,3 \\
+        3,0 & 3,1 & 3,2 & 3,3 \\
+      };
+
+      \draw[jr] ([jse]jup-1-1.center) -- ([jse]jup-2-1.center);
+      \draw[jb] ([jnw]jup-1-1.center) -- ([jnw]jup-2-1.center);
+
+      \draw[jr] ([jne]jup-2-1.center) -- ([jne]jup-2-2.center);
+      \draw[jb] ([jsw]jup-2-1.center) -- ([jsw]jup-2-2.center);
+
+      \draw[jb] (jup-2-2.center) -- (jup-3-2.center);
+
+      \draw[jr] (jup-2-2.center) -- (jup-2-3.center);
+
+      \draw[jb] (jup-3-2.center) -- (jup-3-3.center);
+
+      \draw[jr] (jup-2-3.center) -- (jup-3-3.center);
+
+      \draw[jr] ([jne]jup-3-3.center) -- ([jne]jup-3-4.center);
+      \draw[jb] ([jsw]jup-3-3.center) -- ([jsw]jup-3-4.center);
+
+      \draw[jb, line width=1.5pt] (-1,3.5) --node[above left]{client} (-3,1.5);
+      \draw[jr, line width=1.5pt] (1,3.5) --node[above right]{server} (3,1.5);
+
+    \end{tikzpicture}
+  \end{turn}
+  \oldstyle
+  \label{fig:state}
+\end{figure}
+
+
+
+\chapter{Code Overview}
+Our main addition of code was in and around the \mil{JupiterClient}-class. We changed the flow of the event to go trough it. It is most easily show on figure \ref{fig:event}.
+
+\fxwarning{Are all the names here in the figure the right ones?}
 \begin{figure}[hbp]
   \centering
   \caption{\mil{Event}'s path through the system in the editor as
-  provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextEditEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
+    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextEditEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
   \begin{tikzpicture}[node distance=1cm, auto]
     \footnotesize
     \node[c] (net) {Network};
@@ -163,13 +217,13 @@ The file \texttt{Code1864-ex11.zip} contains a Maven repository with the source
 code and a \textsc{jar} file being the executable editor. From the
 root directory it can be run with \texttt{./run.sh}.
 
-%\clearpage
+% \clearpage
 % \listoftables
 % \listoffigures
 % \listoflistings
-%\nocite{*}
-%\bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
-%\clearpage \appendix
+% \nocite{*}
+% \bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
+% \clearpage \appendix
 
 \end{document}
 
