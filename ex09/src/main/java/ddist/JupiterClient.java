@@ -11,15 +11,15 @@ public class JupiterClient implements Runnable {
 
     private BlockingQueue<Event> _inqueue;
     private BlockingQueue<Event> _toServer;
-    private BlockingQueue<Event> _toReplayer;
+    private BlockingQueue<Event> _toDisplayer;
     private final boolean _isServer; // Makes sense in the 1-1 case
 
     public JupiterClient(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toReplayer, boolean isServer) {
-        _inqueue    = inqueue;
-        _toServer   = toServer;
-        _toReplayer = toReplayer;
-        _isServer   = isServer;
+            toServer, BlockingQueue<Event> toDisplayer, boolean isServer) {
+        _inqueue     = inqueue;
+        _toServer    = toServer;
+        _toDisplayer = toDisplayer;
+        _isServer    = isServer;
     }
 
     public void run() {
@@ -37,7 +37,7 @@ public class JupiterClient implements Runnable {
                 TextChangeEvent localOp = (TextChangeEvent) event;
 
                 // apply op locally
-                _toReplayer.add(localOp);
+                _toDisplayer.add(localOp);
 
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent
@@ -70,7 +70,7 @@ public class JupiterClient implements Runnable {
                 }
 
                 // apply msg.op locally
-                _toReplayer.add(received.getContainedEvent());
+                _toDisplayer.add(received.getContainedEvent());
 
                 // otherMsgs = otherMsgs + 1
                 _currentTime.incOtherTime();
@@ -78,7 +78,7 @@ public class JupiterClient implements Runnable {
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
                 // Pass event on and stop work
-                _toReplayer.add(event);
+                _toDisplayer.add(event);
                 break;
             }
             else {

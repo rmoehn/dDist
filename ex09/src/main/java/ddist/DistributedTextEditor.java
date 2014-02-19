@@ -42,25 +42,23 @@ public class DistributedTextEditor extends JFrame {
      * Queue for holding events coming in from the upper text area or the
      * other editor to be sent to the Jupiter algorithm.
      */
-    private BlockingQueue<Event> inEventQueue
-        = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> inEventQueue = new LinkedBlockingQueue<>();
 
     /*
      * Queue for holding events coming from the upper text area to be sent to
      * the other editor.
      */
-    private BlockingQueue<Event> outEventQueue
-        = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> outEventQueue = new LinkedBlockingQueue<>();
 
     /*
      * Queue on which the Jupiter algorithm sends processed events to the
      * upper text area.
      */
-    private BlockingQueue<Event> replayQueue
+    private BlockingQueue<Event> displayEventQueue 
         = new LinkedBlockingQueue<>();
 
-    private EventReplayer er;
-    private Thread ert;
+    private EventDisplayer eventDisplayer;
+    private Thread eventDisplayerThread;
 
     private JFileChooser dialog =
     		new JFileChooser(System.getProperty("user.dir"));
@@ -115,9 +113,9 @@ public class DistributedTextEditor extends JFrame {
 	setTitle("Disconnected");
 	setVisible(true);
 
-	er = new EventReplayer(dec, replayQueue, area1, this);
-	ert = new Thread(er);
-	ert.start();
+	eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
+	eventDisplayerThread = new Thread(eventDisplayer);
+	eventDisplayerThread.start();
     }
 
     private KeyListener k1 = new KeyAdapter() {
@@ -299,7 +297,7 @@ public class DistributedTextEditor extends JFrame {
         JupiterClient jc = new JupiterClient(
                                inEventQueue,
                                outEventQueue,
-                               replayQueue,
+                               displayEventQueue,
                                isServer
                            );
         Thread jupiterThread = new Thread(jc);

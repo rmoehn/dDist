@@ -54,9 +54,9 @@ public class DisconnectEvent implements Event {
      *     processed by the JupiterClient.
      *
      *  When the JupiterClients (JR and JI) see the DisconnectEvent in the
-     *  inqueue, they pass it on to their respective EventReplayers (MR and
-     *  MI) and shut down.  The EventReplayers take the DisconnectEvent(s)
-     *  from the replay queues and put the rest of their editor in a
+     *  inqueue, they pass it on to their respective EventDisplayers (MR and
+     *  MI) and shut down.  The EventDisplayers take the DisconnectEvent(s)
+     *  from the display queues and put the rest of their editor in a
      *  disconnected state.
      */
 

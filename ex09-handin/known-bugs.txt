@@ -10,8 +10,6 @@
 
 - Some of the queue stuff would be better done with observer pattern.
 
-- Rename *replay* to *display*
-
 - With the boolean server flag, edits close to each other can be
   unintuitive. Priorities might fix it.
 
@@ -36,6 +34,8 @@
 
 - There is no indication that an editor is listening or connected.
 
+- The "Save file?" dialogs are quite annoying.
+
 x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.
 
@@ -48,3 +48,5 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 x Rename MyTextEvent to something
 
 x Make display queue and outqueue more specific
+
+- Rename *replay* to *display*

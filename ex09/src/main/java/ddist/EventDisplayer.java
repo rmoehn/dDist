@@ -10,29 +10,29 @@ import javax.swing.text.AbstractDocument;
 
 /**
  *
- * Takes the event recorded by the DocumentEventCapturer and replays
- * them in a JTextArea.
+ * Takes the event recorded by the DocumentEventCapturer and displays them in
+ * a JTextArea.
  *
  * @author Jesper Buus Nielsen
  *
  */
-public class EventReplayer implements Runnable {
+public class EventDisplayer implements Runnable {
     private DocumentEventCapturer documentEventCapturer;
-    private BlockingQueue<Event> eventQueue;
+    private BlockingQueue<Event> displayQueue;
     private JTextArea area;
     private JFrame frame;
     private DocumentEventCapturer filter;
 
     /**
-     * @param eventQueue the blocking queue from which to take events to
-     * replay them in the on the second argument
-     * @param area the text area in which to replay the events
+     * @param displayQueue the blocking queue from which to take events to
+     * display them in the on the second argument
+     * @param area the text area in which to display the events
      * @param frame the overall frame of the program (might be done better)
      */
-    public EventReplayer(DocumentEventCapturer dec, BlockingQueue<Event>
-            eventQueue, JTextArea area, JFrame frame) {
+    public EventDisplayer(DocumentEventCapturer dec, BlockingQueue<Event>
+            displayQueue, JTextArea area, JFrame frame) {
         this.documentEventCapturer = dec;
-        this.eventQueue = eventQueue;
+        this.displayQueue = displayQueue;
         this.area = area;
         this.frame = frame;
 
@@ -44,7 +44,7 @@ public class EventReplayer implements Runnable {
         boolean wasInterrupted = false;
         while (!wasInterrupted) {
             try {
-                Event mte = eventQueue.take();
+                Event mte = displayQueue.take();
                 if (mte instanceof TextInsertEvent) {
                     final TextInsertEvent tie = (TextInsertEvent)mte;
                     EventQueue.invokeLater(new Runnable() {
@@ -52,7 +52,7 @@ public class EventReplayer implements Runnable {
                                 try {
                                     /*
                                      * The text area should be modified only
-                                     * by user input and this EventReplayer.
+                                     * by user input and this EventDisplayer.
                                      * Both use the EDT, so the filter won't
                                      * be accessed by anything else between
                                      * disabling and enabling the event
@@ -111,6 +111,6 @@ public class EventReplayer implements Runnable {
             }
         }
         System.out.println(
-            "I'm the thread running the EventReplayer, now I die!");
+            "I'm the thread running the EventDisplayer, now I die!");
     }
 }
