@@ -164,8 +164,10 @@ public class DistributedTextEditor extends JFrame {
                         servSock.close();
                     }
                     catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                            DistributedTextEditor.this, "Cannot listen.");
                         ex.printStackTrace();
-                        System.exit(1);
+                        return;
                     }
 
                     // Set up the event sending and receiving
@@ -213,8 +215,10 @@ public class DistributedTextEditor extends JFrame {
             try {
                 socket = new Socket(address, port);
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                    DistributedTextEditor.this, "Connecting failed.");
                 ex.printStackTrace();
-                System.exit(1);
+                return;
             }
 
             // Set up the event sending and receiving

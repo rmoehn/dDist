@@ -36,5 +36,13 @@ x Sometimes after disconnecting message in both editors, sometimes not.
 - The transformer is not correct. -- Invalid inserts and removals
   happen.
 
-- Consider passing 'this' to the EventReplayer and startCommunications
-  instead of everything separately.
+
+- When a connected editor is shut down, the other side dies, too. There
+  is no simple fix for that since we'd have to wait for the connection
+  to be shut down properly before calling System.exit(0).
+
+- It is possible to put DisconnectEvents in the queue (by pressing
+  Disconnect), when the editors are not connected. As a result, they
+  disconnect immediately after the next connection setup.
+
+- There is no indication that an editor is listening or connected.
