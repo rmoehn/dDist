@@ -203,8 +203,20 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   \label{fig:event}
 \end{figure}
 
+\newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
+
+\newcommand\acoord[1]{\ncoord[0em,.9em]{#1}}
+\newcommand\bcoord[1]{\ncoord[0em,-.4em]{#1}}
+\newpage
+%\texttt{… a b c d e f g h i j k …}\\
+\texttt{… a b c\ \acoord{1d}d e f\ \bcoord{1g}g\acoord{1G} h i\bcoord{1I} j k …}\\\\
+\texttt{… a b c\ \ncoord[-.2em,.9em]{2d}h i j k …}\\
 
 
+\tikz[overlay,remember picture] {
+    \draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
+    \filldraw[thick,opacity=0.1,draw opacity=0.7,red,out=-90,in=90]  (1d) -- ++(0,0.1em) -| (1G) -- ++(0em,-.6em) to  (2d) --++(0em,-1em) --cycle;
+}
 
 \chapter{Conclusion}
 \fxwarning{Write a conclusion.}
