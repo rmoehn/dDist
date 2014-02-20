@@ -7,12 +7,12 @@ import java.io.Serializable;
  */
 public class JupiterTime implements Serializable {
     private static final long serialVersionUID = -335296904930150389L;
-    
+
     private long _localTime;
     private long _otherTime;
 
     public JupiterTime() { }
-    
+
     private JupiterTime(long localTime, long otherTime) {
         _localTime = localTime;
         _otherTime = otherTime;
@@ -24,7 +24,7 @@ public class JupiterTime implements Serializable {
     public boolean knowsAbout(JupiterTime other) {
         return _otherTime > other._localTime;
     }
-    
+
     public JupiterTime getCopy() {
         return new JupiterTime(_localTime, _otherTime);
     }
@@ -43,5 +43,10 @@ public class JupiterTime implements Serializable {
         }
 
         ++_otherTime;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("(%4d, %4d)", _localTime, _otherTime);
     }
 }

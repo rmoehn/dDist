@@ -1,0 +1,689 @@
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  15,    0), fromServer: false, contains: At   36 insert f.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  16,    0), fromServer: false, contains: At   37 insert ö.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  17,    0), fromServer: false, contains: At   37 insert a.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  18,    0), fromServer: false, contains: At   39 insert l.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  19,    0), fromServer: false, contains: At   39 insert s.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  20,    0), fromServer: false, contains: At   41 insert d.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  21,    0), fromServer: false, contains: At   42 insert k.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  22,    0), fromServer: false, contains: At   42 insert j.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  23,    0), fromServer: false, contains: At   44 insert f.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  24,    5), fromServer: false, contains: At   45 insert a.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  25,    5), fromServer: false, contains: At   46 insert s.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  26,    5), fromServer: false, contains: At   47 insert ö.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  27,    5), fromServer: false, contains: At   47 insert d.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  28,    5), fromServer: false, contains: At   49 insert f.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  29,    5), fromServer: false, contains: At   50 insert l.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  30,    5), fromServer: false, contains: At   51 insert k.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  31,    5), fromServer: false, contains: At   52 insert j.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  32,    7), fromServer: false, contains: At   38 remove    8 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  33,   12), fromServer: false, contains: At   31 insert a.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  34,   12), fromServer: false, contains: At   32 insert ö.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  35,   12), fromServer: false, contains: At   32 insert s.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  36,   12), fromServer: false, contains: At   34 insert l.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  37,   12), fromServer: false, contains: At   34 insert d.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  38,   12), fromServer: false, contains: At   36 insert k.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  39,   12), fromServer: false, contains: At   37 insert f.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  40,   12), fromServer: false, contains: At   38 insert j.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  41,   12), fromServer: false, contains: At   39 insert a.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  42,   12), fromServer: false, contains: At   40 insert s.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  43,   12), fromServer: false, contains: At   41 insert f.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  44,   12), fromServer: false, contains: At   41 insert d.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  45,   13), fromServer: false, contains: At   50 insert a.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  46,   13), fromServer: false, contains: At   50 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  47,   13), fromServer: false, contains: At   49 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  48,   14), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  49,   14), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  50,   14), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  51,   22), fromServer: false, contains: At   27 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  52,   23), fromServer: false, contains: At   25 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  53,   23), fromServer: false, contains: At   25 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  54,   23), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  55,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  56,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  57,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  58,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  59,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  60,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  61,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  62,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  63,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  64,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  65,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Transformed to: ((  42,   12), fromServer: true, contains: At    5 remove    1 characters., (  66,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Text before: asdasölaskdjfdflasödlkfjasdfkassdöflkj
+Text after:  asdaslaskdjfdflasödlkfjasdfkassdöflkj
+Received: (  43,   12), fromServer: true, contains: At    5 remove    1 characters.
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  12,    0), fromServer: false, contains: At   32 insert j.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  13,    0), fromServer: false, contains: At   32 insert s.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  14,    0), fromServer: false, contains: At   34 insert d.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  15,    0), fromServer: false, contains: At   35 insert f.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  16,    0), fromServer: false, contains: At   36 insert ö.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  17,    0), fromServer: false, contains: At   36 insert a.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  18,    0), fromServer: false, contains: At   38 insert l.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  19,    0), fromServer: false, contains: At   38 insert s.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  20,    0), fromServer: false, contains: At   40 insert d.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  21,    0), fromServer: false, contains: At   41 insert k.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  22,    0), fromServer: false, contains: At   41 insert j.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  23,    0), fromServer: false, contains: At   43 insert f.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  24,    5), fromServer: false, contains: At   44 insert a.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  25,    5), fromServer: false, contains: At   45 insert s.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  26,    5), fromServer: false, contains: At   46 insert ö.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  27,    5), fromServer: false, contains: At   46 insert d.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  28,    5), fromServer: false, contains: At   48 insert f.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  29,    5), fromServer: false, contains: At   49 insert l.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  30,    5), fromServer: false, contains: At   50 insert k.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  31,    5), fromServer: false, contains: At   51 insert j.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  32,    7), fromServer: false, contains: At   37 remove    8 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  33,   12), fromServer: false, contains: At   30 insert a.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  34,   12), fromServer: false, contains: At   31 insert ö.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  35,   12), fromServer: false, contains: At   31 insert s.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  36,   12), fromServer: false, contains: At   33 insert l.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  37,   12), fromServer: false, contains: At   33 insert d.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  38,   12), fromServer: false, contains: At   35 insert k.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  39,   12), fromServer: false, contains: At   36 insert f.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  40,   12), fromServer: false, contains: At   37 insert j.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  41,   12), fromServer: false, contains: At   38 insert a.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  42,   12), fromServer: false, contains: At   39 insert s.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  43,   12), fromServer: false, contains: At   40 insert f.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  44,   12), fromServer: false, contains: At   40 insert d.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  45,   13), fromServer: false, contains: At   49 insert a.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  46,   13), fromServer: false, contains: At   49 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  47,   13), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  48,   14), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  49,   14), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  50,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  51,   22), fromServer: false, contains: At   26 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  52,   23), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  53,   23), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  54,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  55,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  56,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  57,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  58,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  65,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Transformed to: ((  43,   12), fromServer: true, contains: At    5 remove    1 characters., (  66,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Text before: asdaslaskdjfdflasödlkfjasdfkassdöflkj
+Text after:  asdasaskdjfdflasödlkfjasdfkassdöflkj
+Received: (  44,   12), fromServer: true, contains: At    5 remove    1 characters.
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  12,    0), fromServer: false, contains: At   31 insert j.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  13,    0), fromServer: false, contains: At   31 insert s.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  14,    0), fromServer: false, contains: At   33 insert d.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  15,    0), fromServer: false, contains: At   34 insert f.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  16,    0), fromServer: false, contains: At   35 insert ö.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  17,    0), fromServer: false, contains: At   35 insert a.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  18,    0), fromServer: false, contains: At   37 insert l.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  19,    0), fromServer: false, contains: At   37 insert s.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  20,    0), fromServer: false, contains: At   39 insert d.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  21,    0), fromServer: false, contains: At   40 insert k.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  22,    0), fromServer: false, contains: At   40 insert j.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  23,    0), fromServer: false, contains: At   42 insert f.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  24,    5), fromServer: false, contains: At   43 insert a.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  25,    5), fromServer: false, contains: At   44 insert s.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  26,    5), fromServer: false, contains: At   45 insert ö.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  27,    5), fromServer: false, contains: At   45 insert d.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  28,    5), fromServer: false, contains: At   47 insert f.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  29,    5), fromServer: false, contains: At   48 insert l.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  30,    5), fromServer: false, contains: At   49 insert k.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  31,    5), fromServer: false, contains: At   50 insert j.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  32,    7), fromServer: false, contains: At   36 remove    8 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  33,   12), fromServer: false, contains: At   29 insert a.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  34,   12), fromServer: false, contains: At   30 insert ö.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  35,   12), fromServer: false, contains: At   30 insert s.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  36,   12), fromServer: false, contains: At   32 insert l.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  37,   12), fromServer: false, contains: At   32 insert d.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  38,   12), fromServer: false, contains: At   34 insert k.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  39,   12), fromServer: false, contains: At   35 insert f.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  40,   12), fromServer: false, contains: At   36 insert j.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  41,   12), fromServer: false, contains: At   37 insert a.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  42,   12), fromServer: false, contains: At   38 insert s.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  43,   12), fromServer: false, contains: At   39 insert f.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  44,   12), fromServer: false, contains: At   39 insert d.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  45,   13), fromServer: false, contains: At   48 insert a.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  46,   13), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  47,   13), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  48,   14), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  49,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  50,   14), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  51,   22), fromServer: false, contains: At   25 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  52,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  53,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  54,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  55,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  56,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  57,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  58,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  59,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  60,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  61,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  62,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  63,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  64,   23), fromServer: false, contains: At   12 remove    1 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  65,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Transformed to: ((  44,   12), fromServer: true, contains: At    5 remove    1 characters., (  66,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Text before: asdasaskdjfdflasödlkfjasdfkassdöflkj
+Text after:  asdasskdjfdflasödlkfjasdfkassdöflkj
+Received: (  45,   19), fromServer: true, contains: At   34 insert j.
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  19,    0), fromServer: false, contains: At   38 insert s.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  20,    0), fromServer: false, contains: At   40 insert d.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  21,    0), fromServer: false, contains: At   41 insert k.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  22,    0), fromServer: false, contains: At   41 insert j.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  23,    0), fromServer: false, contains: At   43 insert f.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  24,    5), fromServer: false, contains: At   44 insert a.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  25,    5), fromServer: false, contains: At   45 insert s.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  26,    5), fromServer: false, contains: At   46 insert ö.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  27,    5), fromServer: false, contains: At   46 insert d.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  28,    5), fromServer: false, contains: At   48 insert f.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  29,    5), fromServer: false, contains: At   49 insert l.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  30,    5), fromServer: false, contains: At   50 insert k.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  31,    5), fromServer: false, contains: At   51 insert j.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  32,    7), fromServer: false, contains: At   37 remove    8 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   35 insert j., (  33,   12), fromServer: false, contains: At   29 insert a.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   36 insert j., (  34,   12), fromServer: false, contains: At   30 insert ö.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   37 insert j., (  35,   12), fromServer: false, contains: At   30 insert s.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   38 insert j., (  36,   12), fromServer: false, contains: At   32 insert l.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   39 insert j., (  37,   12), fromServer: false, contains: At   32 insert d.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   40 insert j., (  38,   12), fromServer: false, contains: At   34 insert k.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   41 insert j., (  39,   12), fromServer: false, contains: At   35 insert f.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   42 insert j., (  40,   12), fromServer: false, contains: At   36 insert j.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   43 insert j., (  41,   12), fromServer: false, contains: At   37 insert a.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   44 insert j., (  42,   12), fromServer: false, contains: At   38 insert s.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   45 insert j., (  43,   12), fromServer: false, contains: At   39 insert f.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   46 insert j., (  44,   12), fromServer: false, contains: At   39 insert d.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   46 insert j., (  45,   13), fromServer: false, contains: At   49 insert a.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   46 insert j., (  46,   13), fromServer: false, contains: At   49 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   46 insert j., (  47,   13), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   46 insert j., (  48,   14), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   45 insert j., (  49,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   44 insert j., (  50,   14), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   43 insert j., (  51,   22), fromServer: false, contains: At   25 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   42 insert j., (  52,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   41 insert j., (  53,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   40 insert j., (  54,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   39 insert j., (  55,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   38 insert j., (  56,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   37 insert j., (  57,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   36 insert j., (  58,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   35 insert j., (  59,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   34 insert j., (  60,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   33 insert j., (  61,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   32 insert j., (  62,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   31 insert j., (  63,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   30 insert j., (  64,   23), fromServer: false, contains: At   12 remove    1 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   30 insert j., (  65,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Transformed to: ((  45,   19), fromServer: true, contains: At   30 insert j., (  66,   23), fromServer: false, contains: At    5 remove    0 characters.)
+Text before: asdasskdjfdflasödlkfjasdfkassdöflkj
+Text after:  asdasskdjfdflasödlkfjasdfkassdjöflkj
+Received: (  46,   21), fromServer: true, contains: At    3 insert j.
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  21,    0), fromServer: false, contains: At   42 insert k.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  22,    0), fromServer: false, contains: At   42 insert j.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  23,    0), fromServer: false, contains: At   44 insert f.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  24,    5), fromServer: false, contains: At   45 insert a.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  25,    5), fromServer: false, contains: At   46 insert s.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  26,    5), fromServer: false, contains: At   47 insert ö.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  27,    5), fromServer: false, contains: At   47 insert d.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  28,    5), fromServer: false, contains: At   49 insert f.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  29,    5), fromServer: false, contains: At   50 insert l.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  30,    5), fromServer: false, contains: At   51 insert k.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  31,    5), fromServer: false, contains: At   52 insert j.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  32,    7), fromServer: false, contains: At   38 remove    8 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  33,   12), fromServer: false, contains: At   30 insert a.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  34,   12), fromServer: false, contains: At   31 insert ö.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  35,   12), fromServer: false, contains: At   31 insert s.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  36,   12), fromServer: false, contains: At   33 insert l.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  37,   12), fromServer: false, contains: At   33 insert d.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  38,   12), fromServer: false, contains: At   35 insert k.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  39,   12), fromServer: false, contains: At   36 insert f.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  40,   12), fromServer: false, contains: At   37 insert j.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  41,   12), fromServer: false, contains: At   38 insert a.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  42,   12), fromServer: false, contains: At   39 insert s.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  43,   12), fromServer: false, contains: At   40 insert f.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  44,   12), fromServer: false, contains: At   40 insert d.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  45,   13), fromServer: false, contains: At   50 insert a.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  46,   13), fromServer: false, contains: At   50 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  47,   13), fromServer: false, contains: At   49 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  48,   14), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  49,   14), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  50,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  51,   22), fromServer: false, contains: At   26 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  52,   23), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  53,   23), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  54,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  55,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  56,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  57,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  58,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  46,   21), fromServer: true, contains: At    3 insert j., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdasskdjfdflasödlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdflasödlkfjasdfkassdjöflkj
+Received: (  47,   27), fromServer: true, contains: At   22 remove    1 characters.
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  27,    5), fromServer: false, contains: At   46 insert d.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  28,    5), fromServer: false, contains: At   48 insert f.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  29,    5), fromServer: false, contains: At   49 insert l.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  30,    5), fromServer: false, contains: At   50 insert k.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  31,    5), fromServer: false, contains: At   51 insert j.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  32,    7), fromServer: false, contains: At   37 remove    8 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  33,   12), fromServer: false, contains: At   29 insert a.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  34,   12), fromServer: false, contains: At   30 insert ö.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  35,   12), fromServer: false, contains: At   30 insert s.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  36,   12), fromServer: false, contains: At   32 insert l.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  37,   12), fromServer: false, contains: At   32 insert d.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  38,   12), fromServer: false, contains: At   34 insert k.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  39,   12), fromServer: false, contains: At   35 insert f.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  40,   12), fromServer: false, contains: At   36 insert j.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  41,   12), fromServer: false, contains: At   37 insert a.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  42,   12), fromServer: false, contains: At   38 insert s.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  43,   12), fromServer: false, contains: At   39 insert f.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  44,   12), fromServer: false, contains: At   39 insert d.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  45,   13), fromServer: false, contains: At   49 insert a.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  46,   13), fromServer: false, contains: At   49 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  47,   13), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  48,   14), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  49,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  50,   14), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  51,   22), fromServer: false, contains: At   25 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  52,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  53,   23), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  54,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   22 remove    1 characters., (  55,   23), fromServer: false, contains: At   22 remove    0 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   21 remove    1 characters., (  56,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   20 remove    1 characters., (  57,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   19 remove    1 characters., (  58,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   18 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  47,   27), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdflasödlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdfasödlkfjasdfkassdjöflkj
+Received: (  48,   27), fromServer: true, contains: At   21 remove    1 characters.
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  27,    5), fromServer: false, contains: At   45 insert d.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  28,    5), fromServer: false, contains: At   47 insert f.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  29,    5), fromServer: false, contains: At   48 insert l.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  30,    5), fromServer: false, contains: At   49 insert k.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  31,    5), fromServer: false, contains: At   50 insert j.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  32,    7), fromServer: false, contains: At   36 remove    8 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  33,   12), fromServer: false, contains: At   28 insert a.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  34,   12), fromServer: false, contains: At   29 insert ö.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  35,   12), fromServer: false, contains: At   29 insert s.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  36,   12), fromServer: false, contains: At   31 insert l.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  37,   12), fromServer: false, contains: At   31 insert d.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  38,   12), fromServer: false, contains: At   33 insert k.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  39,   12), fromServer: false, contains: At   34 insert f.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  40,   12), fromServer: false, contains: At   35 insert j.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  41,   12), fromServer: false, contains: At   36 insert a.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  42,   12), fromServer: false, contains: At   37 insert s.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  43,   12), fromServer: false, contains: At   38 insert f.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  44,   12), fromServer: false, contains: At   38 insert d.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  45,   13), fromServer: false, contains: At   48 insert a.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  46,   13), fromServer: false, contains: At   48 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  47,   13), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  48,   14), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  49,   14), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  50,   14), fromServer: false, contains: At   43 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  51,   22), fromServer: false, contains: At   24 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  52,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  53,   23), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  54,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  55,   23), fromServer: false, contains: At   21 remove    0 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   21 remove    1 characters., (  56,   23), fromServer: false, contains: At   21 remove    0 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   20 remove    1 characters., (  57,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   19 remove    1 characters., (  58,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   18 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  48,   27), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdfasödlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdfsödlkfjasdfkassdjöflkj
+Received: (  49,   27), fromServer: true, contains: At   20 remove    1 characters.
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  27,    5), fromServer: false, contains: At   44 insert d.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  28,    5), fromServer: false, contains: At   46 insert f.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  29,    5), fromServer: false, contains: At   47 insert l.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  30,    5), fromServer: false, contains: At   48 insert k.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  31,    5), fromServer: false, contains: At   49 insert j.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  32,    7), fromServer: false, contains: At   35 remove    8 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  33,   12), fromServer: false, contains: At   27 insert a.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  34,   12), fromServer: false, contains: At   28 insert ö.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  35,   12), fromServer: false, contains: At   28 insert s.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  36,   12), fromServer: false, contains: At   30 insert l.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  37,   12), fromServer: false, contains: At   30 insert d.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  38,   12), fromServer: false, contains: At   32 insert k.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  39,   12), fromServer: false, contains: At   33 insert f.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  40,   12), fromServer: false, contains: At   34 insert j.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  41,   12), fromServer: false, contains: At   35 insert a.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  42,   12), fromServer: false, contains: At   36 insert s.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  43,   12), fromServer: false, contains: At   37 insert f.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  44,   12), fromServer: false, contains: At   37 insert d.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  45,   13), fromServer: false, contains: At   47 insert a.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  46,   13), fromServer: false, contains: At   47 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  47,   13), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  48,   14), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  49,   14), fromServer: false, contains: At   43 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  50,   14), fromServer: false, contains: At   42 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  51,   22), fromServer: false, contains: At   23 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  52,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  53,   23), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  54,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  55,   23), fromServer: false, contains: At   20 remove    0 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  56,   23), fromServer: false, contains: At   20 remove    0 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   20 remove    1 characters., (  57,   23), fromServer: false, contains: At   20 remove    0 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   19 remove    1 characters., (  58,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   18 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  49,   27), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdfsödlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdfödlkfjasdfkassdjöflkj
+Received: (  50,   27), fromServer: true, contains: At   19 remove    1 characters.
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  27,    5), fromServer: false, contains: At   43 insert d.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  28,    5), fromServer: false, contains: At   45 insert f.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  29,    5), fromServer: false, contains: At   46 insert l.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  30,    5), fromServer: false, contains: At   47 insert k.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  31,    5), fromServer: false, contains: At   48 insert j.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  32,    7), fromServer: false, contains: At   34 remove    8 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  33,   12), fromServer: false, contains: At   26 insert a.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  34,   12), fromServer: false, contains: At   27 insert ö.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  35,   12), fromServer: false, contains: At   27 insert s.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  36,   12), fromServer: false, contains: At   29 insert l.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  37,   12), fromServer: false, contains: At   29 insert d.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  38,   12), fromServer: false, contains: At   31 insert k.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  39,   12), fromServer: false, contains: At   32 insert f.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  40,   12), fromServer: false, contains: At   33 insert j.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  41,   12), fromServer: false, contains: At   34 insert a.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  42,   12), fromServer: false, contains: At   35 insert s.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  43,   12), fromServer: false, contains: At   36 insert f.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  44,   12), fromServer: false, contains: At   36 insert d.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  45,   13), fromServer: false, contains: At   46 insert a.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  46,   13), fromServer: false, contains: At   46 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  47,   13), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  48,   14), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  49,   14), fromServer: false, contains: At   42 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  50,   14), fromServer: false, contains: At   41 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  51,   22), fromServer: false, contains: At   22 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  52,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  53,   23), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  54,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  55,   23), fromServer: false, contains: At   19 remove    0 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  56,   23), fromServer: false, contains: At   19 remove    0 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  57,   23), fromServer: false, contains: At   19 remove    0 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   19 remove    1 characters., (  58,   23), fromServer: false, contains: At   19 remove    0 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   18 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  50,   27), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdfödlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdfdlkfjasdfkassdjöflkj
+Received: (  51,   28), fromServer: true, contains: At   18 remove    1 characters.
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  28,    5), fromServer: false, contains: At   44 insert f.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  29,    5), fromServer: false, contains: At   45 insert l.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  30,    5), fromServer: false, contains: At   46 insert k.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  31,    5), fromServer: false, contains: At   47 insert j.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  32,    7), fromServer: false, contains: At   33 remove    8 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  33,   12), fromServer: false, contains: At   25 insert a.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  34,   12), fromServer: false, contains: At   26 insert ö.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  35,   12), fromServer: false, contains: At   26 insert s.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  36,   12), fromServer: false, contains: At   28 insert l.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  37,   12), fromServer: false, contains: At   28 insert d.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  38,   12), fromServer: false, contains: At   30 insert k.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  39,   12), fromServer: false, contains: At   31 insert f.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  40,   12), fromServer: false, contains: At   32 insert j.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  41,   12), fromServer: false, contains: At   33 insert a.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  42,   12), fromServer: false, contains: At   34 insert s.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  43,   12), fromServer: false, contains: At   35 insert f.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  44,   12), fromServer: false, contains: At   35 insert d.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  45,   13), fromServer: false, contains: At   45 insert a.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  46,   13), fromServer: false, contains: At   45 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  47,   13), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  48,   14), fromServer: false, contains: At   43 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  49,   14), fromServer: false, contains: At   41 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  50,   14), fromServer: false, contains: At   40 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  51,   22), fromServer: false, contains: At   21 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  52,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  53,   23), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  54,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  55,   23), fromServer: false, contains: At   18 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  56,   23), fromServer: false, contains: At   18 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  57,   23), fromServer: false, contains: At   18 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  58,   23), fromServer: false, contains: At   18 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   18 remove    1 characters., (  59,   23), fromServer: false, contains: At   18 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  51,   28), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdfdlkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdflkfjasdfkassdjöflkj
+Received: (  52,   28), fromServer: true, contains: At   17 remove    1 characters.
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  28,    5), fromServer: false, contains: At   43 insert f.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  29,    5), fromServer: false, contains: At   44 insert l.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  30,    5), fromServer: false, contains: At   45 insert k.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  31,    5), fromServer: false, contains: At   46 insert j.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  32,    7), fromServer: false, contains: At   32 remove    8 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  33,   12), fromServer: false, contains: At   24 insert a.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  34,   12), fromServer: false, contains: At   25 insert ö.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  35,   12), fromServer: false, contains: At   25 insert s.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  36,   12), fromServer: false, contains: At   27 insert l.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  37,   12), fromServer: false, contains: At   27 insert d.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  38,   12), fromServer: false, contains: At   29 insert k.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  39,   12), fromServer: false, contains: At   30 insert f.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  40,   12), fromServer: false, contains: At   31 insert j.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  41,   12), fromServer: false, contains: At   32 insert a.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  42,   12), fromServer: false, contains: At   33 insert s.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  43,   12), fromServer: false, contains: At   34 insert f.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  44,   12), fromServer: false, contains: At   34 insert d.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  45,   13), fromServer: false, contains: At   44 insert a.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  46,   13), fromServer: false, contains: At   44 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  47,   13), fromServer: false, contains: At   43 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  48,   14), fromServer: false, contains: At   42 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  49,   14), fromServer: false, contains: At   40 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  50,   14), fromServer: false, contains: At   39 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  51,   22), fromServer: false, contains: At   20 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  52,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  53,   23), fromServer: false, contains: At   18 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  54,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  55,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  56,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  57,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  58,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  59,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   17 remove    1 characters., (  60,   23), fromServer: false, contains: At   17 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  52,   28), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdflkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdfkfjasdfkassdjöflkj
+Received: (  53,   28), fromServer: true, contains: At   16 remove    1 characters.
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  28,    5), fromServer: false, contains: At   42 insert f.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  29,    5), fromServer: false, contains: At   43 insert l.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  30,    5), fromServer: false, contains: At   44 insert k.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  31,    5), fromServer: false, contains: At   45 insert j.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  32,    7), fromServer: false, contains: At   31 remove    8 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  33,   12), fromServer: false, contains: At   23 insert a.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  34,   12), fromServer: false, contains: At   24 insert ö.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  35,   12), fromServer: false, contains: At   24 insert s.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  36,   12), fromServer: false, contains: At   26 insert l.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  37,   12), fromServer: false, contains: At   26 insert d.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  38,   12), fromServer: false, contains: At   28 insert k.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  39,   12), fromServer: false, contains: At   29 insert f.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  40,   12), fromServer: false, contains: At   30 insert j.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  41,   12), fromServer: false, contains: At   31 insert a.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  42,   12), fromServer: false, contains: At   32 insert s.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  43,   12), fromServer: false, contains: At   33 insert f.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  44,   12), fromServer: false, contains: At   33 insert d.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  45,   13), fromServer: false, contains: At   43 insert a.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  46,   13), fromServer: false, contains: At   43 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  47,   13), fromServer: false, contains: At   42 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  48,   14), fromServer: false, contains: At   41 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  49,   14), fromServer: false, contains: At   39 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  50,   14), fromServer: false, contains: At   38 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  51,   22), fromServer: false, contains: At   19 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  52,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  53,   23), fromServer: false, contains: At   17 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  54,   23), fromServer: false, contains: At   16 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  55,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  56,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  57,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  58,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  59,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  60,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   16 remove    1 characters., (  61,   23), fromServer: false, contains: At   16 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   15 remove    1 characters., (  62,   23), fromServer: false, contains: At   15 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   14 remove    1 characters., (  63,   23), fromServer: false, contains: At   14 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   13 remove    1 characters., (  64,   23), fromServer: false, contains: At   13 remove    1 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   13 remove    1 characters., (  65,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Transformed to: ((  53,   28), fromServer: true, contains: At   13 remove    1 characters., (  66,   23), fromServer: false, contains: At    6 remove    0 characters.)
+Text before: asdjasskdjfdfkfjasdfkassdjöflkj
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdfkasjsdöflkj
+
+Received: (  54,   69), fromServer: true, contains: At   50 remove    1 characters.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdfkasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdfasjsdöflkj
+
+Received: (  55,   69), fromServer: true, contains: At   49 remove    1 characters.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdfasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdasjsdöflkj
+
+Received: (  56,   69), fromServer: true, contains: At   48 remove    1 characters.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasdasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasasjsdöflkj
+
+Received: (  57,   69), fromServer: true, contains: At   47 remove    1 characters.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjaasjsdöflkj
+
+Received: (  58,   69), fromServer: true, contains: At   46 remove    1 characters.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjaasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasjsdöflkj
+
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjasskdjflkfjasjsdöflkj
+
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjas
+Received: (  59,   69), fromServer: true, contains: At   45 remove    1 characters.
+Transformed to: ((  59,   69), fromServer: true, contains: At   37 remove    0 characters., (  69,   59), fromServer: false, contains: At   45 remove  -19 characters.)
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asdjas
+Received: (  60,   69), fromServer: true, contains: At   44 remove    1 characters.
+Transformed to: ((  60,   69), fromServer: true, contains: At   44 remove    1 characters., (  69,   59), fromServer: false, contains: At   44 remove  -19 characters.)
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjas
+java.lang.IllegalArgumentException: Invalid remove
+	at javax.swing.JTextArea.replaceRange(JTextArea.java:512)
+	at ddist.EventDisplayer$2.run(EventDisplayer.java:83)
+	at java.awt.event.InvocationEvent.dispatch(InvocationEvent.java:251)
+	at java.awt.EventQueue.dispatchEventImpl(EventQueue.java:727)
+	at java.awt.EventQueue.access$200(EventQueue.java:103)
+	at java.awt.EventQueue$3.run(EventQueue.java:688)
+	at java.awt.EventQueue$3.run(EventQueue.java:686)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at java.security.ProtectionDomain$1.doIntersectionPrivilege(ProtectionDomain.java:76)
+	at java.awt.EventQueue.dispatchEvent(EventQueue.java:697)
+	at java.awt.EventDispatchThread.pumpOneEventForFilters(EventDispatchThread.java:242)
+	at java.awt.EventDispatchThread.pumpEventsForFilter(EventDispatchThread.java:161)
+	at java.awt.EventDispatchThread.pumpEventsForHierarchy(EventDispatchThread.java:150)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:146)
+	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:138)
+	at java.awt.EventDispatchThread.run(EventDispatchThread.java:91)
+Received: (  61,   70), fromServer: true, contains: At   33 insert a.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asadjas
+Received: (  62,   70), fromServer: true, contains: At   34 insert ö.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asadjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaödjas
+Received: (  63,   70), fromServer: true, contains: At   35 insert l.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaödjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaöldjas
+Received: (  64,   70), fromServer: true, contains: At   35 insert s.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaöldjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaösldjas
+Received: (  65,   70), fromServer: true, contains: At   37 insert k.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaösldjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaöslkdjas
+Received: (  66,   70), fromServer: true, contains: At   37 insert d.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaöslkdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaösldkdjas
+Received: (  67,   70), fromServer: true, contains: At   39 insert f.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaösldkdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaösldkfdjas
+Received: (  68,   70), fromServer: true, contains: At   40 insert j.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaösldkfdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaösldkfjdjas
+Received: (  69,   70), fromServer: true, contains: At   41 insert a.
+Text before: asdjasskdjfdffjasdfkassdjöflkj
+asaösldkfjdjas
+Text after:  asdjasskdjfdffjasdfkassdjöflkj
+asaösldkfjadjas
+

@@ -11,15 +11,15 @@ public class JupiterClient implements Runnable {
 
     private BlockingQueue<Event> _inqueue;
     private BlockingQueue<Event> _toServer;
-    private BlockingQueue<Event> _toReplayer;
+    private BlockingQueue<Event> _toDisplayer;
     private final boolean _isServer; // Makes sense in the 1-1 case
 
     public JupiterClient(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toReplayer, boolean isServer) {
-        _inqueue    = inqueue;
-        _toServer   = toServer;
-        _toReplayer = toReplayer;
-        _isServer   = isServer;
+            toServer, BlockingQueue<Event> toDisplayer, boolean isServer) {
+        _inqueue     = inqueue;
+        _toServer    = toServer;
+        _toDisplayer = toDisplayer;
+        _isServer    = isServer;
     }
 
     public void run() {
@@ -33,11 +33,11 @@ public class JupiterClient implements Runnable {
             }
 
             // Generate(op)
-            if (event instanceof MyTextEvent) {
-                MyTextEvent localOp = (MyTextEvent) event;
+            if (event instanceof TextChangeEvent) {
+                TextChangeEvent localOp = (TextChangeEvent) event;
 
                 // apply op locally
-                _toReplayer.add(localOp);
+                _toDisplayer.add(localOp);
 
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent
@@ -60,20 +60,32 @@ public class JupiterClient implements Runnable {
                     _outgoing.remove(0);
                 }
 
+                System.err.println("Received: " + received);
+
                 // Transform new message and the ones in the queue.
                 for (int i = 0; i < _outgoing.size(); ++i) {
                     // {msg, outgoing[i]} = xform(msg, outgoing[i])
                     TransformedPair tp
                         = transformer.transform(received, _outgoing.get(i));
+                    System.err.println("Transformed to: " + tp);
                     received = tp.getReceived();
                     _outgoing.set(i, tp.getLocal());
                 }
 
                 // apply msg.op locally
-                _toReplayer.add(received.getContainedEvent());
+                _toDisplayer.add(received.getContainedEvent());
 
                 // otherMsgs = otherMsgs + 1
                 _currentTime.incOtherTime();
+            }
+            // Want to disconnect
+            else if (event instanceof DisconnectEvent) {
+                // Pass event on and stop work
+                _toDisplayer.add(event);
+                break;
+            }
+            else {
+                throw new IllegalArgumentException("Got unknown event.");
             }
         }
     }

@@ -10,7 +10,6 @@ import java.util.concurrent.BlockingQueue;
  * sending them to another editor.
  */
 public class EventSender implements Runnable {
-    private BlockingQueue<Event> _inEventQueue;
     private BlockingQueue<Event> _outEventQueue;
     private Socket _socket;
 
@@ -21,10 +20,8 @@ public class EventSender implements Runnable {
      * @param outEventQueue a BlockingQueue from which to take events for
      * sending to the other editor
      */
-    public EventSender(Socket sock, BlockingQueue<Event> inEventQueue,
-            BlockingQueue<Event> outEventQueue) {
+    public EventSender(Socket sock, BlockingQueue<Event> outEventQueue) {
         _socket        = sock;
-        _inEventQueue  = inEventQueue;
         _outEventQueue = outEventQueue;
     }
 

@@ -16,4 +16,9 @@ public class TransformedPair {
     public JupiterEvent getLocal() {
         return _local;
     }
+
+    @Override
+    public String toString() {
+        return "(" + _received.toString() + ", " + _local.toString() + ")";
+    }
 }

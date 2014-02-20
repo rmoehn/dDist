@@ -42,37 +42,33 @@ public class DistributedTextEditor extends JFrame {
      * Queue for holding events coming in from the upper text area or the
      * other editor to be sent to the Jupiter algorithm.
      */
-    private BlockingQueue<Event> inEventQueue
-        = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> inEventQueue = new LinkedBlockingQueue<>();
 
     /*
      * Queue for holding events coming from the upper text area to be sent to
      * the other editor.
      */
-    private BlockingQueue<Event> outEventQueue
-        = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> outEventQueue = new LinkedBlockingQueue<>();
 
     /*
      * Queue on which the Jupiter algorithm sends processed events to the
      * upper text area.
      */
-    private BlockingQueue<Event> replayQueue
+    private BlockingQueue<Event> displayEventQueue 
         = new LinkedBlockingQueue<>();
 
-    private EventReplayer er;
-    private Thread ert;
+    private EventDisplayer eventDisplayer;
+    private Thread eventDisplayerThread;
 
     private JFileChooser dialog =
     		new JFileChooser(System.getProperty("user.dir"));
 
     private String currentFile = "Untitled";
     private boolean changed = false;
-    private boolean connected = false;
     private DocumentEventCapturer dec
         = new DocumentEventCapturer(inEventQueue);
 
     public DistributedTextEditor() {
-        dec.enableEventGeneration();
     	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
     	((AbstractDocument)area1.getDocument()).setDocumentFilter(dec);
 
@@ -117,9 +113,9 @@ public class DistributedTextEditor extends JFrame {
 	setTitle("Disconnected");
 	setVisible(true);
 
-	er = new EventReplayer(replayQueue, area1, this);
-	ert = new Thread(er);
-	ert.start();
+	eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
+	eventDisplayerThread = new Thread(eventDisplayer);
+	eventDisplayerThread.start();
     }
 
     private KeyListener k1 = new KeyAdapter() {
@@ -166,18 +162,14 @@ public class DistributedTextEditor extends JFrame {
                         servSock.close();
                     }
                     catch (IOException ex) {
+                        JOptionPane.showMessageDialog(
+                            DistributedTextEditor.this, "Cannot listen.");
                         ex.printStackTrace();
-                        System.exit(1);
+                        return;
                     }
 
                     // Set up the event sending and receiving
-                    startCommunication(
-                        socket,
-                        inEventQueue,
-                        outEventQueue,
-                        replayQueue,
-                        true
-                    );
+                    startCommunication(socket, true);
 
                     // Give the editor a better title
                     setTitle(
@@ -214,18 +206,14 @@ public class DistributedTextEditor extends JFrame {
             try {
                 socket = new Socket(address, port);
             } catch (IOException ex) {
+                JOptionPane.showMessageDialog(
+                    DistributedTextEditor.this, "Connecting failed.");
                 ex.printStackTrace();
-                System.exit(1);
+                return;
             }
 
             // Set up the event sending and receiving
-            startCommunication(
-                socket,
-                inEventQueue,
-                outEventQueue,
-                replayQueue,
-                false
-            );
+            startCommunication(socket, false);
 
             // Give the editor a better title
 	    	setTitle(
@@ -304,16 +292,12 @@ public class DistributedTextEditor extends JFrame {
      * Start threads for handling the transportation of events between the
      * network and the local event queues.
      */
-    private void startCommunication(Socket socket,
-            BlockingQueue<Event> inEventQueue,
-            BlockingQueue<Event> outEventQueue,
-            BlockingQueue<Event> replayQueue,
-            boolean isServer) {
+    private void startCommunication(Socket socket, boolean isServer) {
         // Start thread containing the Jupiter client/server
         JupiterClient jc = new JupiterClient(
                                inEventQueue,
                                outEventQueue,
-                               replayQueue,
+                               displayEventQueue,
                                isServer
                            );
         Thread jupiterThread = new Thread(jc);
@@ -327,9 +311,11 @@ public class DistributedTextEditor extends JFrame {
 
         // Start thread for taking outgoing events from the outqueue
         EventSender sender
-            = new EventSender(socket, inEventQueue, outEventQueue);
+            = new EventSender(socket, outEventQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
+
+        dec.enableEventGeneration();
     }
 
     public static void main(String[] arg) {
