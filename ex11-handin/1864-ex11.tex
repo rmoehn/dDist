@@ -78,7 +78,7 @@ report, so we share the workload at 50\% each.
 In this report we present an editor, the instances of which are able
 to connect to each other and to capture editing actions in one editor
 and replay them in another \textit{in the same textarea}.  We build
-upon the editor from excercise 09. Whitch where able to connect and
+upon the editor from excercise~09. Whitch where able to connect and
 send edit event to each other, but not in the same textarea. Our contribution was to
 make two editors merge their edit in the same window.
 
@@ -88,7 +88,7 @@ decisions we made in developing the editor. The conclusion contains a
 list of issues with the editor that still need to be addressed.
 
 \chapter{Operational transformation}
-\fxwarning{Write something about the techniques.}
+\fxwarning{Richard writes something about the techniques.}
 
 \tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
     minimum height=2em, minimum width=11em, text centered},
@@ -157,8 +157,8 @@ list of issues with the editor that still need to be addressed.
 
 \chapter{Code Overview}
 Our main addition of code was in and around the \mil{JupiterClient}-class. We changed the flow of the event to go trough it. It is most easily show on figure \ref{fig:event}.
+\fxwarning{Richard writes something.}
 
-\fxwarning{Are all the names here in the figure the right ones?}
 \begin{figure}[hbp]
   \centering
   \caption{\mil{Event}'s path through the system in the editor as
@@ -168,7 +168,7 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
     \node[c] (net) {Network};
     \node[b, above right=2.5em of net.north] (esen) {\texttt{EventSender}};
     \node[g, above=2.5em of esen] (oqueue) {Outbound queue};
-    \node[r, above=12em of net] (jc) {\texttt{JupterClient}};
+    \node[r, above=12em of net] (jc) {\texttt{JupiterClient}};
     \node[b, above left=2.5em of net.north] (erec) {\texttt{EventReceiver}};
     \node[g, above=2.5em of erec] (iqueue) {Inbound queue};
     \node[g, above=2.5em of jc.north east] (dqueue) {Display queue};
@@ -203,15 +203,25 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   \label{fig:event}
 \end{figure}
 
-\newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
+\section{\mil{JupiterClient}}
+%\inmnt{35}{80}{JupiterClient.java}
+\fxwarning{Richard writes something.}
 
+\section{\mil{DocumentEventCapturer}}
+%\inmnt{195}{228}{DocumentEventCapturer.java}
+\fxwarning{Mathias writes something.}
+
+
+\section{\mil{Transformer}}
+\fxwarning{Richard writes something.}
+%\inmnt{195}{228}{Transformer.java}
+\newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
 \newcommand\acoord[1]{\ncoord[0em,.9em]{#1}}
 \newcommand\bcoord[1]{\ncoord[0em,-.4em]{#1}}
-\newpage
+%\newpage
 %\texttt{… a b c d e f g h i j k …}\\
 \texttt{… a b c\ \acoord{1d}d e f\ \bcoord{1g}g\acoord{1G} h i\bcoord{1I} j k …}\\\\
 \texttt{… a b c\ \ncoord[-.2em,.9em]{2d}h i j k …}\\
-
 
 \tikz[overlay,remember picture] {
     \draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
