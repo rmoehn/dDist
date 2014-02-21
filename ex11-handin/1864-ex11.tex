@@ -62,6 +62,10 @@
 \usepackage{lipsum}
 \usepackage[margin,draft]{fixme} \fxusetheme{color}
 
+\renewcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
+\renewcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
+\DeclareMathOperator{\transform}{transform}
+
 \begin{document}
 \supertitle{Distributed Systems}
 \title{Exercise 11}
@@ -89,6 +93,70 @@ list of issues with the editor that still need to be addressed.
 
 \chapter{Operational transformation}
 \fxwarning{Richard writes something about the techniques.}
+
+There exist quite some applications for collaborative text editing;
+examples are Saros \cite{Saros}, Google Wave \cite{GoogleWave} or Gobby
+\cite{Gobby}. They all use a client-server approach for synchronising
+optimistically. This means, changes to the text are made immediately
+(when the user presses a key, for example) and then sent to the server,
+which in turn sends them to the other clients. If changes are made
+concurrently by multiple users, an algorithm makes sure that everyone
+ends up with the same text. This approach to synchronisation, or to
+preserving consistency, increases distribution transparency since there
+is no delay between user input and its effects on the screen. However,
+the implementation becomes a little more difficult.
+
+One method for this kind of synchronisation is operational
+transformation: Operations represent changes to the text and they are
+first applied locally, then sent to the other parties editing the same
+text. If the other parties edit their versions of
+the text in the meantime, they have to transform the received operation
+so that it does what was intended.
+
+Example: A and B start with text \textex{abcdefg}. A inserts
+\textex{123} at offset 2 and gets \textex{ab123cdefg}, then sends the
+operation to B. Before B receives it, she removes two characters at
+offset 4 and gets \textex{abcdg}, then she sends this operation to A.
+Now, A and B receive the operations from each other, but if they applied
+them directly, they would end up with different versions of the text: A
+with \textex{ab12defg} and B with \textex{ab123cdg}. In this case, the
+result B gets already appears as a sensible combination of the two
+operations. So only the remove operation A received has to be shifted by
+three characters to the right, so that it ends up with that text, too.
+Mathematically:
+
+\begin{align*}
+    t   &:= \textex{abcdefg} \\
+    o_A &:= (\opname{insert}, 2, \textex{123}) \\
+    o_B &:= (\opname{remove}, 4, 2) \\
+    o_A(t) &= \textex{ab123cdefg} \\
+    o_B(t) &= \textex{abcdg} \\
+    (o_B ∘ o_A)(t) &= \textex{ab12defg} \\
+    (o_A ∘ o_B)(t) &= \textex{ab123cdg} \\
+    (o_A', o_B') &:= \transform(o_A, o_B) \\
+    (o_B' ∘ o_A)(t) = (o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
+\end{align*}
+
+The $\transform$ function is the first component of operational
+transformation. Its defining property is: 
+
+\begin{equation*}
+    ∀ o_a, o_b: (o_a', o_b') := \transform(o_a, o_b) ⇒ (o_b' ∘ o_a) = (o_a' ∘ o_b)
+\end{equation*}
+
+That means, if two copies of the same text have diverged by applying
+$o_a$ to one and $o_b$ to the other, then applying $o_b'$ after $o_a$
+and $o_a'$ after $o_b$ brings them in synch again. Any function that has
+the above property can be used as $\transform$, but most of them will
+only consistent, but not sensible, results.
+
+The second component of operational transformation is an algorithm that
+wraps the $\transform$ function, sends operations to other parties,
+receives operations from other parties, transforms them and applies them
+locally.  All the applications mentioned above use a version of the
+so-called Jupiter algorithm, which was originally published in
+\cite{Jupiter}. By using a client-server approach it reduces the problem
+of synchronising $n$ parties to the problem of synchronising 2 parties.
 
 \tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
     minimum height=2em, minimum width=11em, text centered},
