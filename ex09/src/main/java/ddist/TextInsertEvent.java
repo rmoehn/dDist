@@ -16,6 +16,11 @@ public class TextInsertEvent extends TextChangeEvent {
 	}
 	public String getText() { return text; }
 
+    protected String apply(String text) {
+        return (new StringBuffer(text)).insert(this.getOffset(), text)
+                                       .toString();
+    }
+
     @Override
     public String toString() {
         return String.format(

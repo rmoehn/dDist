@@ -33,15 +33,19 @@ public class JupiterClient implements Runnable {
             }
 
             // Generate(op)
-            if (event instanceof TextChangeEvent) {
-                TextChangeEvent localOp = (TextChangeEvent) event;
+            if (event instanceof DebugTextEvent) {
+                DebugTextEvent debugEvent = (DebugTextEvent) event;
+                TextChangeEvent localOp   = debugEvent.getContainedEvent();
 
                 // apply op locally
                 _toDisplayer.add(localOp);
 
                 // send(op, my Msgs, otherMsgs)
-                JupiterEvent jupiterEvent
-                    = new JupiterEvent(localOp, _currentTime.getCopy(), _isServer);
+                JupiterEvent jupiterEvent = new JupiterEvent(
+                                                debugEvent,
+                                                _currentTime.getCopy(),
+                                                _isServer
+                                            );
                 _toServer.add(jupiterEvent);
 
                 // add (op, my Msgs) to outgoing

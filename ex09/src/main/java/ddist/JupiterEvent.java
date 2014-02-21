@@ -29,7 +29,7 @@ class JupiterEvent implements Event {
     }
 
     public Event getContainedEvent() {
-        return _containedEvent;
+        return ((DebugTextEvent) _containedEvent).getContainedEvent();
     }
 
     public boolean isFromServer() {

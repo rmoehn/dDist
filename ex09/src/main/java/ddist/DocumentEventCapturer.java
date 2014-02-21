@@ -43,7 +43,13 @@ public class DocumentEventCapturer extends DocumentFilter {
 	throws BadLocationException {
 	/* Queue a copy of the event or modify the textarea */
         if (isGenerateEvents) {
-            eventHistory.add(new TextInsertEvent(offset, str));
+            Document doc = fb.getDocument();
+            eventHistory.add(
+                new DebugTextEvent(
+                    new TextInsertEvent(offset, str),
+                    doc.getText(0, doc.getLength()
+                )
+            );
         }
         else {
             super.insertString(fb, offset, str, a);
@@ -54,7 +60,13 @@ public class DocumentEventCapturer extends DocumentFilter {
 	throws BadLocationException {
 	/* Queue a copy of the event or modify the textarea */
         if (isGenerateEvents) {
-            eventHistory.add(new TextRemoveEvent(offset, length));
+            Document doc = fb.getDocument();
+            eventHistory.add(
+                new DebugTextEvent(
+                    new TextRemoveEvent(offset, length),
+                    doc.getText(0, doc.getLength()
+                )
+            );
         }
         else {
             super.remove(fb, offset, length);
@@ -76,11 +88,11 @@ public class DocumentEventCapturer extends DocumentFilter {
             super.replace(fb, offset, length, str, a);
         }
     }
-    
+
     public void enableEventGeneration() {
         this.isGenerateEvents = true;
     }
-    
+
     public void disableEventGeneration() {
         this.isGenerateEvents = false;
     }

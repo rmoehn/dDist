@@ -12,6 +12,14 @@ public class TextRemoveEvent extends TextChangeEvent {
 
 	public int getLength() { return length; }
 
+    protected String apply(String text) {
+        return (new StringBuffer(text)).delete(
+                                            this.getOffset(),
+                                            this.getOffset() + length
+                                        )
+                                       .toString();
+    }
+
     @Override
     public String toString() {
         return String.format(
