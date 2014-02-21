@@ -63,6 +63,7 @@ public class EventDisplayer implements Runnable {
                                     area.insert(tie.getText(), tie.getOffset());
                                     filter.enableEventGeneration();
                 System.err.println("Text after:  " + area.getText());
+                System.err.println();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     /* We catch all axceptions, as an uncaught
@@ -85,6 +86,7 @@ public class EventDisplayer implements Runnable {
                                                       tre.getLength());
                                     filter.enableEventGeneration();
                 System.err.println("Text after:  " + area.getText());
+                System.err.println();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     /* We catch all axceptions, as an uncaught

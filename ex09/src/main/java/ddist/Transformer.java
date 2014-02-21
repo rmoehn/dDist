@@ -90,11 +90,47 @@ public class Transformer {
             int remOffs               = locRemove.getOffset();
             int remLen                = locRemove.getLength();
 
+                /*
+                 *    abcdefghijklmnopqrstuvwxyz
+                 *
+                 * L: abcdefghijklmnopqrstuvwxyz
+                 *    abcdefghijklmnopqrstuvwxyz
+                 *
+                 * R: abcdefghijklmnopqrstuvwxyz
+                 *    abcdefghijklmnopqrstuvwxyz
+                 *
+                 */
+
+            /*
+             *        123
+             *        v
+             *    abcdefghijklmnopqrstuvwxyz
+             *              ^----
+             *
+             * L: abcdefghijpqrstuvwxyz
+             *    abcd123efghijpqrstuvwxyz
+             *
+             * R: abcd123efghijklmnopqrstuvwxyz
+             *    abcd123efghijpqrstuvwxyz
+             */
             if (insOffs <= remOffs) {
                 transRecTE = new TextInsertEvent(insOffs, insStr);
                 transLocTE = new TextRemoveEvent(remOffs + insLen, remLen);
             }
             else {
+                /*
+                 *        123
+                 *        v
+                 *    abcdefghijklmnopqrstuvwxyz
+                 *     ^----
+                 *
+                 * L: aghijklmnopqrstuvwxyz
+                 *    aghijklmnopqrstuvwxyz
+                 *
+                 * R: abcd123efghijklmnopqrstuvwxyz
+                 *    aghijklmnopqrstuvwxyz
+                 *
+                 */
                 // If we want to insert into a region that gets deleted
                 if (insOffs < remOffs + remLen) {
                     // Throw away the insert -- unelegant, but easy
