@@ -62,8 +62,10 @@
 \usepackage{lipsum}
 \usepackage[margin,draft]{fixme} \fxusetheme{color}
 
-\renewcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
-\renewcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
+\newcommand*{\prtA}{\textsc{a}}
+\newcommand*{\prtB}{\textsc{b}}
+\newcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
+\newcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
 \DeclareMathOperator{\transform}{transform}
 
 \begin{document}
@@ -113,17 +115,17 @@ text. If the other parties edit their versions of
 the text in the meantime, they have to transform the received operation
 so that it does what was intended.
 
-Example: A and B start with text \textex{abcdefg}. A inserts
+Example: \prtA and \prtB start with text \textex{abcdefg}. \prtA inserts
 \textex{123} at offset 2 and gets \textex{ab123cdefg}, then sends the
-operation to B. Before B receives it, she removes two characters at
+operation to B. Before \prtB receives it, she removes two characters at
 offset 4 and gets \textex{abcdg}, then she sends this operation to A.
-Now, A and B receive the operations from each other, but if they applied
-them directly, they would end up with different versions of the text: A
-with \textex{ab12defg} and B with \textex{ab123cdg}. In this case, the
-result B gets already appears as a sensible combination of the two
-operations. So only the remove operation A received has to be shifted by
-three characters to the right, so that it ends up with that text, too.
-Mathematically:
+Now, \prtA and \prtB receive the operations from each other, but if they
+applied them directly, they would end up with different versions of the
+text: A with \textex{ab12defg} and \prtB with \textex{ab123cdg}. In this
+case, the result \prtB gets already appears as a sensible combination of
+the two operations. So only the remove operation \prtA received has to
+be shifted by three characters to the right, so that it ends up with
+that text, too.  Mathematically:
 
 \begin{align*}
     t   &:= \textex{abcdefg} \\
