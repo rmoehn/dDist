@@ -269,15 +269,13 @@ operation.
 
 
 \chapter{Code Overview}
-Our main addition of code was in and around the \mil{JupiterClient}-class. We changed the flow of the event to go trough it. It is most easily show on figure \ref{fig:event}.
-\fxwarning{Richard writes something.}
 
 \begin{figure}[hbp]
   \centering
   \fxwarning{The EventDisplayer communicates directly with the text
   area.}
   \caption{\mil{Event}'s path through the system in the editor as
-    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextEditEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
+    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextChangeEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
   \begin{tikzpicture}[node distance=1cm, auto]
     \footnotesize
     \node[c] (net) {Network};
@@ -318,9 +316,35 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   \label{fig:event}
 \end{figure}
 
+Thanks to the layered architecture (not very stringent) and message
+queueing, we didn't have to change much of the existing code in order to
+allow for distributed editing of the same text. -- Of course, one text
+area had to go and \mil{DocumentEventCapturer} and \mil{EventDisplayer}
+(formerly \mil{EventReplayer}) now operate on the remaining one.
+But otherwise only the \mil{JupiterClient} got plugged in between
+receiving and sending, and capturing and displaying events,
+respectively. Figure \ref{fig:event} shows the new configuration.
+
+
 \section{\mil{JupiterClient}}
 %\inmnt{35}{80}{JupiterClient.java}
-\fxwarning{Richard writes something.}
+
+The \mil{JupiterClient} is called like that because it will be used as
+the client Jupiter class for the next handin with $n$ parties. Right
+now, there is one \mil{JupiterClient}s on each of the two editors
+running.
+
+All events go through the \mil{JupiterClient}: Both user inputs in the
+form of \mil{TextChangeEvent}s and events from the other
+\mil{JupiterClient} in the form of \mil{JupiterEvent}s come in through
+the inbound queue.  If an incoming event came from the user's actions on
+the text area, the \mil{JupiterClient} wraps it in a \mil{JupiterEvent},
+including a timestamp and sends it to the other editor. It gives it
+to the \mil{EventReplayer}, so that the user actually sees the result of
+her input. If, on the other hand, an incoming event came from the other
+editor, the \mil{JupiterClient} transforms it, if necessary, before
+giving it to the \mil{EventReplayer}.
+
 
 \section{\mil{DocumentEventCapturer}}
 %\inmnt{195}{228}{DocumentEventCapturer.java}
