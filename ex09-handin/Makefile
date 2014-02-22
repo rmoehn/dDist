@@ -1,8 +1,12 @@
-ex09-handin.pdf: ex09-handin.aux
+ex09-handin.pdf: ex09-handin.aux bach.bbl
 	xelatex -shell-escape ex09-handin.tex
 
-ex09-handin.aux: ex09-handin.tex
+ex09-handin.aux bach.bcf: ex09-handin.tex
 	xelatex -shell-escape ex09-handin.tex
+
+bach.bbl: bach.bcf literatur.bib
+	biber bach.bcf
+
 
 .PHONY: clean
 clean:

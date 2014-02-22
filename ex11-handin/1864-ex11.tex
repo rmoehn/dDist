@@ -62,10 +62,24 @@
 \usepackage{lipsum}
 \usepackage[margin,draft]{fixme} \fxusetheme{color}
 
+\usepackage{ragged2e}
+
+\usepackage{csquotes}
+\usepackage{biblatex}
+\usepackage[
+  language=english,
+  backend=biber,
+  sortcites=true,
+  hyperref=true,
+]{biblatex}
+\addbibresource{literatur.bib}
+
+
 \newcommand*{\prtA}{\textsc{a}}
 \newcommand*{\prtB}{\textsc{b}}
 \newcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
 \newcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
+\newcommand*{\state}[1]{\ensuremath{#1}}
 \DeclareMathOperator{\transform}{transform}
 
 \begin{document}
@@ -105,27 +119,26 @@ which in turn sends them to the other clients. If changes are made
 concurrently by multiple users, an algorithm makes sure that everyone
 ends up with the same text. This approach to synchronisation, or to
 preserving consistency, increases distribution transparency since there
-is no delay between user input and its effects on the screen. However,
-the implementation becomes a little more difficult.
+is no delay between user input and its effects on the screen. 
 
 One method for this kind of synchronisation is operational
 transformation: Operations represent changes to the text and they are
 first applied locally, then sent to the other parties editing the same
-text. If the other parties edit their versions of
-the text in the meantime, they have to transform the received operation
-so that it does what was intended.
+text. If the other parties edit their versions of the text in the
+meantime, they have to transform the received operation so that it does
+what was intended.
 
 Example: \prtA and \prtB start with text \textex{abcdefg}. \prtA inserts
 \textex{123} at offset 2 and gets \textex{ab123cdefg}, then sends the
-operation to B. Before \prtB receives it, she removes two characters at
-offset 4 and gets \textex{abcdg}, then she sends this operation to A.
-Now, \prtA and \prtB receive the operations from each other, but if they
-applied them directly, they would end up with different versions of the
-text: A with \textex{ab12defg} and \prtB with \textex{ab123cdg}. In this
-case, the result \prtB gets already appears as a sensible combination of
-the two operations. So only the remove operation \prtA received has to
-be shifted by three characters to the right, so that it ends up with
-that text, too.  Mathematically:
+operation to \prtB. Before \prtB receives it, she removes two characters
+at offset 4 and gets \textex{abcdg}, then she sends this operation to
+\prtA.  Now, \prtA and \prtB receive the operations from each other, but
+if they applied them directly, they would end up with different versions
+of the text: \prtA with \textex{ab12defg} and \prtB with
+\textex{ab123cdg}. In this case, the result \prtB gets already appears
+like a sensible combination of the two operations. Then only the remove
+operation \prtA received has to be shifted by three characters to the
+right, so that it ends up with that text, too.  Mathematically:
 
 \begin{align*}
     t   &:= \textex{abcdefg} \\
@@ -136,6 +149,8 @@ that text, too.  Mathematically:
     (o_B ∘ o_A)(t) &= \textex{ab12defg} \\
     (o_A ∘ o_B)(t) &= \textex{ab123cdg} \\
     (o_A', o_B') &:= \transform(o_A, o_B) \\
+    o_A' &= (\opname{insert}, 2, \textex{123}) \\
+    o_B' &= (\opname{remove}, 4, 5) \\
     (o_B' ∘ o_A)(t) = (o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
 \end{align*}
 
@@ -150,7 +165,7 @@ That means, if two copies of the same text have diverged by applying
 $o_a$ to one and $o_b$ to the other, then applying $o_b'$ after $o_a$
 and $o_a'$ after $o_b$ brings them in synch again. Any function that has
 the above property can be used as $\transform$, but most of them will
-only consistent, but not sensible, results.
+only give consistent, but not sensible, results.
 
 The second component of operational transformation is an algorithm that
 wraps the $\transform$ function, sends operations to other parties,
@@ -159,6 +174,33 @@ locally.  All the applications mentioned above use a version of the
 so-called Jupiter algorithm, which was originally published in
 \cite{Jupiter}. By using a client-server approach it reduces the problem
 of synchronising $n$ parties to the problem of synchronising 2 parties.
+
+\cite{Jupiter} and \cite{UnderstandOT} contain extensive descriptions of
+how it works, so we won't go into details here. However, figure
+\ref{fig:state} illustrates its workings. The numbers count the
+operations applied to the text on the client server and paired up, they
+are logical timestamps identifying the states the edited text goes
+through. The arrows correspond to operations applied to the text, the
+state of which changes after every application of an operation.
+Operations include the timestamp of the state to which they were
+applied. Both the client and the server start in state \state{0,0}.
+First the client generates and applies an operation and the text goes
+into state \state{1,0}. The client sends the operation to the server,
+which applies it, so that its copy of the text goes into state
+\state{1,0}, too. The same happens the other way around when the server
+generates the second operation. Then the client applies an operation and
+the server applies an operation, too, before receiving that of the
+client. The result are two different states of the text after the same
+total number of operations. Client and server now receive each other's
+operations, but cannot apply them because their texts are not in the
+state to which the operations where originally applied. In order
+to get from their diverged states into a common state again, client
+and server have to transform the received operations and apply the
+results. Then they proceed without conflicts.
+
+This is most of what the Jupiter algorithm does. It gets only slightly
+more difficult when client and server diverge by more than one
+operation.
 
 \tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
     minimum height=2em, minimum width=11em, text centered},
@@ -316,6 +358,10 @@ root directory it can be run with \texttt{./run.sh}.
 % \nocite{*}
 % \bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
 % \clearpage \appendix
+
+\setlength{\RaggedRightRightskip}{0pt plus 4em} % maybe
+\RaggedRight
+\printbibliography
 
 \end{document}
 
