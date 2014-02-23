@@ -145,24 +145,24 @@ to be shifted by three characters to the right, so that it ends up with
 that text, too.  Mathematically:
 
 \begin{align*}
-    t               :=& \textex{abcdefg} \\
-    o_A             :=& (\opname{insert}, 2, \textex{123}) \\
-    o_B             :=& (\opname{remove}, 4, 2) \\
-    o_A(t)          =&\textex{ab123cdefg} \\
-    o_B(t)          =&\textex{abcdg} \\
-    (o_B ∘ o_A)(t)  =&\textex{ab12defg} \\
-    (o_A ∘ o_B)(t)  =&\textex{ab123cdg} \\
-    (o_A', o_B')    :=& \transform(o_A, o_B) \\
-    o_A'            =&(\opname{insert}, 2, \textex{123}) \\
-    o_B'            =&(\opname{remove}, 4, 5) \\
-    (o_B' ∘ o_A)(t) =&(o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
+  t               & ≔ \textex{abcdefg}                   \\
+  o_A             & ≔ (\opname{insert}, 2, \textex{123}) \\
+  o_B             & ≔ (\opname{remove}, 4, 2)            \\
+  o_A(t)          & =\textex{ab123cdefg}                 \\
+  o_B(t)          & =\textex{abcdg}                      \\
+  (o_B ∘ o_A)(t)  & =\textex{ab12defg}                   \\
+  (o_A ∘ o_B)(t)  & =\textex{ab123cdg}                   \\
+  (o_A', o_B')    & ≔ \transform(o_A, o_B)               \\
+  o_A'            & =(\opname{insert}, 2, \textex{123})  \\
+  o_B'            & =(\opname{remove}, 4, 5)             \\
+  (o_B' ∘ o_A)(t) & =(o_A' ∘ o_B)(t) = \textex{ab123cdg}
 \end{align*}
 
 The $\transform$ function is the first part of operational
 transformation. Its defining property is: 
 
 \begin{equation*}
-    ∀ o_a, o_b: (o_a', o_b') := \transform(o_a, o_b) ⇒ (o_b' ∘ o_a) = (o_a' ∘ o_b)
+    ∀ o_a, o_b: (o_a', o_b') ≔ \transform(o_a, o_b) ⇒ (o_b' ∘ o_a) = (o_a' ∘ o_b)
 \end{equation*}
 
 That means, if two copies of the same text have diverged by applying
