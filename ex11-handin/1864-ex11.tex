@@ -1,5 +1,5 @@
 \RequirePackage[l2tabu, orthodox]{nag}
-\documentclass[a4paper,draft,12pt,oneside,article,table]{memoir}
+\documentclass[a4paper,final,12pt,oneside,article,table]{memoir}
 
 %% Geometry
 \isopage[10]
@@ -110,17 +110,20 @@ list of issues with the editor that still need to be addressed.
 
 \chapter{Operational transformation}
 
-There exist quite some applications for collaborative text editing;
-examples are Saros \cite{Saros}, Google Wave \cite{GoogleWave} or Gobby
-\cite{Gobby}. They all use a client-server approach for synchronising
-optimistically. This means, changes to the text are made immediately
-(when the user presses a key, for example) and then sent to the server,
-which in turn sends them to the other clients. If changes are made
-concurrently by multiple users, an algorithm makes sure that everyone
-ends up with the same text. This approach to synchronisation, or to
-preserving consistency, increases distribution transparency since there
-is no delay between user input and its effects on the screen, just as in
-a non-distributed editor. 
+There exist multiple applications for collaborative text editing;
+examples are Gobby \cite{Gobby}, Google Wave\footnote{Google
+  discounted Google Wave, but later used the collabrative text editing
+  technology they developed in Google Docs. Wave was later adopted by
+  the Apache Software Foundation and is now know as Apache Wave.}
+\Cite{GoogleWave} or Saros \cite{Saros}. They all use a client-server
+approach for synchronising optimistically. This means, changes to the
+text are made immediately (when the user presses a key, for example)
+and then sent to the server, which in turn sends them to the other
+clients. If changes are made concurrently by multiple users, an
+algorithm makes sure that everyone ends up with the same text. This
+approach to synchronisation, or to preserving consistency, increases
+distribution transparency since there is no delay between user input
+and its effects on the screen, just as in a non-distributed editor.
 
 One method for this kind of synchronisation is operational
 transformation: Operations represent changes to the text and they are
@@ -155,7 +158,7 @@ that text, too.  Mathematically:
     (o_B' ∘ o_A)(t) =&(o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
 \end{align*}
 
-The $\transform$ function is the first component of operational
+The $\transform$ function is the first part of operational
 transformation. Its defining property is: 
 
 \begin{equation*}
@@ -168,7 +171,7 @@ and $o_a'$ after $o_b$ brings them in synch again. Any function that has
 the above property can be used as $\transform$, but most of them will
 only give consistent, but not sensible, results.
 
-The second component of operational transformation is an algorithm that
+The second part of operational transformation is an algorithm that
 wraps the $\transform$ function, sends operations to other parties,
 receives operations from other parties, transforms them and applies them
 locally.  All the applications mentioned above use a version of the
@@ -202,8 +205,8 @@ of synchronising $n$ parties to the problem of synchronising 2 parties.
   \caption{The state space in the Jupiter algorithm.}
   \lining
   \begin{tikzpicture}
-    \clip (.5,-3) rectangle (8.25,3.75); % this
-    \begin{turn}{-45}                    % and this is black-magic. 
+    \clip (.5,-3.25) rectangle (8.25,3.75); % this
+    \begin{turn}{-45}                       % and this is black-magic. 
       \begin{scope}[rotate=45,row sep=0.5cm, column sep=0.5cm,nodes={rotate=45},]
 
       \matrix (jup) [matrix of nodes] {
@@ -333,17 +336,16 @@ the client Jupiter class for the next handin with $n$ parties. Right
 now, there is one \mil{JupiterClient}s on each of the two editors
 running.
 
-All events go through the \mil{JupiterClient}: Both the user inputs in the
+All events go through the \mil{JupiterClient}: The user inputs in the
 form of \mil{TextChangeEvent}s and events from the other
 \mil{JupiterClient} in the form of \mil{JupiterEvent}s come in through
-the inbound queue.  If an incoming event came from the user's actions on
-the text area, the \mil{JupiterClient} wraps it in a \mil{JupiterEvent},
-including a timestamp and sends it to the other editor. It gives it
-to the \mil{EventReplayer}, so that the user actually sees the result of
-her input. If, on the other hand, an incoming event came from the other
+the inbound queue.  If an incoming event is a \mil{TextChangeEvent}, the
+\mil{JupiterClient} wraps it in a \mil{JupiterEvent}, including a
+timestamp and sends it to the other editor. It also gives it to the
+\mil{EventReplayer}, so that the user actually sees the result of her
+input. If, on the other hand, an incoming event came from the other
 editor, the \mil{JupiterClient} transforms it, if necessary, before
 giving it to the \mil{EventReplayer}.
-
 
 \section{\mil{DocumentEventCapturer}}
 It is not possible to send the text directly to the text area from the
@@ -358,25 +360,23 @@ event, but instead add text to the area. Afterwards it it set to
 \mil{true} again.
 
 The gray arrows on the \mil{DocumentEventCapturer} on figure
-\ref{fig:event} represent this switch.  The listing below shows how
-the switch is implementet in the \mil{insertString}-method in
+\ref{fig:event} represent this switch.  The listing below shows how one of
+these switches is implemented in the \mil{insertString}-method in
 \mil{DocumentEventCapturer}.
 
 \inmnt{41}{51}{DocumentEventCapturer.java}
 
 \section{\mil{Transformer}}
 
-As mentioned earlier, the transformation function can be implemented in
-different ways. The Saros project, for example, uses what is described
-in \cite{Transform}. We decided for a more primitive approach, which
-covers all cases, but does not always yield satisfactory results.
-However, we wrapped the function \mil{transform} in a class
-\mil{Transform}, so that the structure can easily be changed to match
-the strategy pattern. Thereby, different solutions to the same problem
-could be plugged in without effort.
+As mentioned earlier, the transformation function can be implemented
+in different ways. The Saros project, for example, uses what is
+described in \cite{Transform}. We decided for a more primitive
+approach, which covers all cases, but does not always yield
+satisfactory results.  However, we wrapped the function
+\mil{transform} in a class \mil{Transform}, so that the structure can
+easily be changed to match the strategy pattern. Thereby, different
+solutions could be interchanged without effort.
 
-\fxwarning{Possibly needs to be adapted to the text. Or just include an
-ASCII art thing like I drew in the Transformer.}
 \begin{figure}[htb]
 \centering
 \caption{Transformation of two overlapping remove operations}
@@ -384,7 +384,6 @@ ASCII art thing like I drew in the Transformer.}
 \newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
 \newcommand\acoord[2][.3em]{\ncoord[#1,.8em]{#2}}
 \newcommand\remove[4]{\filldraw[#1] ($(#2) +(.15em,0em)$) -- ($(#3) +(-.15em,0em)$) -- ++(0em,-.6em) to [out=-90,in=90] ($(#4) + (.1em,0em)$) |- ++(-.2em,-.8em) --++(0em,.8em) to [out=90,in=-90] ($(#2) + (.15em,-.8em)$) --cycle;}
-%\texttt{… a b c d e f g h i j k …}\\
 \ttfamily
 … a b c\acoord{1cd} d e f\acoord{1fg} g\acoord{1gh} h i\acoord{1ij} j k …\\
 \vspace{4em}
@@ -415,6 +414,9 @@ respective other operation already deleted something. The following
 listing shows the piece of source code that covers this and some other
 cases. The last two assignments are the transformed operations in this
 case.
+\\
+\\
+\\
 
 \inmnt{149}{184}{Transformer.java}
 
@@ -458,8 +460,6 @@ root directory it can be run with \texttt{./run.sh}.
 
 \setlength{\RaggedRightRightskip}{0pt plus 4em} % maybe
 \RaggedRight
-\fxwarning{BibLaTeX might be displaying too much information. Just throw
-them out of literatur.bib.}
 \printbibliography
 
 \end{document}
