@@ -1,5 +1,12 @@
 package ddist;
 
+/**
+ * Sort of a strategy (pattern) for transforming two operations that resulted
+ * in different texts on the local and the sender's side to operations to be
+ * applied afterwards, bringing the texts in synch again.
+ *
+ * @see JupiterClient
+ */
 public class Transformer {
     /*
      * How to read the diagrams
