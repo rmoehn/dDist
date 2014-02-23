@@ -327,7 +327,7 @@ respectively. Figure \ref{fig:event} shows the new configuration.
 
 
 \section{\mil{JupiterClient}}
-%\inmnt{35}{80}{JupiterClient.java}
+%\inmnt{35}{80}{JupiterClient.java} -- I think I won't need this.
 
 The \mil{JupiterClient} is called like that because it will be used as
 the client Jupiter class for the next handin with $n$ parties. Right
@@ -352,8 +352,22 @@ giving it to the \mil{EventReplayer}.
 
 
 \section{\mil{Transformer}}
-\fxwarning{Richard writes something.}
-%\inmnt{195}{228}{Transformer.java}
+
+As mentioned earlier, the transformation function can be implemented in
+different ways. The Saros project, for example, uses what is described
+in \cite{Transform}. We decided for a more primitive approach, which
+covers all cases, but does not always yield satisfactory results.
+However, we wrapped the function \mil{transform} in a class
+\mil{Transform}, so that the structure can easily be changed to match
+the strategy pattern. Thereby, different solutions to the same problem
+could be plugged in without effort.
+
+\begin{figure}
+\centering
+\caption{Transformation of two overlapping remove operations}
+\label{fig:transform}
+\fxwarning{Possibly needs to be adapted to the text. Or just include an
+ASCII art thing like I drew in the Transformer.}
 \newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
 \newcommand\acoord[1]{\ncoord[0em,.9em]{#1}}
 \newcommand\bcoord[1]{\ncoord[0em,-.4em]{#1}}
@@ -366,9 +380,40 @@ giving it to the \mil{EventReplayer}.
     \draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
     \filldraw[thick,opacity=0.1,draw opacity=0.7,red,out=-90,in=90]  (1d) -- ++(0,0.1em) -| (1G) -- ++(0em,-.6em) to  (2d) --++(0em,-1em) --cycle;
 }
+\end{figure}
+
+As an example, figure \ref{fig:transform} shows what \mil{transform}
+does for two overlapping remove events: On the local machine the smaller
+removal to the right and on the remote machine the larger removal to the
+left have happened. In this case, transforming the operations amounts to
+make them delete less and possibly in a different place. The following
+listing shows the piece of source code that covers this and some other
+cases. The last two assignments are the transformed operations in this
+case.
+
+\inmnt{149}{184}{Transformer.java}
 
 \chapter{Conclusion}
-\fxwarning{Write a conclusion.}
+
+We had an editor whose instances could connect to each other and where
+the user could see what the other was doing to her text. Now we extended
+this, enabling both users to edit the same text at the same time. For
+synchronisation we use the well-known Jupiter algorithm, one advantage
+of which is that users see their changes without delay.
+
+As usual, some issues, mainly in regard of user friendliness remain. For
+instance, there is no indication whether editors are connected. However,
+those things are in no way related to distributed systems and therefore
+have to stand back behind things that are. Another example is the
+relative primitivity of the \mil{transform} function. This is also not
+severe, since it only very rarely, if at all, affects sensible text
+editing actions.
+
+All in all, the architecture created for the previous version of the
+editor proved quite successful in letting us concentrate on the
+synchronisation issues central to this exercise. And using the exising
+Jupiter algorithm is, in our opinion, a much better approach than
+inventing some half-baked own synchronisation method.
 
 \appendix
 
@@ -388,6 +433,8 @@ root directory it can be run with \texttt{./run.sh}.
 
 \setlength{\RaggedRightRightskip}{0pt plus 4em} % maybe
 \RaggedRight
+\fxwarning{BibLaTeX might be displaying too much information. Just throw
+them out of literatur.bib.}
 \printbibliography
 
 \end{document}
