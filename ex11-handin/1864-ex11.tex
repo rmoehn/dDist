@@ -70,6 +70,7 @@
   backend=biber,
   sortcites=true,
   hyperref=true,
+  maxbibnames=99
 ]{biblatex}
 \addbibresource{literatur.bib}
 
@@ -141,17 +142,17 @@ to be shifted by three characters to the right, so that it ends up with
 that text, too.  Mathematically:
 
 \begin{align*}
-    t               &:= \textex{abcdefg} \\
-    o_A             &:= (\opname{insert}, 2, \textex{123}) \\
-    o_B             &:= (\opname{remove}, 4, 2) \\
-    o_A(t)          &= \textex{ab123cdefg} \\
-    o_B(t)          &= \textex{abcdg} \\
-    (o_B ∘ o_A)(t)  &= \textex{ab12defg} \\
-    (o_A ∘ o_B)(t)  &= \textex{ab123cdg} \\
-    (o_A', o_B')    &:= \transform(o_A, o_B) \\
-    o_A'            &= (\opname{insert}, 2, \textex{123}) \\
-    o_B'            &= (\opname{remove}, 4, 5) \\
-    (o_B' ∘ o_A)(t) &= (o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
+    t               :=& \textex{abcdefg} \\
+    o_A             :=& (\opname{insert}, 2, \textex{123}) \\
+    o_B             :=& (\opname{remove}, 4, 2) \\
+    o_A(t)          =&\textex{ab123cdefg} \\
+    o_B(t)          =&\textex{abcdg} \\
+    (o_B ∘ o_A)(t)  =&\textex{ab12defg} \\
+    (o_A ∘ o_B)(t)  =&\textex{ab123cdg} \\
+    (o_A', o_B')    :=& \transform(o_A, o_B) \\
+    o_A'            =&(\opname{insert}, 2, \textex{123}) \\
+    o_B'            =&(\opname{remove}, 4, 5) \\
+    (o_B' ∘ o_A)(t) =&(o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
 \end{align*}
 
 The $\transform$ function is the first component of operational
@@ -406,7 +407,8 @@ As an example, figure \ref{fig:transform} shows what \mil{transform}
 does for two overlapping remove events: On the local machine the smaller
 removal to the right and on the remote machine the larger removal to the
 left have happened. In this case, transforming the operations amounts to
-make them delete less and possibly in a different place. The following
+make them delete less and possibly in a different place, because the
+respective other operation already deleted something. The following
 listing shows the piece of source code that covers this and some other
 cases. The last two assignments are the transformed operations in this
 case.
@@ -421,12 +423,12 @@ this, enabling both users to edit the same text at the same time. For
 synchronisation we use the well-known Jupiter algorithm, one advantage
 of which is that users see their changes without delay.
 
-As usual, some issues, mainly in regard of user friendliness remain. For
-instance, there is no indication whether editors are connected. However,
-those things are in no way related to distributed systems and therefore
-have to stand back behind things that are. Another example is the
-relative primitivity of the \mil{transform} function. This is also not
-severe, since it only very rarely, if at all, affects sensible text
+As usual, some issues, mainly in regard of user-friendliness, remain.
+For instance, there is no indication whether editors are connected.
+However, those things are hardly related to distributed systems and
+therefore have to stand back behind things that are. Another example is
+the relative primitivity of the \mil{transform} function. This is also
+not severe, since it only very rarely, if at all, affects sensible text
 editing actions.
 
 All in all, the architecture created for the previous version of the
