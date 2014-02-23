@@ -267,8 +267,6 @@ operation.
 
 
 \chapter{Code Overview}
-\fxwarning{The EventDisplayer communicates directly with the text
-  area.}
 \begin{figure}[htb]
   \centering
   \caption{\mil{Event}'s path through the system in the editor as
@@ -299,14 +297,18 @@ operation.
     \draw[st] (jc.20) --  (dqueue.230);
     \draw[st] (dqueue.north) --  (edis.south);
 
-    \draw[sa] (edis.south west) --  (dec.north east);
+    \draw[sa] (edis.south west) --  (ta.north east);
 
     \draw[sa] (ta.220) --  (dec.140);
 
-    \draw[sa] (dec.20) --  (ta.340);
+    \draw[sa] (ta.347) --  (dec.13);
+
+
+    \draw[sa] (dec.35) --  (ta.325);
 
     \draw[sb,out=290,in=130,] (dec.140) to  (dec.320);
-    \path[sb] (dec.north east) edge[bend left=45]  (dec.20);
+    \path[sb] (dec.13) edge[bend left=45]  (dec.35);
+    \path[sb] (ta.north east) edge[bend right=25]  (ta.347);
     \node[n, left=2.5em of jc] (dec2) {\texttt{DocumentEventCapturer}};
   \end{tikzpicture}
   \label{fig:event}
@@ -354,8 +356,9 @@ Before \mil{EventDisplayer} send the text to the text area, it set the
 event, but instead add text to the area. Afterwards it it set to
 \mil{true} again.
 
-The gray arrows on figure \ref{fig:event} represent this switch.  The
-listing below shows how the switch is implementet in the \mil{insertString}-method in
+The gray arrows on the \mil{DocumentEventCapturer} on figure
+\ref{fig:event} represent this switch.  The listing below shows how
+the switch is implementet in the \mil{insertString}-method in
 \mil{DocumentEventCapturer}.
 
 \inmnt{41}{51}{DocumentEventCapturer.java}
