@@ -17,7 +17,7 @@ public class TextInsertEvent extends TextChangeEvent {
 	public String getText() { return text; }
 
     protected String apply(String text) {
-        return (new StringBuffer(text)).insert(this.getOffset(), text)
+        return (new StringBuffer(text)).insert(this.getOffset(), this.text)
                                        .toString();
     }
 

@@ -8,11 +8,11 @@ package ddist;
 public abstract class TextChangeEvent implements Event {
     private static final long serialVersionUID = -1787964932805068674L;
 
-    public TextChangeEvent(int offset, String origText) {
+    public TextChangeEvent(int offset) {
 		this.offset = offset;
 	}
 	private int offset;
 	int getOffset() { return offset; }
 
-    protected String apply(String text);
+    abstract protected String apply(String text);
 }

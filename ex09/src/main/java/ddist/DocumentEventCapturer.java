@@ -4,6 +4,7 @@ import java.util.concurrent.BlockingQueue;
 
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Document;
 import javax.swing.text.DocumentFilter;
 
 /**
@@ -45,9 +46,9 @@ public class DocumentEventCapturer extends DocumentFilter {
         if (isGenerateEvents) {
             Document doc = fb.getDocument();
             eventHistory.add(
-                new DebugTextEvent(
+                new JupiterEvent(
                     new TextInsertEvent(offset, str),
-                    doc.getText(0, doc.getLength()
+                    doc.getText(0, doc.getLength())
                 )
             );
         }
@@ -62,9 +63,9 @@ public class DocumentEventCapturer extends DocumentFilter {
         if (isGenerateEvents) {
             Document doc = fb.getDocument();
             eventHistory.add(
-                new DebugTextEvent(
+                new JupiterEvent(
                     new TextRemoveEvent(offset, length),
-                    doc.getText(0, doc.getLength()
+                    doc.getText(0, doc.getLength())
                 )
             );
         }
@@ -78,11 +79,22 @@ public class DocumentEventCapturer extends DocumentFilter {
 			String str, AttributeSet a)
 	throws BadLocationException {
         /* Queue a copy of the event or modify the text */
+        Document doc = fb.getDocument();
         if (isGenerateEvents) {
             if (length > 0) {
-                eventHistory.add(new TextRemoveEvent(offset, length));
+                eventHistory.add(
+                    new JupiterEvent(
+                        new TextRemoveEvent(offset, length),
+                        doc.getText(0, doc.getLength())
+                    )
+                );
             }
-            eventHistory.add(new TextInsertEvent(offset, str));
+            eventHistory.add(
+                new JupiterEvent(
+                    new TextInsertEvent(offset, str),
+                    doc.getText(0, doc.getLength())
+                )
+            );
         }
         else {
             super.replace(fb, offset, length, str, a);

@@ -32,17 +32,24 @@ public class JupiterClient implements Runnable {
                 System.exit(1);
             }
 
-            // Generate(op)
-            if (event instanceof DebugTextEvent) {
-                DebugTextEvent debugEvent = (DebugTextEvent) event;
-                TextChangeEvent localOp   = debugEvent.getContainedEvent();
+            // Want to disconnect
+            if (event instanceof DisconnectEvent) {
+                // Pass event on and stop work
+                _toDisplayer.add(event);
+                break;
+            }
 
+            // Generate(op) -- event comes from the DocumentEventCapturer
+            JupiterEvent jEvent = (JupiterEvent) event;
+            if (jEvent.isWithoutTimestamp()) {
                 // apply op locally
+                TextChangeEvent localOp
+                    = (TextChangeEvent) jEvent.getContainedEvent();
                 _toDisplayer.add(localOp);
 
                 // send(op, my Msgs, otherMsgs)
                 JupiterEvent jupiterEvent = new JupiterEvent(
-                                                debugEvent,
+                                                jEvent,
                                                 _currentTime.getCopy(),
                                                 _isServer
                                             );
@@ -55,8 +62,8 @@ public class JupiterClient implements Runnable {
                 _currentTime.incLocalTime();
             }
             // Receive(msg)
-            else if (event instanceof JupiterEvent) {
-                JupiterEvent received = (JupiterEvent) event;
+            else {
+                JupiterEvent received = (JupiterEvent) jEvent;
 
                 // Discard acknowledged messages.
                 while (_outgoing.size() > 0
@@ -81,15 +88,6 @@ public class JupiterClient implements Runnable {
 
                 // otherMsgs = otherMsgs + 1
                 _currentTime.incOtherTime();
-            }
-            // Want to disconnect
-            else if (event instanceof DisconnectEvent) {
-                // Pass event on and stop work
-                _toDisplayer.add(event);
-                break;
-            }
-            else {
-                throw new IllegalArgumentException("Got unknown event.");
             }
         }
     }

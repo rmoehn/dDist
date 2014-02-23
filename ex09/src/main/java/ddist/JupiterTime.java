@@ -13,7 +13,7 @@ public class JupiterTime implements Serializable {
 
     public JupiterTime() { }
 
-    private JupiterTime(long localTime, long otherTime) {
+    protected JupiterTime(long localTime, long otherTime) {
         _localTime = localTime;
         _otherTime = otherTime;
     }
@@ -43,6 +43,10 @@ public class JupiterTime implements Serializable {
         }
 
         ++_otherTime;
+    }
+
+    protected boolean isFake() {
+        return (_localTime == -1) && (_otherTime == -1);
     }
 
     @Override

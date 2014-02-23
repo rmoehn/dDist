@@ -229,12 +229,14 @@ public class Transformer {
             new JupiterEvent(
                 transRecTE,
                 recTS,
-                isRecFromServer
+                isRecFromServer,
+                local.getTransformedText()
             ),
             new JupiterEvent(
                 transLocTE,
                 locTS,
-                isLocFromServer
+                isLocFromServer,
+                received.getTransformedText()
             )
         );
     }
