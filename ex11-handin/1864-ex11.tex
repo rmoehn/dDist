@@ -41,7 +41,7 @@
 
 %% Grapics
 \usepackage{tikz,pgfplots,tikz-timing,rotating}
-\usetikzlibrary{mindmap,arrows,positioning,shapes,matrix}
+\usetikzlibrary{mindmap,calc,arrows,positioning,shapes,matrix}
 
 %% TÅGEKAMMERET
 % \usepackage{tket,tkvc}
@@ -216,17 +216,31 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
 \fxwarning{Richard writes something.}
 %\inmnt{195}{228}{Transformer.java}
 \newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
-\newcommand\acoord[1]{\ncoord[0em,.9em]{#1}}
-\newcommand\bcoord[1]{\ncoord[0em,-.4em]{#1}}
-%\newpage
+\newcommand\acoord[2][.3em]{\ncoord[#1,.8em]{#2}}
+\newcommand\remove[4]{\filldraw[#1] ($(#2) +(.15em,0em)$) -- ($(#3) +(-.15em,0em)$) -- ++(0em,-.6em) to [out=-90,in=90] ($(#4) + (.1em,0em)$) |- ++(-.2em,-.8em) --++(0em,.8em) to [out=90,in=-90] ($(#2) + (.15em,-.8em)$) --cycle;}
+\newpage
 %\texttt{… a b c d e f g h i j k …}\\
-\texttt{… a b c\ \acoord{1d}d e f\ \bcoord{1g}g\acoord{1G} h i\bcoord{1I} j k …}\\\\
-\texttt{… a b c\ \ncoord[-.2em,.9em]{2d}h i j k …}\\
+\begin{center}
+\ttfamily
+… a b c\acoord{1cd} d e f\acoord{1fg} g\acoord{1gh} h i\acoord{1ij} j k …\\
+\vspace{4em}
+… a b c\acoord{2ch} h i\acoord{2ij} j k … \quad
+… a b c\acoord{3cd} d e f\acoord{3fj} j k …\\
+\vspace{4em}
+… a b c\acoord[.2em]{4cjl}\acoord[.4em]{4cjr} j k …
 
-\tikz[overlay,remember picture] {
-    \draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
-    \filldraw[thick,opacity=0.1,draw opacity=0.7,red,out=-90,in=90]  (1d) -- ++(0,0.1em) -| (1G) -- ++(0em,-.6em) to  (2d) --++(0em,-1em) --cycle;
+\tikzset{
+  li/.style={opacity=.15,draw opacity=.5,},
+  dk/.style={opacity=.3,draw opacity=.7,},
 }
+\tikz[overlay,remember picture] {
+    %\draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
+  \remove{blue,dk}{1fg}{1ij}{3fj}
+  \remove{blue,li}{2ch}{2ij}{4cjl}
+  \remove{red,dk}{1cd}{1gh}{2ch}
+  \remove{red,li}{3cd}{3fj}{4cjr}
+}
+\end{center}
 
 \chapter{Conclusion}
 \fxwarning{Write a conclusion.}
