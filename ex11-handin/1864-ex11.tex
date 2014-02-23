@@ -8,7 +8,7 @@
 \sloppybottom
 
 %% Typography
-\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor}
+\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor,xspace}
 \definecolor{zen-red}{HTML}{B23333}    \definecolor{zen-orange}{HTML}{E57A33}
 \definecolor{zen-yellow}{HTML}{F0DFAF} \definecolor{zen-green}{HTML}{5F7F5F}
 \definecolor{zen-cyan}{HTML}{93E0E3}   \definecolor{zen-blue}{HTML}{336CB2}
@@ -74,11 +74,11 @@
 \addbibresource{literatur.bib}
 
 
-\newcommand*{\prtA}{\textsc{a}}
-\newcommand*{\prtB}{\textsc{b}}
-\newcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
-\newcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
-\newcommand*{\state}[1]{\ensuremath{#1}}
+\newcommand*{\prtA}{\textsc{a}\xspace}
+\newcommand*{\prtB}{\textsc{b}\xspace}
+\newcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}\xspace}
+\newcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}\xspace}
+\newcommand*{\state}[1]{{\lining#1}\xspace}
 \DeclareMathOperator{\transform}{transform}
 
 \begin{document}
@@ -196,16 +196,16 @@ of synchronising $n$ parties to the problem of synchronising 2 parties.
   jsw/.style={shift={(-2pt,-2pt)}},
   jse/.style={shift={(2pt,-2pt)}},
 }
-
-\begin{figure}[hbp]
+\begin{figure}[htb]
   \centering
   \caption{The state space in the Jupiter algorithm.}
   \lining
-  \begin{turn}{-45}
-    \begin{tikzpicture}[rotate=45,row sep=0.5cm, column sep=0.5cm,nodes={rotate=45},]
+  \begin{tikzpicture}
+    \clip (.5,-3) rectangle (8.25,3.75); % this
+    \begin{turn}{-45}                    % and this is black-magic. 
+      \begin{scope}[rotate=45,row sep=0.5cm, column sep=0.5cm,nodes={rotate=45},]
 
-      \matrix (jup) [matrix of nodes]
-      {
+      \matrix (jup) [matrix of nodes] {
         0,0 & 0,1 & 0,2 & 0,3 \\
         1,0 & 1,1 & 1,2 & 1,3 \\
         2,0 & 2,1 & 2,2 & 2,3 \\
@@ -231,13 +231,12 @@ of synchronising $n$ parties to the problem of synchronising 2 parties.
 
       \draw[jb, line width=1.5pt] (-1,3.5) --node[above left]{client} (-3,1.5);
       \draw[jr, line width=1.5pt] (1,3.5) --node[above right]{server} (3,1.5);
-
-    \end{tikzpicture}
-  \end{turn}
+      \end{scope}
+    \end{turn}
+  \end{tikzpicture}
   \oldstyle
   \label{fig:state}
 \end{figure}
-
 
 \cite{Jupiter} and \cite{UnderstandOT} contain extensive descriptions of
 how it works, so we won't go into details here. However, figure
@@ -268,11 +267,10 @@ operation.
 
 
 \chapter{Code Overview}
-
-\begin{figure}[hbp]
-  \centering
-  \fxwarning{The EventDisplayer communicates directly with the text
+\fxwarning{The EventDisplayer communicates directly with the text
   area.}
+\begin{figure}[htb]
+  \centering
   \caption{\mil{Event}'s path through the system in the editor as
     provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextChangeEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
   \begin{tikzpicture}[node distance=1cm, auto]
@@ -286,7 +284,6 @@ operation.
     \node[g, above=2.5em of jc.north east] (dqueue) {Display queue};
     \node[r, above=2.5em of dqueue] (edis) {\texttt{EventDisplayer}};
     \node[r, left=2.5em of jc] (dec) {};
-
 
     \node[r, above=2.5em of dec] (ta) {Text area};
 
@@ -361,12 +358,12 @@ However, we wrapped the function \mil{transform} in a class
 the strategy pattern. Thereby, different solutions to the same problem
 could be plugged in without effort.
 
-\begin{figure}
+\fxwarning{Possibly needs to be adapted to the text. Or just include an
+ASCII art thing like I drew in the Transformer.}
+\begin{figure}[htb]
 \centering
 \caption{Transformation of two overlapping remove operations}
 \label{fig:transform}
-\fxwarning{Possibly needs to be adapted to the text. Or just include an
-ASCII art thing like I drew in the Transformer.}
 \newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
 \newcommand\acoord[2][.3em]{\ncoord[#1,.8em]{#2}}
 \newcommand\remove[4]{\filldraw[#1] ($(#2) +(.15em,0em)$) -- ($(#3) +(-.15em,0em)$) -- ++(0em,-.6em) to [out=-90,in=90] ($(#4) + (.1em,0em)$) |- ++(-.2em,-.8em) --++(0em,.8em) to [out=90,in=-90] ($(#2) + (.15em,-.8em)$) --cycle;}
