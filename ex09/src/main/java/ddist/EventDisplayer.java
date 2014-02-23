@@ -58,12 +58,9 @@ public class EventDisplayer implements Runnable {
                                      * disabling and enabling the event
                                      * generation.
                                      */
-                System.err.println("Text before: " + area.getText());
                                     filter.disableEventGeneration();
                                     area.insert(tie.getText(), tie.getOffset());
                                     filter.enableEventGeneration();
-                System.err.println("Text after:  " + area.getText());
-                System.err.println();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     /* We catch all axceptions, as an uncaught
@@ -79,14 +76,11 @@ public class EventDisplayer implements Runnable {
                             public void run() {
                                 try {
                                     // See comment on TextInsertEvent above.
-                System.err.println("Text before: " + area.getText());
                                     filter.disableEventGeneration();
                                     area.replaceRange(null, tre.getOffset(),
                                                       tre.getOffset() +
                                                       tre.getLength());
                                     filter.enableEventGeneration();
-                System.err.println("Text after:  " + area.getText());
-                System.err.println();
                                 } catch (Exception e) {
                                     e.printStackTrace();
                                     /* We catch all axceptions, as an uncaught

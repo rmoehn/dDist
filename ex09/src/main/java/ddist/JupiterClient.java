@@ -73,6 +73,13 @@ public class JupiterClient implements Runnable {
 
                 // Transform new message and the ones in the queue.
                 for (int i = 0; i < _outgoing.size(); ++i) {
+                    String origText = _outgoing.get(i).getOrigText();
+                    System.err.println("t_l:  " + origText);
+                    System.err.println("t_r:  " + received.getOrigText());
+                    System.err.println("l(t): " + _outgoing.get(i).getTransformedText());
+                    System.err.println("r(t): " + received.getTransformedText());
+                    assert( origText.equals( received.getOrigText() ) );
+
                     // {msg, outgoing[i]} = xform(msg, outgoing[i])
                     System.err.println("Received: " + received);
                     System.err.println("Outgoing: " + _outgoing.get(i));
@@ -81,6 +88,15 @@ public class JupiterClient implements Runnable {
                     System.err.println("Transformed to: " + tp);
                     received = tp.getReceived();
                     _outgoing.set(i, tp.getLocal());
+
+                    System.err.println("r'(l(t)): " + tp.getReceived().getTransformedText());
+                    System.err.println("l'(r(t)): " + tp.getLocal().getTransformedText());
+                    System.out.println();
+                    assert(
+                        tp.getReceived().getTransformedText().equals(
+                            tp.getLocal().getTransformedText()
+                        )
+                    );
                 }
 
                 // apply msg.op locally
