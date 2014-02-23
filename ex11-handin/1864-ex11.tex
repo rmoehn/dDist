@@ -185,8 +185,8 @@ of synchronising $n$ parties to the problem of synchronising 2 parties.
   y/.style={n, fill=yellow!20},
   l/.style={>=latex',line width=1.5pt},
   sa/.style={l,->,shorten >=1pt},
-  st/.style={sa,orange},
-  sj/.style={sa,green!70!black},
+  st/.style={sa, red!90!black, text=black},
+  sj/.style={sa, blue!70!black, text=black,},
   sb/.style={sa, shorten <=1pt,black!30!white!90!red},
   jm/.style={sa, line width=1pt,shorten >=.35cm,shorten <=.35cm},
   jr/.style={jm, red!90!black, text=black},
@@ -330,7 +330,7 @@ the client Jupiter class for the next handin with $n$ parties. Right
 now, there is one \mil{JupiterClient}s on each of the two editors
 running.
 
-All events go through the \mil{JupiterClient}: Both user inputs in the
+All events go through the \mil{JupiterClient}: Both the user inputs in the
 form of \mil{TextChangeEvent}s and events from the other
 \mil{JupiterClient} in the form of \mil{JupiterEvent}s come in through
 the inbound queue.  If an incoming event came from the user's actions on
@@ -343,9 +343,22 @@ giving it to the \mil{EventReplayer}.
 
 
 \section{\mil{DocumentEventCapturer}}
-%\inmnt{195}{228}{DocumentEventCapturer.java}
-\fxwarning{Mathias writes something.}
+It is not possible to send the text directly to the text area from the
+\mil{EventDisplayer} without it going through
+\mil{DocumentEventCapturer}, witch extends \mil{DocumentFilter}. To
+circumvent this we put a switch in \mil{DocumentEventCapturer}.
 
+Before \mil{EventDisplayer} send the text to the text area, it set the
+\mil{isGenerateEvents} to \mil{false} to change the function of
+\mil{DocumentEventCapturer}. When it is set it does not generate
+event, but instead add text to the area. Afterwards it it set to
+\mil{true} again.
+
+The gray arrows on figure \ref{fig:event} represent this switch.  The
+listing below shows how the switch is implementet in the \mil{insertString}-method in
+\mil{DocumentEventCapturer}.
+
+\inmnt{41}{51}{DocumentEventCapturer.java}
 
 \section{\mil{Transformer}}
 
