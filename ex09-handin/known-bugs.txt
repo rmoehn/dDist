@@ -9,6 +9,7 @@
   instead, but also difficult.
 
 - Some of the queue stuff would be better done with observer pattern.
+  -- Thread.interrupt() might be interesting.
 
 - With the boolean server flag, edits close to each other can be
   unintuitive. Priorities might fix it.
@@ -36,6 +37,12 @@
 
 - The "Save file?" dialogs are quite annoying.
 
+- Sometimes the assertion that the original texts of the local and
+  received events be equal, fails.
+
+- We might introduce an EmptyTextEvent in order to replace
+  TextInsertEvent(0, "") and TextRemoveEvent(0, 0).
+
 x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.
 
@@ -49,4 +56,4 @@ x Rename MyTextEvent to something
 
 x Make display queue and outqueue more specific
 
-- Rename *replay* to *display*
+x Rename *replay* to *display*

@@ -1,6 +1,32 @@
 package ddist;
 
+/**
+ * Sort of a strategy (pattern) for transforming two operations that resulted
+ * in different texts on the local and the sender's side to operations to be
+ * applied afterwards, bringing the texts in synch again.
+ *
+ * @see JupiterClient
+ */
 public class Transformer {
+    /*
+     * How to read the diagrams
+     * ------------------------
+     *
+     *        v-----                 <- upcoming remove operation on remote
+     *    abcdefghijklmnopqrstuvwxyz <- original text, same for both
+     *          ^
+     *          1234                 <- upcoming insert operation on local
+     *
+     * L: abcdef1234ghijklmnopqrstuvwxyz <- result of the local operation
+     *    abcdklmnopqrstuvwxyz <- result of local and transformed remote
+     *
+     * R: abcdklmnopqrstuvwxyz <- result of the remote operation
+     *    abcdklmnopqrstuvwxyz <- result of remote and transformed local
+     *
+     * After applying the second operation each, the strings should be the
+     * same. This is what transform() is all about.
+     */
+
     public Transformer() { }
 
     public TransformedPair transform(JupiterEvent received, JupiterEvent
@@ -71,7 +97,7 @@ public class Transformer {
                     transRecTE = new TextRemoveEvent(remOffs, remLen +insLen);
 
                     // Throw away the insert -- unelegant, but easy
-                    transLocTE = new TextInsertEvent(insOffs, "");
+                    transLocTE = new TextInsertEvent(0, "");
                 }
                 else {
                     transRecTE = new TextRemoveEvent(remOffs, remLen);
@@ -90,6 +116,18 @@ public class Transformer {
             int remOffs               = locRemove.getOffset();
             int remLen                = locRemove.getLength();
 
+            /*
+             *        123
+             *        v
+             *    abcdefghijklmnopqrstuvwxyz
+             *              ^----
+             *
+             * L: abcdefghijpqrstuvwxyz
+             *    abcd123efghijpqrstuvwxyz
+             *
+             * R: abcd123efghijklmnopqrstuvwxyz
+             *    abcd123efghijpqrstuvwxyz
+             */
             if (insOffs <= remOffs) {
                 transRecTE = new TextInsertEvent(insOffs, insStr);
                 transLocTE = new TextRemoveEvent(remOffs + insLen, remLen);
@@ -98,7 +136,7 @@ public class Transformer {
                 // If we want to insert into a region that gets deleted
                 if (insOffs < remOffs + remLen) {
                     // Throw away the insert -- unelegant, but easy
-                    transRecTE = new TextInsertEvent(insOffs, "");
+                    transRecTE = new TextInsertEvent(0, "");
 
                     transLocTE = new TextRemoveEvent(remOffs, remLen +insLen);
                 }
@@ -130,7 +168,7 @@ public class Transformer {
                                          recOffs,
                                          recLen - locLen
                                      );
-                        transLocTE = new TextRemoveEvent(locOffs, 0);
+                        transLocTE = new TextRemoveEvent(0, 0);
                     }
                     else {
                         transRecTE = new TextRemoveEvent(
@@ -150,11 +188,23 @@ public class Transformer {
                     transLocTE = new TextRemoveEvent(locOffs, locLen);
                 }
                 else {
+                    /*
+                     *            v----
+                     *    abcdefghijklmnopqrstuvwxyz
+                     *        ^----------
+                     *
+                     * L: abcdpqrstuvwxyz
+                     *    abcdpqrstuvwxyz
+                     *
+                     * R: abcdefghnopqrstuvwxyz
+                     *    abcdpqrstuvwxyz
+                     *
+                     */
                     if (recOffs + recLen < locOffs + locLen) {
-                        transRecTE = new TextRemoveEvent(locOffs, 0);
+                        transRecTE = new TextRemoveEvent(0, 0);
                         transLocTE = new TextRemoveEvent(
-                                         recOffs,
-                                         recLen - locLen
+                                         locOffs,
+                                         locLen - recLen
                                      );
                     }
                     else {
@@ -171,16 +221,16 @@ public class Transformer {
             }
             else { // recOffs == locOffs -- nearly contained in another case
                 if (recLen < locLen) {
-                    transRecTE = new TextRemoveEvent(recOffs, 0);
+                    transRecTE = new TextRemoveEvent(0, 0);
                     transLocTE = new TextRemoveEvent(locOffs, locLen -recLen);
                 }
                 else if (locLen < recLen) {
                     transRecTE = new TextRemoveEvent(recOffs, recLen -locLen);
-                    transLocTE = new TextRemoveEvent(locOffs, 0);
+                    transLocTE = new TextRemoveEvent(0, 0);
                 }
                 else { // equal length for both
                     transRecTE = new TextRemoveEvent(recOffs, recLen);
-                    transLocTE = new TextRemoveEvent(locOffs, 0);
+                    transLocTE = new TextRemoveEvent(0, 0);
                 }
             }
         }

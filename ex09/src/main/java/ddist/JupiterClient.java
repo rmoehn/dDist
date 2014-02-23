@@ -4,6 +4,11 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
+/**
+ * Central mechanism for optimistic synchronisation. Described in
+ * Nichols, Curtis, Dixon, Lamping: High-Latency, Low-Bandwidth Windowing in
+ * the Jupiter Collaboration System. UIST 95 Pittsburgh PA USA, Proceedings.
+ */
 public class JupiterClient implements Runnable {
     private JupiterTime _currentTime     = new JupiterTime();
     private List<JupiterEvent> _outgoing = new LinkedList<>();
@@ -60,14 +65,11 @@ public class JupiterClient implements Runnable {
                     _outgoing.remove(0);
                 }
 
-                System.err.println("Received: " + received);
-
                 // Transform new message and the ones in the queue.
                 for (int i = 0; i < _outgoing.size(); ++i) {
                     // {msg, outgoing[i]} = xform(msg, outgoing[i])
                     TransformedPair tp
                         = transformer.transform(received, _outgoing.get(i));
-                    System.err.println("Transformed to: " + tp);
                     received = tp.getReceived();
                     _outgoing.set(i, tp.getLocal());
                 }

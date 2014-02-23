@@ -8,7 +8,7 @@
 \sloppybottom
 
 %% Typography
-\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor,natbib}
+\usepackage{polyglossia,microtype,hyperref,amsmath,unicode-math,xcolor}
 \definecolor{zen-red}{HTML}{B23333}    \definecolor{zen-orange}{HTML}{E57A33}
 \definecolor{zen-yellow}{HTML}{F0DFAF} \definecolor{zen-green}{HTML}{5F7F5F}
 \definecolor{zen-cyan}{HTML}{93E0E3}   \definecolor{zen-blue}{HTML}{336CB2}
@@ -62,6 +62,25 @@
 \usepackage{lipsum}
 \usepackage[margin,draft]{fixme} \fxusetheme{color}
 
+\usepackage{ragged2e}
+
+\usepackage{csquotes}
+\usepackage[
+  language=english,
+  backend=biber,
+  sortcites=true,
+  hyperref=true,
+]{biblatex}
+\addbibresource{literatur.bib}
+
+
+\newcommand*{\prtA}{\textsc{a}}
+\newcommand*{\prtB}{\textsc{b}}
+\newcommand*{\textex}[1]{\ensuremath{\text{\texttt{#1}}}}
+\newcommand*{\opname}[1]{\ensuremath{\text{\textit{#1}}}}
+\newcommand*{\state}[1]{\ensuremath{#1}}
+\DeclareMathOperator{\transform}{transform}
+
 \begin{document}
 \supertitle{Distributed Systems}
 \title{Exercise 11}
@@ -75,20 +94,86 @@
 We used pairprogramming for all the code and ``pairreporting'' for the
 report, so we share the workload at 50\% each.
 
-In this report we present an editor, the instances of which are able
-to connect to each other and to capture editing actions in one editor
-and replay them in another \textit{in the same textarea}.  We build
-upon the editor from excercise~09. Whitch where able to connect and
-send edit event to each other, but not in the same textarea. Our contribution was to
-make two editors merge their edit in the same window.
+In this report we present an editor, the instances of which are able to
+connect to each other and to capture editing actions in one editor and
+replay them in another \textit{in the same text}.  We built upon the
+editor from excercise~09, which was able to connect and send edit event
+to other instances of itself, but not in the same textarea. Our
+contribution was to make two editors merge their edits in the same
+text.
 
-The report describes how we change the architechture of the event flow
+The report describes how we changed the architecture of the event flow
 based on operational transformation. It discusses some of the
 decisions we made in developing the editor. The conclusion contains a
 list of issues with the editor that still need to be addressed.
 
 \chapter{Operational transformation}
-\fxwarning{Richard writes something about the techniques.}
+
+There exist quite some applications for collaborative text editing;
+examples are Saros \cite{Saros}, Google Wave \cite{GoogleWave} or Gobby
+\cite{Gobby}. They all use a client-server approach for synchronising
+optimistically. This means, changes to the text are made immediately
+(when the user presses a key, for example) and then sent to the server,
+which in turn sends them to the other clients. If changes are made
+concurrently by multiple users, an algorithm makes sure that everyone
+ends up with the same text. This approach to synchronisation, or to
+preserving consistency, increases distribution transparency since there
+is no delay between user input and its effects on the screen, just as in
+a non-distributed editor. 
+
+One method for this kind of synchronisation is operational
+transformation: Operations represent changes to the text and they are
+first applied locally, then sent to the other parties editing the same
+text. If the other parties edit their versions of the text in the
+meantime, they have to transform the received operation so that it does
+what was intended.
+
+Example: \prtA and \prtB start with text \textex{abcdefg}. \prtA inserts
+\textex{123} at offset 2 and gets \textex{ab123cdefg}, then sends the
+operation to \prtB. Before \prtB receives it, she removes two characters
+at offset 4 and gets \textex{abcdg}, then she sends this operation to
+\prtA.  Now, \prtA and \prtB receive the operations from each other, but
+if they applied them directly, they would end up with different texts:
+\prtA with \textex{ab12defg} and \prtB with \textex{ab123cdg}. In this
+case, the result \prtB gets already appears like a sensible combination
+of the two operations. Then only the remove operation \prtA received has
+to be shifted by three characters to the right, so that it ends up with
+that text, too.  Mathematically:
+
+\begin{align*}
+    t               &:= \textex{abcdefg} \\
+    o_A             &:= (\opname{insert}, 2, \textex{123}) \\
+    o_B             &:= (\opname{remove}, 4, 2) \\
+    o_A(t)          &= \textex{ab123cdefg} \\
+    o_B(t)          &= \textex{abcdg} \\
+    (o_B ∘ o_A)(t)  &= \textex{ab12defg} \\
+    (o_A ∘ o_B)(t)  &= \textex{ab123cdg} \\
+    (o_A', o_B')    &:= \transform(o_A, o_B) \\
+    o_A'            &= (\opname{insert}, 2, \textex{123}) \\
+    o_B'            &= (\opname{remove}, 4, 5) \\
+    (o_B' ∘ o_A)(t) &= (o_A' ∘ o_B)(t) = \textex{ab123cdg} \\
+\end{align*}
+
+The $\transform$ function is the first component of operational
+transformation. Its defining property is: 
+
+\begin{equation*}
+    ∀ o_a, o_b: (o_a', o_b') := \transform(o_a, o_b) ⇒ (o_b' ∘ o_a) = (o_a' ∘ o_b)
+\end{equation*}
+
+That means, if two copies of the same text have diverged by applying
+$o_a$ to one and $o_b$ to the other, then applying $o_b'$ after $o_a$
+and $o_a'$ after $o_b$ brings them in synch again. Any function that has
+the above property can be used as $\transform$, but most of them will
+only give consistent, but not sensible, results.
+
+The second component of operational transformation is an algorithm that
+wraps the $\transform$ function, sends operations to other parties,
+receives operations from other parties, transforms them and applies them
+locally.  All the applications mentioned above use a version of the
+so-called Jupiter algorithm, which was originally published in
+\cite{Jupiter}. By using a client-server approach it reduces the problem
+of synchronising $n$ parties to the problem of synchronising 2 parties.
 
 \tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
     minimum height=2em, minimum width=11em, text centered},
@@ -154,15 +239,42 @@ list of issues with the editor that still need to be addressed.
 \end{figure}
 
 
+\cite{Jupiter} and \cite{UnderstandOT} contain extensive descriptions of
+how it works, so we won't go into details here. However, figure
+\ref{fig:state} illustrates its workings. The numbers count the
+operations applied to the text on the client and server and, paired up,
+they are logical timestamps identifying the states the edited text goes
+through. The arrows correspond to operations applied to the text, the
+state of which changes after every application of an operation.
+Operations include the timestamp of the state to which they were
+applied. Both the client and the server start in state \state{0,0}.
+First, the client generates and applies an operation and the text goes
+into state \state{1,0}. The client sends the operation to the server,
+which applies it, so that its copy of the text goes into state
+\state{1,0}, too. The same happens the other way around when the server
+generates the second operation. Then the client applies an operation and
+the also server applies an operation, before receiving that of the
+client. The result are two different states of the text after the same
+total number of operations. Client and server now receive each other's
+operations, but cannot apply them because their texts are not in the
+state to which the operations where originally applied. In order to get
+from their diverged states into a common state again, client and server
+have to transform the received operations and apply the results. Then
+they proceed without conflicts.
+
+This is most of what the Jupiter algorithm does. It gets only slightly
+more difficult when client and server diverge by more than one
+operation.
+
 
 \chapter{Code Overview}
-Our main addition of code was in and around the \mil{JupiterClient}-class. We changed the flow of the event to go trough it. It is most easily show on figure \ref{fig:event}.
-\fxwarning{Richard writes something.}
 
 \begin{figure}[hbp]
   \centering
+  \fxwarning{The EventDisplayer communicates directly with the text
+  area.}
   \caption{\mil{Event}'s path through the system in the editor as
-    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextEditEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
+    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextChangeEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
   \begin{tikzpicture}[node distance=1cm, auto]
     \footnotesize
     \node[c] (net) {Network};
@@ -203,9 +315,35 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   \label{fig:event}
 \end{figure}
 
+Thanks to the layered architecture (not very stringent) and message
+queueing, we didn't have to change much of the existing code in order to
+allow for distributed editing of the same text. -- Of course, one text
+area had to go and \mil{DocumentEventCapturer} and \mil{EventDisplayer}
+(formerly \mil{EventReplayer}) now operate on the remaining one.
+But otherwise only the \mil{JupiterClient} got plugged in between
+receiving and sending, and capturing and displaying events,
+respectively. Figure \ref{fig:event} shows the new configuration.
+
+
 \section{\mil{JupiterClient}}
-%\inmnt{35}{80}{JupiterClient.java}
-\fxwarning{Richard writes something.}
+%\inmnt{35}{80}{JupiterClient.java} -- I think I won't need this.
+
+The \mil{JupiterClient} is called like that because it will be used as
+the client Jupiter class for the next handin with $n$ parties. Right
+now, there is one \mil{JupiterClient}s on each of the two editors
+running.
+
+All events go through the \mil{JupiterClient}: Both user inputs in the
+form of \mil{TextChangeEvent}s and events from the other
+\mil{JupiterClient} in the form of \mil{JupiterEvent}s come in through
+the inbound queue.  If an incoming event came from the user's actions on
+the text area, the \mil{JupiterClient} wraps it in a \mil{JupiterEvent},
+including a timestamp and sends it to the other editor. It gives it
+to the \mil{EventReplayer}, so that the user actually sees the result of
+her input. If, on the other hand, an incoming event came from the other
+editor, the \mil{JupiterClient} transforms it, if necessary, before
+giving it to the \mil{EventReplayer}.
+
 
 \section{\mil{DocumentEventCapturer}}
 %\inmnt{195}{228}{DocumentEventCapturer.java}
@@ -213,14 +351,26 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
 
 
 \section{\mil{Transformer}}
-\fxwarning{Richard writes something.}
-%\inmnt{195}{228}{Transformer.java}
+
+As mentioned earlier, the transformation function can be implemented in
+different ways. The Saros project, for example, uses what is described
+in \cite{Transform}. We decided for a more primitive approach, which
+covers all cases, but does not always yield satisfactory results.
+However, we wrapped the function \mil{transform} in a class
+\mil{Transform}, so that the structure can easily be changed to match
+the strategy pattern. Thereby, different solutions to the same problem
+could be plugged in without effort.
+
+\begin{figure}
+\centering
+\caption{Transformation of two overlapping remove operations}
+\label{fig:transform}
+\fxwarning{Possibly needs to be adapted to the text. Or just include an
+ASCII art thing like I drew in the Transformer.}
 \newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
 \newcommand\acoord[2][.3em]{\ncoord[#1,.8em]{#2}}
 \newcommand\remove[4]{\filldraw[#1] ($(#2) +(.15em,0em)$) -- ($(#3) +(-.15em,0em)$) -- ++(0em,-.6em) to [out=-90,in=90] ($(#4) + (.1em,0em)$) |- ++(-.2em,-.8em) --++(0em,.8em) to [out=90,in=-90] ($(#2) + (.15em,-.8em)$) --cycle;}
-\newpage
 %\texttt{… a b c d e f g h i j k …}\\
-\begin{center}
 \ttfamily
 … a b c\acoord{1cd} d e f\acoord{1fg} g\acoord{1gh} h i\acoord{1ij} j k …\\
 \vspace{4em}
@@ -240,10 +390,40 @@ Our main addition of code was in and around the \mil{JupiterClient}-class. We ch
   \remove{red,dk}{1cd}{1gh}{2ch}
   \remove{red,li}{3cd}{3fj}{4cjr}
 }
-\end{center}
+\end{figure}
+
+As an example, figure \ref{fig:transform} shows what \mil{transform}
+does for two overlapping remove events: On the local machine the smaller
+removal to the right and on the remote machine the larger removal to the
+left have happened. In this case, transforming the operations amounts to
+make them delete less and possibly in a different place. The following
+listing shows the piece of source code that covers this and some other
+cases. The last two assignments are the transformed operations in this
+case.
+
+\inmnt{149}{184}{Transformer.java}
 
 \chapter{Conclusion}
-\fxwarning{Write a conclusion.}
+
+We had an editor whose instances could connect to each other and where
+the user could see what the other was doing to her text. Now we extended
+this, enabling both users to edit the same text at the same time. For
+synchronisation we use the well-known Jupiter algorithm, one advantage
+of which is that users see their changes without delay.
+
+As usual, some issues, mainly in regard of user friendliness remain. For
+instance, there is no indication whether editors are connected. However,
+those things are in no way related to distributed systems and therefore
+have to stand back behind things that are. Another example is the
+relative primitivity of the \mil{transform} function. This is also not
+severe, since it only very rarely, if at all, affects sensible text
+editing actions.
+
+All in all, the architecture created for the previous version of the
+editor proved quite successful in letting us concentrate on the
+synchronisation issues central to this exercise. And using the exising
+Jupiter algorithm is, in our opinion, a much better approach than
+inventing some half-baked own synchronisation method.
 
 \appendix
 
@@ -260,6 +440,12 @@ root directory it can be run with \texttt{./run.sh}.
 % \nocite{*}
 % \bibliographystyle{dlfltxbbibtex} \Bibliography{bib}
 % \clearpage \appendix
+
+\setlength{\RaggedRightRightskip}{0pt plus 4em} % maybe
+\RaggedRight
+\fxwarning{BibLaTeX might be displaying too much information. Just throw
+them out of literatur.bib.}
+\printbibliography
 
 \end{document}
 
