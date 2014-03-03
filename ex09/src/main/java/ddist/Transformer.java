@@ -5,7 +5,7 @@ package ddist;
  * in different texts on the local and the sender's side to operations to be
  * applied afterwards, bringing the texts in synch again.
  *
- * @see JupiterClient
+ * @see ClientEventDistributor
  */
 public class Transformer {
     /*

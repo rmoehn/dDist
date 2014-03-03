@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
  * Nichols, Curtis, Dixon, Lamping: High-Latency, Low-Bandwidth Windowing in
  * the Jupiter Collaboration System. UIST 95 Pittsburgh PA USA, Proceedings.
  */
-public class JupiterClient implements Runnable {
+public class ClientEventDistributor implements Runnable {
     private JupiterTime _currentTime     = new JupiterTime();
     private List<JupiterEvent> _outgoing = new LinkedList<>();
     private Transformer transformer      = new Transformer();
@@ -19,7 +19,7 @@ public class JupiterClient implements Runnable {
     private BlockingQueue<Event> _toDisplayer;
     private final boolean _isServer; // Makes sense in the 1-1 case
 
-    public JupiterClient(BlockingQueue<Event> inqueue, BlockingQueue<Event>
+    public ClientEventDistributor(BlockingQueue<Event> inqueue, BlockingQueue<Event>
             toServer, BlockingQueue<Event> toDisplayer, boolean isServer) {
         _inqueue     = inqueue;
         _toServer    = toServer;

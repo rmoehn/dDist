@@ -46,12 +46,12 @@ public class DisconnectEvent implements Event {
      *     on. The DisconnectEvent now indicates that the socket should be
      *     closed. OR complies and then shuts itself down. OR doesn't need to
      *     flush the inqueue since all pending events will be processed by the
-     *     JupiterClient.
+     *     ClientEventDistributor.
      *
      *  5. II receives the DisconnectEvent event from the network, puts it in
      *     the inqueue, shuts the socket down as told and terminates. II
      *     doesn't need to flush the inqueue since all pending events will be
-     *     processed by the JupiterClient.
+     *     processed by the ClientEventDistributor.
      *
      *  When the JupiterClients (JR and JI) see the DisconnectEvent in the
      *  inqueue, they pass it on to their respective EventDisplayers (MR and

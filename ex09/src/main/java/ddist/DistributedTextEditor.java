@@ -294,7 +294,7 @@ public class DistributedTextEditor extends JFrame {
      */
     private void startCommunication(Socket socket, boolean isServer) {
         // Start thread containing the Jupiter client/server
-        JupiterClient jc = new JupiterClient(
+        ClientEventDistributor jc = new ClientEventDistributor(
                                inEventQueue,
                                outEventQueue,
                                displayEventQueue,
