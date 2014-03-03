@@ -57,6 +57,8 @@ public class DistributedTextEditor extends JFrame {
     private BlockingQueue<Event> displayEventQueue 
         = new LinkedBlockingQueue<>();
 
+    private BlockingQueue<Event> _serverInQueue = new LinkedBlockingQueue<>();
+
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
 
@@ -169,7 +171,7 @@ public class DistributedTextEditor extends JFrame {
                     }
 
                     // Set up the event sending and receiving
-                    startCommunication(socket, true);
+                    startServer();
 
                     // Give the editor a better title
                     setTitle(
@@ -213,7 +215,8 @@ public class DistributedTextEditor extends JFrame {
             }
 
             // Set up the event sending and receiving
-            startCommunication(socket, false);
+            // startCommunication(socket, false);
+            assert(false);
 
             // Give the editor a better title
 	    	setTitle(
@@ -292,27 +295,13 @@ public class DistributedTextEditor extends JFrame {
      * Start threads for handling the transportation of events between the
      * network and the local event queues.
      */
-    private void startCommunication(Socket socket, boolean isServer) {
+    private void startServer() {
         // Start thread containing the Jupiter client/server
-        ClientEventDistributor jc = new ClientEventDistributor(
-                               inEventQueue,
-                               outEventQueue,
-                               displayEventQueue
-                           );
-        Thread jupiterThread = new Thread(jc);
-        jupiterThread.start();
-
-        // Start thread for adding incoming events to the inqueue
-        EventReceiver rec
-            = new EventReceiver(socket, inEventQueue, outEventQueue);
-        Thread receiverThread = new Thread(rec);
-        receiverThread.start();
-
-        // Start thread for taking outgoing events from the outqueue
-        EventSender sender
-            = new EventSender(socket, outEventQueue);
-        Thread senderThread = new Thread(sender);
-        senderThread.start();
+        ServerEventDistributor eventDistributor =
+            new ServerEventDistributor(_serverInQueue,
+                                       inEventQueue);
+        Thread eventDistributorThread = new Thread(eventDistributor);
+        eventDistributorThread.start();
 
         dec.enableEventGeneration();
     }

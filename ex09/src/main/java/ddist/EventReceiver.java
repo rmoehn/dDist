@@ -22,7 +22,7 @@ public class EventReceiver implements Runnable {
      * sending to the other editor
      */
     public EventReceiver(Socket sock, BlockingQueue<Event> inEventQueue,
-            BlockingQueue<Event> outEventQueue) {
+                         BlockingQueue<Event> outEventQueue) {
         _socket        = sock;
         _inEventQueue  = inEventQueue;
         _outEventQueue = outEventQueue;

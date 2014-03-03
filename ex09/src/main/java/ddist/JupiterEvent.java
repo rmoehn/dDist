@@ -9,11 +9,14 @@ class JupiterEvent implements Event {
     private final Event _containedEvent;
     private final JupiterTime _timestamp;
     private final boolean _isFromServer;
+    private final int _senderID;
 
     public JupiterEvent(Event event, JupiterTime time, boolean isFromServer) {
         _containedEvent = event;
         _timestamp      = time;
         _isFromServer   = isFromServer;
+        assert(false);
+        _senderID = 0;
     }
 
     /**
@@ -32,6 +35,10 @@ class JupiterEvent implements Event {
         return _containedEvent;
     }
 
+    public int getSenderID() {
+        return _senderID;
+    }
+
     public boolean isFromServer() {
         return _isFromServer;
     }
@@ -39,9 +46,9 @@ class JupiterEvent implements Event {
     @Override
     public String toString() {
         return String.format("%s, fromServer: %b, contains: %s",
-                   _timestamp.toString(),
-                   _isFromServer,
-                   _containedEvent.toString()
-               );
+                             _timestamp.toString(),
+                             _isFromServer,
+                             _containedEvent.toString()
+                             );
     }
 }
