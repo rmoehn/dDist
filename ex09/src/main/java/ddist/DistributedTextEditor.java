@@ -297,8 +297,7 @@ public class DistributedTextEditor extends JFrame {
         ClientEventDistributor jc = new ClientEventDistributor(
                                inEventQueue,
                                outEventQueue,
-                               displayEventQueue,
-                               isServer
+                               displayEventQueue
                            );
         Thread jupiterThread = new Thread(jc);
         jupiterThread.start();

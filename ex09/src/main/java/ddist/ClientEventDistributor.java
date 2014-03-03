@@ -1,7 +1,5 @@
 package ddist;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -10,21 +8,17 @@ import java.util.concurrent.BlockingQueue;
  * the Jupiter Collaboration System. UIST 95 Pittsburgh PA USA, Proceedings.
  */
 public class ClientEventDistributor implements Runnable {
-    private JupiterTime _currentTime     = new JupiterTime();
-    private List<JupiterEvent> _outgoing = new LinkedList<>();
-    private Transformer transformer      = new Transformer();
+    private Jupiter jupiter = new Jupiter(false);
 
     private BlockingQueue<Event> _inqueue;
     private BlockingQueue<Event> _toServer;
     private BlockingQueue<Event> _toDisplayer;
-    private final boolean _isServer; // Makes sense in the 1-1 case
 
     public ClientEventDistributor(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toDisplayer, boolean isServer) {
+            toServer, BlockingQueue<Event> toDisplayer) {
         _inqueue     = inqueue;
         _toServer    = toServer;
         _toDisplayer = toDisplayer;
-        _isServer    = isServer;
     }
 
     public void run() {
@@ -45,40 +39,15 @@ public class ClientEventDistributor implements Runnable {
                 _toDisplayer.add(localOp);
 
                 // send(op, my Msgs, otherMsgs)
-                JupiterEvent jupiterEvent
-                    = new JupiterEvent(localOp, _currentTime.getCopy(), _isServer);
+                JupiterEvent jupiterEvent = jupiter.generate(localOp);
                 _toServer.add(jupiterEvent);
-
-                // add (op, my Msgs) to outgoing
-                _outgoing.add(jupiterEvent);
-
-                // myMsgs = myMsgs + 1
-                _currentTime.incLocalTime();
             }
             // Receive(msg)
             else if (event instanceof JupiterEvent) {
                 JupiterEvent received = (JupiterEvent) event;
 
-                // Discard acknowledged messages.
-                while (_outgoing.size() > 0
-                        && received.knowsAbout( _outgoing.get(0) )) {
-                    _outgoing.remove(0);
-                }
-
-                // Transform new message and the ones in the queue.
-                for (int i = 0; i < _outgoing.size(); ++i) {
-                    // {msg, outgoing[i]} = xform(msg, outgoing[i])
-                    TransformedPair tp
-                        = transformer.transform(received, _outgoing.get(i));
-                    received = tp.getReceived();
-                    _outgoing.set(i, tp.getLocal());
-                }
-
                 // apply msg.op locally
-                _toDisplayer.add(received.getContainedEvent());
-
-                // otherMsgs = otherMsgs + 1
-                _currentTime.incOtherTime();
+                _toDisplayer.add(jupiter.receive(received).getContainedEvent());
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
