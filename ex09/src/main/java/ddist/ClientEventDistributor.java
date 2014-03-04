@@ -1,5 +1,6 @@
 package ddist;
 
+import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 
 /**
@@ -8,16 +9,25 @@ import java.util.concurrent.BlockingQueue;
  * the Jupiter Collaboration System. UIST 95 Pittsburgh PA USA, Proceedings.
  */
 public class ClientEventDistributor implements Runnable {
-    private Jupiter jupiter = new Jupiter(false);
 
+    private ClientHandle _handle;
     private BlockingQueue<Event> _inqueue;
-    private BlockingQueue<Event> _toServer;
     private BlockingQueue<Event> _toDisplayer;
 
-    public ClientEventDistributor(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toDisplayer) {
+    public ClientEventDistributor(BlockingQueue<Event> toLocalClient,
+                                  BlockingQueue<Event> toDisplayer) {
+        outQueue = null; //serverInQueue
+        assert(false);
+        _handle = new ClientHandle(toLocalClient, outQueue);
+        _inqueue     = toLocalClient;
+        _toDisplayer = toDisplayer;
+    }
+
+    public ClientEventDistributor(BlockingQueue<Event> inqueue,
+                                  BlockingQueue<Event> toDisplayer,
+                                  Socket socket) {
+        _handle = new ClientHandle(inqueue, socket);
         _inqueue     = inqueue;
-        _toServer    = toServer;
         _toDisplayer = toDisplayer;
     }
 
@@ -37,17 +47,15 @@ public class ClientEventDistributor implements Runnable {
 
                 // apply op locally
                 _toDisplayer.add(localOp);
-
-                // send(op, my Msgs, otherMsgs)
-                JupiterEvent jupiterEvent = jupiter.generate(localOp);
-                _toServer.add(jupiterEvent);
+                // send it to server
+                _handle.send(localOp);
             }
             // Receive(msg)
             else if (event instanceof JupiterEvent) {
                 JupiterEvent received = (JupiterEvent) event;
 
                 // apply msg.op locally
-                _toDisplayer.add(jupiter.receive(received).getContainedEvent());
+                _toDisplayer.add(_handle.receive(received).getContainedEvent());
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {

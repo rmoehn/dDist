@@ -11,6 +11,8 @@ public class ClientHandle {
 
     private Jupiter _jupiter;
 
+
+    // ClientHandle for local client on the server
     public ClientHandle(BlockingQueue<Event> serverInQueue,
                         BlockingQueue<Event> outQueue) {
         _serverInQueue = serverInQueue;
@@ -18,9 +20,11 @@ public class ClientHandle {
         _jupiter       = new Jupiter(true);
     }
 
+    // ClientHandle for remote clients on the server and server on remote clients
     public ClientHandle(BlockingQueue<Event> serverInQueue, Socket socket) {
         _serverInQueue = serverInQueue;
         _jupiter       = new Jupiter(true);
+        assert(false); //All jupiters isServer
         _outQueue      = new LinkedBlockingQueue<Event>();
 
         // Start thread for adding incoming events to the inqueue

@@ -27,7 +27,7 @@ public class Jupiter {
 
         // myMsgs = myMsgs + 1
         _currentTime.incLocalTime();
-
+        System.out.println(jupiterEvent);
         return jupiterEvent;
     }
 
@@ -49,7 +49,7 @@ public class Jupiter {
 
         // otherMsgs = otherMsgs + 1
         _currentTime.incOtherTime();
-
+        System.out.println(event);
         return event;
     }
 }

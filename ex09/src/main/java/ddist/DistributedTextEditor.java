@@ -38,26 +38,11 @@ public class DistributedTextEditor extends JFrame {
     private JTextField ipaddress = new JTextField("localhost");
     private JTextField portNumber = new JTextField("20000");
 
-    /*
-     * Queue for holding events coming in from the upper text area or the
-     * other editor to be sent to the Jupiter algorithm.
-     */
-    private BlockingQueue<Event> inEventQueue = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> _toLocalClient = new LinkedBlockingQueue<>();
 
-    /*
-     * Queue for holding events coming from the upper text area to be sent to
-     * the other editor.
-     */
-    private BlockingQueue<Event> outEventQueue = new LinkedBlockingQueue<>();
-
-    /*
-     * Queue on which the Jupiter algorithm sends processed events to the
-     * upper text area.
-     */
-    private BlockingQueue<Event> displayEventQueue 
+    private BlockingQueue<Event> _localClientToDisplayer
         = new LinkedBlockingQueue<>();
 
-    private BlockingQueue<Event> _serverInQueue = new LinkedBlockingQueue<>();
 
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
@@ -68,7 +53,7 @@ public class DistributedTextEditor extends JFrame {
     private String currentFile = "Untitled";
     private boolean changed = false;
     private DocumentEventCapturer dec
-        = new DocumentEventCapturer(inEventQueue);
+        = new DocumentEventCapturer(_toLocalClient);
 
     public DistributedTextEditor() {
     	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
@@ -115,7 +100,7 @@ public class DistributedTextEditor extends JFrame {
 	setTitle("Disconnected");
 	setVisible(true);
 
-	eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
+	eventDisplayer = new EventDisplayer(dec, _localClientToDisplayer, area1, this);
 	eventDisplayerThread = new Thread(eventDisplayer);
 	eventDisplayerThread.start();
     }
@@ -128,7 +113,7 @@ public class DistributedTextEditor extends JFrame {
 	    }
 	};
 
-    Action Listen = new AbstractAction("Listen") {
+    Action Listen = new AbstractAction("Start sever") {
         private static final long serialVersionUID = 3098L;
 
 	    public void actionPerformed(ActionEvent e) {
@@ -150,12 +135,16 @@ public class DistributedTextEditor extends JFrame {
                 System.exit(1);
             }
             final int port = Integer.parseInt(portNumber.getText());
-	    	setTitle(
-                String.format("I'm listening on %s:%d.", address, port));
+            setTitle(String.format("I'm listening on %s:%d.", address, port));
+
+            // Set up the event sending and receiving
+            startServer();
+            startClient();
 
             // Asynchronously wait for a connection
             new Thread( new Runnable() {
                 public void run() {
+                    while (true) {
                     // Wait for an incoming connection
                     Socket socket = null;
                     try {
@@ -169,10 +158,9 @@ public class DistributedTextEditor extends JFrame {
                         ex.printStackTrace();
                         return;
                     }
-
-                    // Set up the event sending and receiving
-                    startServer();
-
+                    
+                    serverInQueue.add(new ConnectEvent(socket));
+                    
                     // Give the editor a better title
                     setTitle(
                         String.format(
@@ -181,6 +169,7 @@ public class DistributedTextEditor extends JFrame {
                             socket.getPort()
                         )
                     );
+                    }
                 }
             } ).start();
 	    }
@@ -229,7 +218,8 @@ public class DistributedTextEditor extends JFrame {
 
 	    public void actionPerformed(ActionEvent e) {
             // Initiate disconnecting process
-            outEventQueue.add( new DisconnectEvent() );
+            //outEventQueue.add( new DisconnectEvent());
+                assert(false);
 	    }
 	};
 
@@ -291,6 +281,17 @@ public class DistributedTextEditor extends JFrame {
 	}
     }
 
+    private void startClient() {
+        ClientEventDistributor eventDistributor =
+            new ClientEventDistributor(_toLocalClient,
+                                       _localClientToDisplayer);
+
+        Thread clientEventDistributorThread = new Thread(eventDistributor);
+        clientEventDistributorThread.start();
+                    
+        dec.enableEventGeneration();
+    }
+
     /**
      * Start threads for handling the transportation of events between the
      * network and the local event queues.
@@ -298,12 +299,9 @@ public class DistributedTextEditor extends JFrame {
     private void startServer() {
         // Start thread containing the Jupiter client/server
         ServerEventDistributor eventDistributor =
-            new ServerEventDistributor(_serverInQueue,
-                                       inEventQueue);
-        Thread eventDistributorThread = new Thread(eventDistributor);
-        eventDistributorThread.start();
-
-        dec.enableEventGeneration();
+            new ServerEventDistributor(_toLocalClient);
+        Thread serverEventDistributorThread = new Thread(eventDistributor);
+        serverEventDistributorThread.start();
     }
 
     public static void main(String[] arg) {
