@@ -5,12 +5,20 @@ public class TextRemoveEvent extends TextChangeEvent {
 
     private int length;
 
-    public TextRemoveEvent(int offset, int length) {
-        super(offset);
-        this.length = length;
-    }
+	public TextRemoveEvent(int offset, int length) {
+		super(offset);
+		this.length = length;
+	}
 
-    public int getLength() { return length; }
+	public int getLength() { return length; }
+
+    protected String apply(String text) {
+        return (new StringBuffer(text)).delete(
+                                            this.getOffset(),
+                                            this.getOffset() + length
+                                        )
+                                       .toString();
+    }
 
     @Override
     public String toString() {

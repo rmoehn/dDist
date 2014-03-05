@@ -10,11 +10,16 @@ public class TextInsertEvent extends TextChangeEvent {
 
     private String text;
 
-    public TextInsertEvent(int offset, String text) {
-        super(offset);
-        this.text = text;
+	public TextInsertEvent(int offset, String text) {
+		super(offset);
+		this.text = text;
+	}
+	public String getText() { return text; }
+
+    protected String apply(String text) {
+        return (new StringBuffer(text)).insert(this.getOffset(), this.text)
+                                       .toString();
     }
-    public String getText() { return text; }
 
     @Override
     public String toString() {
