@@ -10,7 +10,6 @@ import java.awt.event.KeyListener;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
@@ -129,62 +128,37 @@ public class DistributedTextEditor extends JFrame {
 	};
 
     Action Listen = new AbstractAction("Listen") {
-        private static final long serialVersionUID = 3098L;
+            private static final long serialVersionUID = 3098L;
 
-	    public void actionPerformed(ActionEvent e) {
-	    	saveOld();
+            public void actionPerformed(ActionEvent e) {
+            	saveOld();
 
-            // Prepare for connection
-	    	area1.setText("");
-	    	changed = false;
-	    	Save.setEnabled(false);
-	    	SaveAs.setEnabled(false);
+                // Prepare for connection
+            	area1.setText("");
+            	changed = false;
+            	Save.setEnabled(false);
+            	SaveAs.setEnabled(false);
 
-            // Display information about the listening
-            String address = null;
-            try {
-                address = InetAddress.getLocalHost().getHostAddress();
-            }
-            catch (UnknownHostException ex) {
-                ex.printStackTrace();
-                System.exit(1);
-            }
-            final int port = Integer.parseInt(portNumber.getText());
-	    	setTitle(
-                String.format("I'm listening on %s:%d.", address, port));
-
-            // Asynchronously wait for a connection
-            new Thread( new Runnable() {
-                public void run() {
-                    // Wait for an incoming connection
-                    Socket socket = null;
-                    try {
-                        ServerSocket servSock = new ServerSocket(port);
-                        socket = servSock.accept();
-                        servSock.close();
-                    }
-                    catch (IOException ex) {
-                        JOptionPane.showMessageDialog(
-                            DistributedTextEditor.this, "Cannot listen.");
-                        ex.printStackTrace();
-                        return;
-                    }
-
-                    // Set up the event sending and receiving
-                    startServer();
-
-                    // Give the editor a better title
-                    setTitle(
-                        String.format(
-                            "Connected to %s:%d.",
-                            socket.getInetAddress().toString(),
-                            socket.getPort()
-                        )
-                    );
+            	// Display information about the listening
+                String address = null;
+                try {
+                    address = InetAddress.getLocalHost().getHostAddress();
                 }
-            } ).start();
-	    }
-	};
+                catch (UnknownHostException ex) {
+                    ex.printStackTrace();
+                    System.exit(1);
+                }
+                final int port = Integer.parseInt(portNumber.getText());
+            	setTitle(String.format("I'm listening on %s:%d.", address, port));
+
+                Server server = new Server(port);
+                server.start();
+                // Give the editor a better title
+/*                setTitle(String.format("Connected to %s:%d.",
+                                       socket.getInetAddress().toString(),
+                                       socket.getPort()));*/
+            }
+        };
 
     Action Connect = new AbstractAction("Connect") {
         private static final long serialVersionUID = 135098L;
@@ -296,18 +270,12 @@ public class DistributedTextEditor extends JFrame {
      * network and the local event queues.
      */
     private void startServer() {
-        // Start thread containing the Jupiter client/server
-        ServerEventDistributor eventDistributor =
-            new ServerEventDistributor(_serverInQueue,
-                                       inEventQueue);
-        Thread eventDistributorThread = new Thread(eventDistributor);
-        eventDistributorThread.start();
 
-        dec.enableEventGeneration();
+        //dec.enableEventGeneration();
     }
 
     public static void main(String[] arg) {
     	new DistributedTextEditor();
     }
-
 }
+

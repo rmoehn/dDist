@@ -1,8 +1,10 @@
 package ddist;
 
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 /**
  * Central mechanism for optimistic synchronisation. Described in
@@ -13,13 +15,13 @@ public class ServerEventDistributor implements Runnable {
 
 
     private BlockingQueue<Event> _serverInQueue;
-    private Map<Integer,ClientHandle> _clients;
+    private Map<Integer, ClientHandle> _clients;
+    private int _nextID;
 
-    public ServerEventDistributor(BlockingQueue<Event> serverInQueue,
-                                  BlockingQueue<Event> localClientOutQueue) {
-        _serverInQueue = serverInQueue;
-        _clients = new HashMap<>();
-        _clients.put(0, new ClientHandle(_serverInQueue, localClientOutQueue));
+    public ServerEventDistributor() {
+        _serverInQueue = new LinkedBlockingQueue<Event>();
+        _clients       = new HashMap<>();
+        _nextID        = 0;
     }
 
     public void run() {
@@ -45,6 +47,13 @@ public class ServerEventDistributor implements Runnable {
                     client.send((TextChangeEvent) transformed.getContainedEvent());
                 }
             }
+            // Want to connect
+            else if (event instanceof ConnectEvent) {
+                ClientHandle handle = new ClientHandle(_serverInQueue,
+                                                       ((ConnectEvent) event).getSocket());
+                _clients.put(_nextID,handle);
+                _nextID++;
+            }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
                 // Pass event on and stop work
@@ -55,5 +64,9 @@ public class ServerEventDistributor implements Runnable {
                 throw new IllegalArgumentException("Got unknown event.");
             }
         }
+    }
+
+    public void addClient(Socket socket) {
+        _serverInQueue.add(new ConnectEvent(socket));
     }
 }
