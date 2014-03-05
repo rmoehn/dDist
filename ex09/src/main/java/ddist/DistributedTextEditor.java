@@ -41,22 +41,9 @@ public class DistributedTextEditor extends JFrame {
      * Queue for holding events coming in from the upper text area or the
      * other editor to be sent to the Jupiter algorithm.
      */
-    private BlockingQueue<Event> inEventQueue = new LinkedBlockingQueue<>();
-
-    /*
-     * Queue for holding events coming from the upper text area to be sent to
-     * the other editor.
-     */
-    private BlockingQueue<Event> outEventQueue = new LinkedBlockingQueue<>();
-
-    /*
-     * Queue on which the Jupiter algorithm sends processed events to the
-     * upper text area.
-     */
-    private BlockingQueue<Event> displayEventQueue
+    private BlockingQueue<Event> _toLocalClient = new LinkedBlockingQueue<>();
+    private BlockingQueue<Event> _localClientToDisplayer
         = new LinkedBlockingQueue<>();
-
-    private BlockingQueue<Event> _serverInQueue = new LinkedBlockingQueue<>();
 
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
@@ -67,7 +54,7 @@ public class DistributedTextEditor extends JFrame {
     private String currentFile = "Untitled";
     private boolean changed = false;
     private DocumentEventCapturer dec
-        = new DocumentEventCapturer(inEventQueue);
+        = new DocumentEventCapturer(_toLocalClient);
 
     public DistributedTextEditor() {
         area1.setFont(new Font("Monospaced",Font.PLAIN,12));
@@ -114,7 +101,7 @@ public class DistributedTextEditor extends JFrame {
         setTitle("Disconnected");
         setVisible(true);
 
-        eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
+        eventDisplayer = new EventDisplayer(dec, _localClientToDisplayer, area1, this);
         eventDisplayerThread = new Thread(eventDisplayer);
         eventDisplayerThread.start();
     }
@@ -153,6 +140,19 @@ public class DistributedTextEditor extends JFrame {
 
                 Server server = new Server(port);
                 server.start();
+
+                Socket clientSocket = null;
+                try {
+                    clientSocket = new Socket(address, port);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(DistributedTextEditor.this,
+                                                  "Connecting failed.");
+                    ex.printStackTrace();
+                    return;
+                }
+                
+                startClient(clientSocket);
+                
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
                                   socket.getInetAddress().toString(),
@@ -203,7 +203,8 @@ public class DistributedTextEditor extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 // Initiate disconnecting process
-                outEventQueue.add( new DisconnectEvent() );
+                //outEventQueue.add( new DisconnectEvent() );
+            	assert(false);
             }
         };
 
@@ -269,9 +270,29 @@ public class DistributedTextEditor extends JFrame {
      * Start threads for handling the transportation of events between the
      * network and the local event queues.
      */
-    private void startServer() {
+    private void startClient(Socket socket) {
+        BlockingQueue<Event> outQueue = new LinkedBlockingQueue<Event>();
+        // Start thread containing the Jupiter client/server
+        ClientEventDistributor eventDistributor =
+            new ClientEventDistributor(_toLocalClient,
+                                       outQueue,
+                                       _localClientToDisplayer);
+        Thread eventDistributorThread = new Thread(eventDistributor);
+        eventDistributorThread.start();
 
-        //dec.enableEventGeneration();
+        // Start thread for adding incoming events to the inqueue
+        EventReceiver rec
+            = new EventReceiver(socket, _toLocalClient, outQueue);
+        Thread receiverThread = new Thread(rec);
+        receiverThread.start();
+
+        // Start thread for taking outgoing events from the outqueue
+        EventSender sender
+            = new EventSender(socket, outQueue);
+        Thread senderThread = new Thread(sender);
+        senderThread.start();
+
+        dec.enableEventGeneration();
     }
 
     public static void main(String[] arg) {
