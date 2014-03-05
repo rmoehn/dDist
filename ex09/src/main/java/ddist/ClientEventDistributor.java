@@ -20,7 +20,7 @@ public class ClientEventDistributor implements Runnable {
         _inQueue     = inQueue;
         _outQueue    = outQueue;
         _toDisplayer = toDisplayer;
-       
+
     }
 
     public void run() {
@@ -62,5 +62,10 @@ public class ClientEventDistributor implements Runnable {
                 throw new IllegalArgumentException("Got unknown event.");
             }
         }
+    }
+
+    public void sendDisconnect() {
+        _outQueue.add(new DisconnectEvent());
+        return;
     }
 }

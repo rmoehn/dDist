@@ -3,7 +3,7 @@ package ddist;
 /**
  * Event indicating that someone wants to disconnect.
  */
-public class DisconnectEvent implements Event {
+public class DisconnectEvent extends IdEvent {
     /*
      * There are eight threads that have to be notified when one user wants to
      * disconnect:
@@ -20,10 +20,10 @@ public class DisconnectEvent implements Event {
      * The process of disconnection uses the normal communication paths
      * between the threads and the editors. It looks like this:
      *
-     *       MI -> OI ------------------------> IR -> JR -> MR
-     *                                           |
-     *                                           v
-     * MI <- JI <- II <------------------------ OR
+     *       MI -> OI -----------------> IR -> SED -> CH
+     *                                                |
+     *                                                v
+     * MI <- CED <- II <----------------------------- OR
      *
      *  1. The main thread at the initiator creates a DisconnectEvent and puts
      *     it in the queue for outgoing events (outqueue).

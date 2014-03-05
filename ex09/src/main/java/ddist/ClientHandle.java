@@ -12,6 +12,9 @@ public class ClientHandle {
     private Jupiter _jupiter;
     private final int _clientId;
 
+    private Thread _receiverThread;
+    private Thread _senderThread;
+
     public ClientHandle(BlockingQueue<Event> serverInQueue, Socket socket, int clientId) {
         _serverInQueue = serverInQueue;
         _clientId      = clientId;
@@ -21,14 +24,14 @@ public class ClientHandle {
         // Start thread for adding incoming events to the inqueue
         EventReceiver rec
             = new EventReceiver(socket, _serverInQueue, _outQueue, _clientId);
-        Thread receiverThread = new Thread(rec);
-        receiverThread.start();
+        _receiverThread = new Thread(rec);
+        _receiverThread.start();
 
         // Start thread for taking outgoing events from the outqueue
         EventSender sender
             = new EventSender(socket, _outQueue);
-        Thread senderThread = new Thread(sender);
-        senderThread.start();
+        _senderThread = new Thread(sender);
+        _senderThread.start();
     }
 
     public void send(TextChangeEvent event) {
@@ -37,5 +40,16 @@ public class ClientHandle {
 
     public JupiterEvent receive(JupiterEvent event) {
         return _jupiter.receive(event);
+    }
+
+    public void disconnect(DisconnectEvent event) {
+        _outQueue.add(event);
+        try {
+			_receiverThread.join();
+	        _senderThread.join();
+		} catch (InterruptedException e) {
+			throw new AssertionError();
+		}
+        return;
     }
 }

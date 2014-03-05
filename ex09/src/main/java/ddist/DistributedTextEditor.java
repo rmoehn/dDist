@@ -49,6 +49,8 @@ public class DistributedTextEditor extends JFrame {
     private BlockingQueue<Event> _localClientToDisplayer
         = new LinkedBlockingQueue<>();
 
+    private ClientEventDistributor _eventDistributor;
+
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
 
@@ -214,9 +216,7 @@ public class DistributedTextEditor extends JFrame {
             private static final long serialVersionUID = 983498L;
 
             public void actionPerformed(ActionEvent e) {
-                // Initiate disconnecting process
-                //outEventQueue.add( new DisconnectEvent() );
-                assert(false);
+                _eventDistributor.sendDisconnect();
             }
         };
 
@@ -285,11 +285,10 @@ public class DistributedTextEditor extends JFrame {
     private void startClient(Socket socket) {
         BlockingQueue<Event> outQueue = new LinkedBlockingQueue<Event>();
         // Start thread containing the Jupiter client/server
-        ClientEventDistributor eventDistributor =
-            new ClientEventDistributor(_toLocalClient,
-                                       outQueue,
-                                       _localClientToDisplayer);
-        Thread eventDistributorThread = new Thread(eventDistributor);
+        _eventDistributor = new ClientEventDistributor(_toLocalClient,
+                                                       outQueue,
+                                                       _localClientToDisplayer);
+        Thread eventDistributorThread = new Thread(_eventDistributor);
         eventDistributorThread.start();
 
         // Start thread for adding incoming events to the inqueue

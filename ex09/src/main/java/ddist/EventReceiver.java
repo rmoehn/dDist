@@ -36,7 +36,7 @@ public class EventReceiver implements Runnable {
     public EventReceiver(Socket sock,
                          BlockingQueue<Event> inEventQueue,
                          BlockingQueue<Event> outEventQueue) {
-        this(sock, inEventQueue, outEventQueue, JupiterEvent.NOT_SET);
+        this(sock, inEventQueue, outEventQueue, IdEvent.NOT_SET);
     }
 
     public void run() {
@@ -48,8 +48,8 @@ public class EventReceiver implements Runnable {
             // Put edit events from the other editor in the queue
             while (true) {
                 Event event = (Event) objIn.readObject();
-                if (event instanceof JupiterEvent) {
-                    ((JupiterEvent) event).setSenderId(_clientId);
+                if (event instanceof IdEvent) {
+                    ((IdEvent) event).setSenderId(_clientId);
                 }
                 _inEventQueue.put(event);
 
@@ -67,7 +67,6 @@ public class EventReceiver implements Runnable {
                         disconnectEvent.setShouldClose();
                         _outEventQueue.put(event);
                     }
-
                     break;
                 }
             }

@@ -64,9 +64,10 @@ public class ServerEventDistributor implements Runnable {
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
-                // Pass event on and stop work
-                // _toDisplayer.add(event);
-                break;
+            	int senderId = ((IdEvent) event).getSenderId();
+                _clients.get(senderId).disconnect((DisconnectEvent) event);
+                _clients.remove(senderId);
+                //break;
             }
             else {
                 throw new IllegalArgumentException("Got unknown event.");
