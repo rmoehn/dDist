@@ -32,9 +32,10 @@ public class ClientEventDistributor implements Runnable {
                 e.printStackTrace();
                 System.exit(1);
             }
-
+            System.out.println("Client: " + event);
             // Generate(op)
             if (event instanceof TextChangeEvent) {
+
                 TextChangeEvent localOp = (TextChangeEvent) event;
 
                 // apply op locally

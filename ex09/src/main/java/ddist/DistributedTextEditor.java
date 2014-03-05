@@ -186,23 +186,23 @@ public class DistributedTextEditor extends JFrame {
                 // Find out with whom to connect
                 String address = _remoteIp.getText();
                 int port = Integer.parseInt(_remotePort.getText() );
-                setTitle(
-                         String.format("Connecting to %s:%d...", address, port));
+                setTitle(String.format("Connecting to %s:%d...",
+                                       address,
+                                       port));
 
                 // Initiate connection with other editor
                 Socket socket = null;
                 try {
                     socket = new Socket(address, port);
                 } catch (IOException ex) {
-                    JOptionPane.showMessageDialog(
-                                                  DistributedTextEditor.this, "Connecting failed.");
+                    JOptionPane.showMessageDialog(DistributedTextEditor.this,
+                                                  "Connecting failed.");
                     ex.printStackTrace();
                     return;
                 }
 
                 // Set up the event sending and receiving
-                // startCommunication(socket, false);
-                assert(false);
+                startClient(socket);
 
                 // Give the editor a better title
                 setTitle(
@@ -294,7 +294,9 @@ public class DistributedTextEditor extends JFrame {
 
         // Start thread for adding incoming events to the inqueue
         EventReceiver rec
-            = new EventReceiver(socket, _toLocalClient, outQueue);
+            = new EventReceiver(socket,
+                                _toLocalClient,
+                                outQueue);
         Thread receiverThread = new Thread(rec);
         receiverThread.start();
 

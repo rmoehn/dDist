@@ -10,9 +10,10 @@ import java.util.concurrent.BlockingQueue;
  * queue.
  */
 public class EventReceiver implements Runnable {
-    Socket _socket;
-    BlockingQueue<Event> _inEventQueue;
-    BlockingQueue<Event> _outEventQueue;
+    private Socket _socket;
+    private BlockingQueue<Event> _inEventQueue;
+    private BlockingQueue<Event> _outEventQueue;
+    private final int _clientId;
 
     /**
      * @param sock a Socket representing the connection to the other editor
@@ -21,11 +22,21 @@ public class EventReceiver implements Runnable {
      * @param outEventQueue a BlockingQueue from which to take events for
      * sending to the other editor
      */
-    public EventReceiver(Socket sock, BlockingQueue<Event> inEventQueue,
-                         BlockingQueue<Event> outEventQueue) {
+    public EventReceiver(Socket sock,
+                         BlockingQueue<Event> inEventQueue,
+                         BlockingQueue<Event> outEventQueue,
+                         int clientId) {
         _socket        = sock;
         _inEventQueue  = inEventQueue;
         _outEventQueue = outEventQueue;
+        _clientId      = clientId;
+
+    }
+
+    public EventReceiver(Socket sock,
+                         BlockingQueue<Event> inEventQueue,
+                         BlockingQueue<Event> outEventQueue) {
+        this(sock, inEventQueue, outEventQueue, JupiterEvent.NOT_SET);
     }
 
     public void run() {
@@ -37,6 +48,9 @@ public class EventReceiver implements Runnable {
             // Put edit events from the other editor in the queue
             while (true) {
                 Event event = (Event) objIn.readObject();
+                if (event instanceof JupiterEvent) {
+                    ((JupiterEvent) event).setSenderId(_clientId);
+                }
                 _inEventQueue.put(event);
 
                 // Cleanup and close thread if client wants to disconnect

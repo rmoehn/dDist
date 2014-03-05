@@ -10,22 +10,17 @@ public class ClientHandle {
     private BlockingQueue<Event> _outQueue;
 
     private Jupiter _jupiter;
+    private final int _clientId;
 
-    public ClientHandle(BlockingQueue<Event> serverInQueue,
-                        BlockingQueue<Event> outQueue) {
+    public ClientHandle(BlockingQueue<Event> serverInQueue, Socket socket, int clientId) {
         _serverInQueue = serverInQueue;
-        _outQueue      = outQueue;
-        _jupiter       = new Jupiter(true);
-    }
-
-    public ClientHandle(BlockingQueue<Event> serverInQueue, Socket socket) {
-        _serverInQueue = serverInQueue;
+        _clientId      = clientId;
         _jupiter       = new Jupiter(true);
         _outQueue      = new LinkedBlockingQueue<Event>();
 
         // Start thread for adding incoming events to the inqueue
         EventReceiver rec
-            = new EventReceiver(socket, _serverInQueue, _outQueue);
+            = new EventReceiver(socket, _serverInQueue, _outQueue, _clientId);
         Thread receiverThread = new Thread(rec);
         receiverThread.start();
 

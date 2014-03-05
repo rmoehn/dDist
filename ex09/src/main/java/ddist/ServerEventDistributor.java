@@ -33,10 +33,10 @@ public class ServerEventDistributor implements Runnable {
                 e.printStackTrace();
                 System.exit(1);
             }
-
+            System.out.println("Server: " + event);
             if (event instanceof JupiterEvent) {
                 JupiterEvent received = (JupiterEvent) event;
-                ClientHandle sender = _clients.get(received.getSenderID());
+                ClientHandle sender = _clients.get(received.getSenderId());
 
                 JupiterEvent transformed = sender.receive(received);
 
@@ -50,7 +50,8 @@ public class ServerEventDistributor implements Runnable {
             // Want to connect
             else if (event instanceof ConnectEvent) {
                 ClientHandle handle = new ClientHandle(_serverInQueue,
-                                                       ((ConnectEvent) event).getSocket());
+                                                       ((ConnectEvent) event).getSocket(),
+                                                       _nextID);
                 _clients.put(_nextID,handle);
                 _nextID++;
             }
