@@ -3,6 +3,7 @@ package ddist;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.Semaphore;
 
 public class Server {
 
@@ -14,30 +15,30 @@ public class Server {
         _eventDistributor = new ServerEventDistributor();
     }
 
-    public void start() {
+    public void start(Semaphore mayConnect) {
         listenForConnection();
         startEventDistributor();
+        mayConnect.release();
     }
 
     private void listenForConnection() {
         // Asynchronously wait for a connection
         new Thread( new Runnable() {
                 public void run() {
-                    while (true) {
-                        try {
-                            @SuppressWarnings("resource")
-                                ServerSocket servSock = new ServerSocket(_port);
-
+                    try {
+                        @SuppressWarnings("resource")
+                            ServerSocket servSock = new ServerSocket(_port);
+                        while (true) {
                             // Wait for an incoming connection
                             Socket socket = null;
                             socket = servSock.accept();
                             _eventDistributor.addClient(socket);
                         }
-                        catch (IOException ex) {
-                            System.out.println("Cannot listen."); //TODO: GUI
-                            ex.printStackTrace();
-                            return;
-                        }
+                    }
+                    catch (IOException ex) {
+                        System.out.println("Cannot listen."); //TODO: GUI
+                        ex.printStackTrace();
+                        return;
                     }
                 }
             } ).start();

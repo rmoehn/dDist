@@ -14,6 +14,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.Semaphore;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -34,8 +35,11 @@ public class DistributedTextEditor extends JFrame {
     private static final long serialVersionUID = 4813L;
 
     private JTextArea area1 = new JTextArea(10,120);
-    private JTextField ipaddress = new JTextField("localhost");
-    private JTextField portNumber = new JTextField("20000");
+    private JTextField _listenIp = new JTextField("localhost");
+    private JTextField _listenPort = new JTextField("20000");
+
+    private JTextField _remoteIp = new JTextField("localhost");
+    private JTextField _remotePort = new JTextField("20000");
 
     /*
      * Queue for holding events coming in from the upper text area or the
@@ -69,8 +73,10 @@ public class DistributedTextEditor extends JFrame {
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         content.add(scroll1,BorderLayout.CENTER);
 
-        content.add(ipaddress,BorderLayout.CENTER);
-        content.add(portNumber,BorderLayout.CENTER);
+        content.add(_listenIp, BorderLayout.CENTER);
+        content.add(_listenPort, BorderLayout.CENTER);
+        content.add(_remoteIp, BorderLayout.CENTER);
+        content.add(_remotePort, BorderLayout.CENTER);
 
         JMenuBar JMB = new JMenuBar();
         setJMenuBar(JMB);
@@ -127,32 +133,38 @@ public class DistributedTextEditor extends JFrame {
                 SaveAs.setEnabled(false);
 
                 // Display information about the listening
-                String address = null;
+                String listenAddress = null;
                 try {
-                    address = InetAddress.getLocalHost().getHostAddress();
+                    listenAddress = InetAddress.getLocalHost().getHostAddress();
                 }
                 catch (UnknownHostException ex) {
                     ex.printStackTrace();
                     System.exit(1);
                 }
-                final int port = Integer.parseInt(portNumber.getText());
-                setTitle(String.format("I'm listening on %s:%d.", address, port));
+                final int listenPort = Integer.parseInt(_listenPort.getText());
+                setTitle(String.format("I'm listening on %s:%d.", listenAddress, listenPort));
+                Semaphore mayConnect = new Semaphore(0);
+                Server server = new Server(listenPort);
+                server.start(mayConnect);
 
-                Server server = new Server(port);
-                server.start();
+                try {
+                    mayConnect.acquire();
+                } catch (InterruptedException e1) {
+                    e1.printStackTrace();
+                }
 
                 Socket clientSocket = null;
                 try {
-                    clientSocket = new Socket(address, port);
+                    clientSocket = new Socket(listenAddress, Integer.parseInt(_remotePort.getText()));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(DistributedTextEditor.this,
                                                   "Connecting failed.");
                     ex.printStackTrace();
                     return;
                 }
-                
+
                 startClient(clientSocket);
-                
+
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
                                   socket.getInetAddress().toString(),
@@ -172,8 +184,8 @@ public class DistributedTextEditor extends JFrame {
                 SaveAs.setEnabled(false);
 
                 // Find out with whom to connect
-                String address = ipaddress.getText();
-                int port = Integer.parseInt( portNumber.getText() );
+                String address = _remoteIp.getText();
+                int port = Integer.parseInt(_remotePort.getText() );
                 setTitle(
                          String.format("Connecting to %s:%d...", address, port));
 
@@ -204,7 +216,7 @@ public class DistributedTextEditor extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Initiate disconnecting process
                 //outEventQueue.add( new DisconnectEvent() );
-            	assert(false);
+                assert(false);
             }
         };
 
