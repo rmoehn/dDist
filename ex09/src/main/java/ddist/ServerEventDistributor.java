@@ -17,11 +17,13 @@ public class ServerEventDistributor implements Runnable {
     private BlockingQueue<Event> _serverInQueue;
     private Map<Integer, ClientHandle> _clients;
     private int _nextID;
+    private String _currentText;
 
     public ServerEventDistributor() {
         _serverInQueue = new LinkedBlockingQueue<Event>();
         _clients       = new HashMap<>();
         _nextID        = 0;
+        _currentText   = "";
     }
 
     public void run() {
@@ -39,12 +41,15 @@ public class ServerEventDistributor implements Runnable {
                 ClientHandle sender = _clients.get(received.getSenderId());
 
                 JupiterEvent transformed = sender.receive(received);
+                TextChangeEvent contained = (TextChangeEvent) transformed.getContainedEvent();
+
+                _currentText = contained.apply(_currentText);
 
                 for (ClientHandle client : _clients.values()) {
                     if (client == sender) {
                         continue;
                     }
-                    client.send((TextChangeEvent) transformed.getContainedEvent());
+                    client.send(contained);
                 }
             }
             // Want to connect
@@ -52,8 +57,10 @@ public class ServerEventDistributor implements Runnable {
                 ClientHandle handle = new ClientHandle(_serverInQueue,
                                                        ((ConnectEvent) event).getSocket(),
                                                        _nextID);
-                _clients.put(_nextID,handle);
+                _clients.put(_nextID, handle);
                 _nextID++;
+
+                handle.send(new TextInsertEvent(0, _currentText));
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
