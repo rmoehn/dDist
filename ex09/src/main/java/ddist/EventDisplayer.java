@@ -30,7 +30,7 @@ public class EventDisplayer implements Runnable {
      * @param frame the overall frame of the program (might be done better)
      */
     public EventDisplayer(DocumentEventCapturer dec, BlockingQueue<Event>
-            displayQueue, JTextArea area, JFrame frame) {
+                          displayQueue, JTextArea area, JFrame frame) {
         this.documentEventCapturer = dec;
         this.displayQueue = displayQueue;
         this.area = area;
@@ -93,14 +93,14 @@ public class EventDisplayer implements Runnable {
                 }
                 else if (mte instanceof DisconnectEvent) {
                     EventQueue.invokeLater(new Runnable() {
-                        public void run() {
-                            JOptionPane.showMessageDialog(
-                                frame, "Disconnected.");
-                            frame.setTitle("Disconnected");
-                            area.setText("");
-                            documentEventCapturer.disableEventGeneration();
-                        }
-                    } );
+                            public void run() {
+                                JOptionPane.showMessageDialog(
+                                                              frame, "Disconnected.");
+                                frame.setTitle("Disconnected");
+                                area.setText("");
+                                documentEventCapturer.disableEventGeneration();
+                            }
+                        } );
                 }
                 else {
                     System.err.println("Illegal event received.");
@@ -111,6 +111,6 @@ public class EventDisplayer implements Runnable {
             }
         }
         System.out.println(
-            "I'm the thread running the EventDisplayer, now I die!");
+                           "I'm the thread running the EventDisplayer, now I die!");
     }
 }

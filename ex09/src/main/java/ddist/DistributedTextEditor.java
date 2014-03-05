@@ -53,7 +53,7 @@ public class DistributedTextEditor extends JFrame {
      * Queue on which the Jupiter algorithm sends processed events to the
      * upper text area.
      */
-    private BlockingQueue<Event> displayEventQueue 
+    private BlockingQueue<Event> displayEventQueue
         = new LinkedBlockingQueue<>();
 
     private BlockingQueue<Event> _serverInQueue = new LinkedBlockingQueue<>();
@@ -62,7 +62,7 @@ public class DistributedTextEditor extends JFrame {
     private Thread eventDisplayerThread;
 
     private JFileChooser dialog =
-    		new JFileChooser(System.getProperty("user.dir"));
+        new JFileChooser(System.getProperty("user.dir"));
 
     private String currentFile = "Untitled";
     private boolean changed = false;
@@ -70,76 +70,76 @@ public class DistributedTextEditor extends JFrame {
         = new DocumentEventCapturer(inEventQueue);
 
     public DistributedTextEditor() {
-    	area1.setFont(new Font("Monospaced",Font.PLAIN,12));
-    	((AbstractDocument)area1.getDocument()).setDocumentFilter(dec);
+        area1.setFont(new Font("Monospaced",Font.PLAIN,12));
+        ((AbstractDocument)area1.getDocument()).setDocumentFilter(dec);
 
-    	Container content = getContentPane();
-    	content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
+        Container content = getContentPane();
+        content.setLayout(new BoxLayout(content, BoxLayout.Y_AXIS));
 
-    	JScrollPane scroll1 =
-    			new JScrollPane(area1,
-    					JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-    					JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
-    	content.add(scroll1,BorderLayout.CENTER);
+        JScrollPane scroll1 =
+            new JScrollPane(area1,
+                            JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+                            JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
+        content.add(scroll1,BorderLayout.CENTER);
 
-		content.add(ipaddress,BorderLayout.CENTER);
-		content.add(portNumber,BorderLayout.CENTER);
+        content.add(ipaddress,BorderLayout.CENTER);
+        content.add(portNumber,BorderLayout.CENTER);
 
-	JMenuBar JMB = new JMenuBar();
-	setJMenuBar(JMB);
-	JMenu file = new JMenu("File");
-	JMenu edit = new JMenu("Edit");
-	JMB.add(file);
-	JMB.add(edit);
+        JMenuBar JMB = new JMenuBar();
+        setJMenuBar(JMB);
+        JMenu file = new JMenu("File");
+        JMenu edit = new JMenu("Edit");
+        JMB.add(file);
+        JMB.add(edit);
 
-	file.add(Listen);
-	file.add(Connect);
-	file.add(Disconnect);
-	file.addSeparator();
-	file.add(Save);
-	file.add(SaveAs);
-	file.add(Quit);
+        file.add(Listen);
+        file.add(Connect);
+        file.add(Disconnect);
+        file.addSeparator();
+        file.add(Save);
+        file.add(SaveAs);
+        file.add(Quit);
 
-	edit.add(Copy);
-	edit.add(Paste);
-	edit.getItem(0).setText("Copy");
-	edit.getItem(1).setText("Paste");
+        edit.add(Copy);
+        edit.add(Paste);
+        edit.getItem(0).setText("Copy");
+        edit.getItem(1).setText("Paste");
 
-	Save.setEnabled(false);
-	SaveAs.setEnabled(false);
+        Save.setEnabled(false);
+        SaveAs.setEnabled(false);
 
-	setDefaultCloseOperation(EXIT_ON_CLOSE);
-	pack();
-	area1.addKeyListener(k1);
-	setTitle("Disconnected");
-	setVisible(true);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        pack();
+        area1.addKeyListener(k1);
+        setTitle("Disconnected");
+        setVisible(true);
 
-	eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
-	eventDisplayerThread = new Thread(eventDisplayer);
-	eventDisplayerThread.start();
+        eventDisplayer = new EventDisplayer(dec, displayEventQueue, area1, this);
+        eventDisplayerThread = new Thread(eventDisplayer);
+        eventDisplayerThread.start();
     }
 
     private KeyListener k1 = new KeyAdapter() {
-	    public void keyPressed(KeyEvent e) {
-		changed = true;
-		Save.setEnabled(true);
-		SaveAs.setEnabled(true);
-	    }
-	};
+            public void keyPressed(KeyEvent e) {
+                changed = true;
+                Save.setEnabled(true);
+                SaveAs.setEnabled(true);
+            }
+        };
 
     Action Listen = new AbstractAction("Listen") {
             private static final long serialVersionUID = 3098L;
 
             public void actionPerformed(ActionEvent e) {
-            	saveOld();
+                saveOld();
 
                 // Prepare for connection
-            	area1.setText("");
-            	changed = false;
-            	Save.setEnabled(false);
-            	SaveAs.setEnabled(false);
+                area1.setText("");
+                changed = false;
+                Save.setEnabled(false);
+                SaveAs.setEnabled(false);
 
-            	// Display information about the listening
+                // Display information about the listening
                 String address = null;
                 try {
                     address = InetAddress.getLocalHost().getHostAddress();
@@ -149,91 +149,91 @@ public class DistributedTextEditor extends JFrame {
                     System.exit(1);
                 }
                 final int port = Integer.parseInt(portNumber.getText());
-            	setTitle(String.format("I'm listening on %s:%d.", address, port));
+                setTitle(String.format("I'm listening on %s:%d.", address, port));
 
                 Server server = new Server(port);
                 server.start();
                 // Give the editor a better title
-/*                setTitle(String.format("Connected to %s:%d.",
-                                       socket.getInetAddress().toString(),
-                                       socket.getPort()));*/
+                /*                setTitle(String.format("Connected to %s:%d.",
+                                  socket.getInetAddress().toString(),
+                                  socket.getPort()));*/
             }
         };
 
     Action Connect = new AbstractAction("Connect") {
-        private static final long serialVersionUID = 135098L;
+            private static final long serialVersionUID = 135098L;
 
-	    public void actionPerformed(ActionEvent e) {
-            // Prepare for connection
-	    	saveOld();
-	    	area1.setText("");
-	    	changed = false;
-	    	Save.setEnabled(false);
-	    	SaveAs.setEnabled(false);
+            public void actionPerformed(ActionEvent e) {
+                // Prepare for connection
+                saveOld();
+                area1.setText("");
+                changed = false;
+                Save.setEnabled(false);
+                SaveAs.setEnabled(false);
 
-            // Find out with whom to connect
-            String address = ipaddress.getText();
-            int port = Integer.parseInt( portNumber.getText() );
-	    	setTitle(
-	    	    String.format("Connecting to %s:%d...", address, port));
+                // Find out with whom to connect
+                String address = ipaddress.getText();
+                int port = Integer.parseInt( portNumber.getText() );
+                setTitle(
+                         String.format("Connecting to %s:%d...", address, port));
 
-            // Initiate connection with other editor
-            Socket socket = null;
-            try {
-                socket = new Socket(address, port);
-            } catch (IOException ex) {
-                JOptionPane.showMessageDialog(
-                    DistributedTextEditor.this, "Connecting failed.");
-                ex.printStackTrace();
-                return;
+                // Initiate connection with other editor
+                Socket socket = null;
+                try {
+                    socket = new Socket(address, port);
+                } catch (IOException ex) {
+                    JOptionPane.showMessageDialog(
+                                                  DistributedTextEditor.this, "Connecting failed.");
+                    ex.printStackTrace();
+                    return;
+                }
+
+                // Set up the event sending and receiving
+                // startCommunication(socket, false);
+                assert(false);
+
+                // Give the editor a better title
+                setTitle(
+                         String.format("Connected to %s:%d.", address, port));
             }
-
-            // Set up the event sending and receiving
-            // startCommunication(socket, false);
-            assert(false);
-
-            // Give the editor a better title
-	    	setTitle(
-	    	    String.format("Connected to %s:%d.", address, port));
-	    }
-	};
+        };
 
     Action Disconnect = new AbstractAction("Disconnect") {
-        private static final long serialVersionUID = 983498L;
+            private static final long serialVersionUID = 983498L;
 
-	    public void actionPerformed(ActionEvent e) {
-            // Initiate disconnecting process
-            outEventQueue.add( new DisconnectEvent() );
-	    }
-	};
+            public void actionPerformed(ActionEvent e) {
+                // Initiate disconnecting process
+                outEventQueue.add( new DisconnectEvent() );
+            }
+        };
 
     Action Save = new AbstractAction("Save") {
-        private static final long serialVersionUID = 409098L;
+            private static final long serialVersionUID = 409098L;
 
-	    public void actionPerformed(ActionEvent e) {
-		if(!currentFile.equals("Untitled"))
-		    saveFile(currentFile);
-		else
-		    saveFileAs();
-	    }
-	};
+            public void actionPerformed(ActionEvent e) {
+                if(!currentFile.equals("Untitled"))
+                    saveFile(currentFile);
+                else
+                    saveFileAs();
+            }
+        };
 
     Action SaveAs = new AbstractAction("Save as...") {
-        private static final long serialVersionUID = 2848761098L;
+            private static final long serialVersionUID = 2848761098L;
 
-	    public void actionPerformed(ActionEvent e) {
-	    	saveFileAs();
-	    }
-	};
+            public void actionPerformed(ActionEvent e) {
+                saveFileAs();
+            }
+        };
 
     Action Quit = new AbstractAction("Quit") {
-        private static final long serialVersionUID = 92497045L;
+            private static final long serialVersionUID = 92497045L;
 
-	    public void actionPerformed(ActionEvent e) {
-	    	saveOld();
-	    	System.exit(0);
-	    }
-	};
+            public void actionPerformed(ActionEvent e) {
+                saveOld();
+                System.exit(0);
+            }
+        };
 
     ActionMap m = area1.getActionMap();
 
@@ -241,28 +241,28 @@ public class DistributedTextEditor extends JFrame {
     Action Paste = m.get(DefaultEditorKit.pasteAction);
 
     private void saveFileAs() {
-	if(dialog.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
-	    saveFile(dialog.getSelectedFile().getAbsolutePath());
+        if(dialog.showSaveDialog(null)==JFileChooser.APPROVE_OPTION)
+            saveFile(dialog.getSelectedFile().getAbsolutePath());
     }
 
     private void saveOld() {
-    	if(changed) {
-	    if(JOptionPane.showConfirmDialog(this, "Would you like to save "+ currentFile +" ?","Save",JOptionPane.YES_NO_OPTION)== JOptionPane.YES_OPTION)
-		saveFile(currentFile);
-    	}
+        if(changed) {
+            if(JOptionPane.showConfirmDialog(this, "Would you like to save "+ currentFile +" ?","Save",JOptionPane.YES_NO_OPTION)== JOptionPane.YES_OPTION)
+                saveFile(currentFile);
+        }
     }
 
     private void saveFile(String fileName) {
-	try {
-	    FileWriter w = new FileWriter(fileName);
-	    area1.write(w);
-	    w.close();
-	    currentFile = fileName;
-	    changed = false;
-	    Save.setEnabled(false);
-	}
-	catch(IOException e) {
-	}
+        try {
+            FileWriter w = new FileWriter(fileName);
+            area1.write(w);
+            w.close();
+            currentFile = fileName;
+            changed = false;
+            Save.setEnabled(false);
+        }
+        catch(IOException e) {
+        }
     }
 
     /**
@@ -275,7 +275,6 @@ public class DistributedTextEditor extends JFrame {
     }
 
     public static void main(String[] arg) {
-    	new DistributedTextEditor();
+        new DistributedTextEditor();
     }
 }
-

@@ -15,7 +15,7 @@ public class ClientEventDistributor implements Runnable {
     private BlockingQueue<Event> _toDisplayer;
 
     public ClientEventDistributor(BlockingQueue<Event> inqueue, BlockingQueue<Event>
-            toServer, BlockingQueue<Event> toDisplayer) {
+                                  toServer, BlockingQueue<Event> toDisplayer) {
         _inqueue     = inqueue;
         _toServer    = toServer;
         _toDisplayer = toDisplayer;

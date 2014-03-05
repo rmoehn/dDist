@@ -39,9 +39,9 @@ public class DocumentEventCapturer extends DocumentFilter {
     }
 
     public void insertString(FilterBypass fb, int offset,
-			     String str, AttributeSet a)
-	throws BadLocationException {
-	/* Queue a copy of the event or modify the textarea */
+                             String str, AttributeSet a)
+        throws BadLocationException {
+        /* Queue a copy of the event or modify the textarea */
         if (isGenerateEvents) {
             eventHistory.add(new TextInsertEvent(offset, str));
         }
@@ -51,8 +51,8 @@ public class DocumentEventCapturer extends DocumentFilter {
     }
 
     public void remove(FilterBypass fb, int offset, int length)
-	throws BadLocationException {
-	/* Queue a copy of the event or modify the textarea */
+        throws BadLocationException {
+        /* Queue a copy of the event or modify the textarea */
         if (isGenerateEvents) {
             eventHistory.add(new TextRemoveEvent(offset, length));
         }
@@ -62,9 +62,9 @@ public class DocumentEventCapturer extends DocumentFilter {
     }
 
     public void replace(FilterBypass fb, int offset,
-			int length,
-			String str, AttributeSet a)
-	throws BadLocationException {
+                        int length,
+                        String str, AttributeSet a)
+        throws BadLocationException {
         /* Queue a copy of the event or modify the text */
         if (isGenerateEvents) {
             if (length > 0) {
@@ -76,11 +76,11 @@ public class DocumentEventCapturer extends DocumentFilter {
             super.replace(fb, offset, length, str, a);
         }
     }
-    
+
     public void enableEventGeneration() {
         this.isGenerateEvents = true;
     }
-    
+
     public void disableEventGeneration() {
         this.isGenerateEvents = false;
     }

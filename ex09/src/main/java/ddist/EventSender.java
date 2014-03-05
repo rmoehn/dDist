@@ -29,7 +29,7 @@ public class EventSender implements Runnable {
         try {
             // Open connection to the other editor
             ObjectOutputStream objOut
-            = new ObjectOutputStream( _socket.getOutputStream() );
+                = new ObjectOutputStream( _socket.getOutputStream() );
 
             // Send events arriving in the queue to other editor
             while (true) {
