@@ -2,6 +2,7 @@ package ddist;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.FlowLayout;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -22,9 +23,11 @@ import javax.swing.ActionMap;
 import javax.swing.BoxLayout;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -35,11 +38,11 @@ public class DistributedTextEditor extends JFrame {
     private static final long serialVersionUID = 4813L;
 
     private JTextArea area1 = new JTextArea(10,120);
-    private JTextField _listenIp = new JTextField("localhost");
-    private JTextField _listenPort = new JTextField("20000");
+    private JTextField _listenIp = new JTextField("localhost", 15);
+    private JTextField _listenPort = new JTextField("20000", 5);
 
     private JTextField _remoteIp = new JTextField("localhost");
-    private JTextField _remotePort = new JTextField("20000");
+    private JTextField _remotePort = new JTextField("20000", 15);
 
     /*
      * Queue for holding events coming in from the upper text area or the
@@ -75,10 +78,18 @@ public class DistributedTextEditor extends JFrame {
                             JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         content.add(scroll1,BorderLayout.CENTER);
 
-        content.add(_listenIp, BorderLayout.CENTER);
-        content.add(_listenPort, BorderLayout.CENTER);
-        content.add(_remoteIp, BorderLayout.CENTER);
-        content.add(_remotePort, BorderLayout.CENTER);
+        JPanel addressPanel
+            = new JPanel( new FlowLayout(FlowLayout.LEFT, 1, 3) );
+        content.add(addressPanel, BorderLayout.SOUTH);
+
+        addressPanel.add(new JLabel("Listen on: "));
+        addressPanel.add(_listenIp);
+        addressPanel.add(new JLabel(":"));
+        addressPanel.add(_listenPort);
+        addressPanel.add(new JLabel("  Connect to: ")); // Sorry for the hack.
+        addressPanel.add(_remoteIp);
+        addressPanel.add(new JLabel(":"));
+        addressPanel.add(_remotePort);
 
         JMenuBar JMB = new JMenuBar();
         setJMenuBar(JMB);
