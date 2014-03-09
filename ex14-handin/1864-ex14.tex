@@ -84,7 +84,7 @@
 
 \begin{document}
 \supertitle{Distributed Systems}
-\title{Exercise 11}
+\title{Exercise 14}
 % \subtitle{}
 \author{Richard~Möhn~\small{(201311231)} \and Mathias~Dannesbo~\small{(201206106)}}
 % \stunum{201311231, 201206106}
@@ -95,358 +95,208 @@
 We used pairprogramming for all the code and ``pairreporting'' for the
 report, so we share the workload at 50\% each.
 
-In this report we present an editor, the instances of which are able to
-connect to each other and to capture editing actions in one editor and
-replay them in another \textit{in the same text}.  We built upon the
-editor from excercise~09, which was able to connect and send edit event
-to other instances of itself, but not in the same textarea. Our
-contribution was to make two editors merge their edits in the same
-text.
+In this report we present another version of our distributed editor.
+This time it is not only able to synchronise editing actions between two
+running instances, but arbitrarily many (within the bounds of the
+computers' resources and some number representations). For this, we
+didn't need to change the Jupiter algorithm, but rather had to add lots
+of infrastructure.
 
-The report describes how we changed the architecture of the event flow
-based on operational transformation. It discusses some of the
-decisions we made in developing the editor. The conclusion contains a
-list of issues with the editor that still need to be addressed.
+The report describes how we enabled the editor to do $n$-way
+synchronisation and our efforts to implement the management of the
+distributed system. It discusses some of the decisions we made in
+developing the new version of the editor. The conclusion contains a list
+of issues with the editor that still need to be addressed.
 
-\chapter{Operational transformation}
+\chapter{Code overview}
 
-There exist multiple applications for collaborative text editing;
-examples are Gobby \cite{Gobby}, Google Wave\footnote{Google
-  discounted Google Wave, but later used the collabrative text editing
-  technology they developed in Google Docs. Wave was later adopted by
-  the Apache Software Foundation and is now know as Apache Wave.}
-\Cite{GoogleWave} or Saros \cite{Saros}. They all use a client-server
-approach for synchronising optimistically. This means, changes to the
-text are made immediately (when the user presses a key, for example)
-and then sent to the server, which in turn sends them to the other
-clients. If changes are made concurrently by multiple users, an
-algorithm makes sure that everyone ends up with the same text. This
-approach to synchronisation, or to preserving consistency, increases
-distribution transparency since there is no delay between user input
-and its effects on the screen, just as in a non-distributed editor.
+For $n$-way synchronisation the Jupiter algorithm requires a central
+coordinater (called server) to which all editors (called clients)
+connect. One of the instances of the distributed text editor runs both
+the server and the client in different threads. 
 
-One method for this kind of synchronisation is operational
-transformation: Operations represent changes to the text and they are
-first applied locally, then sent to the other parties editing the same
-text. If the other parties edit their versions of the text in the
-meantime, they have to transform the received operation so that it does
-what was intended.
+The changes to the previous version can be summarized as follows.  We
+separated the Jupiter algorithm from the event processing by splitting
+\mil{JupiterClient} into the classes \mil{Jupiter} and
+\mil{ClientEventDistributor} for the clients and
+\mil{ServerEventDistributor} on the server.  We introduced the classes
+\mil{Server} and \mil{Client} taking care of the server's and clients'
+\mil{EventReceiver}s, \mil{EventSender}s and \mil{EventDistributor}s,
+thereby pulling out code from the main class
+\mil{DistributedTextEditor}.  We created \mil{ClientHandle}, which the
+\mil{ServerEventDistributor} uses as an interface to the clients it
+manages.  
+Also the process of moving the server between clients (described later) 
+required several new \mil{Event}s.
 
-Example: \prtA and \prtB start with text \textex{abcdefg}. \prtA inserts
-\textex{123} at offset 2 and gets \textex{ab123cdefg}, then sends the
-operation to \prtB. Before \prtB receives it, she removes two characters
-at offset 4 and gets \textex{abcdg}, then she sends this operation to
-\prtA.  Now, \prtA and \prtB receive the operations from each other, but
-if they applied them directly, they would end up with different texts:
-\prtA with \textex{ab12defg} and \prtB with \textex{ab123cdg}. In this
-case, the result \prtB gets already appears like a sensible combination
-of the two operations. Then only the remove operation \prtA received has
-to be shifted by three characters to the right, so that it ends up with
-that text, too.  Mathematically:
+\chapter{$n$-way synchronisation}
 
-\begin{align*}
-  t               & ≔ \textex{abcdefg}                   \\
-  o_A             & ≔ (\opname{insert}, 2, \textex{123}) \\
-  o_B             & ≔ (\opname{remove}, 4, 2)            \\
-  o_A(t)          & =\textex{ab123cdefg}                 \\
-  o_B(t)          & =\textex{abcdg}                      \\
-  (o_B ∘ o_A)(t)  & =\textex{ab12defg}                   \\
-  (o_A ∘ o_B)(t)  & =\textex{ab123cdg}                   \\
-  (o_A', o_B')    & ≔ \transform(o_A, o_B)               \\
-  o_A'            & =(\opname{insert}, 2, \textex{123})  \\
-  o_B'            & =(\opname{remove}, 4, 5)             \\
-  (o_B' ∘ o_A)(t) & =(o_A' ∘ o_B)(t) = \textex{ab123cdg}
-\end{align*}
+The Jupiter algorithm doesn't need to change in order to accomodate
+$n$-way synchronisation \cite{Jupiter}. Instead it uses $n$ instances of
+two-way synchronisation, handled by two instances of the Jupiter
+algorithm each. The Server has one \mil{Jupiter} object for each client.
+When the \mil{ServerEventDistributor} receives a \mil{JupiterEvent} from
+a client, it uses the \mil{Jupiter} instance corresponding to that
+client to transform it. Then it propagates the resulting operations to
+the other \mil{Jupiter} instances which then synchronise with the
+\mil{Jupiter} instances on the clients they are responsible for. Only
+after one event is thus received, transformed and broadcast, the next
+event can be processed. This sequentiality makes special synchronisation
+measures between the \mil{Jupiter} instances on the server unnecessary.
+Note that the number of simultaneous edits is only limited by
+computational and network resources available at the server.
 
-The $\transform$ function is the first part of operational
-transformation. Its defining property is: 
+\chapter{Peers joining}
+\label{sec:joining}
 
-\begin{equation*}
-    ∀ o_a, o_b: (o_a', o_b') ≔ \transform(o_a, o_b) ⇒ (o_b' ∘ o_a) = (o_a' ∘ o_b)
-\end{equation*}
+The server continuously listens for new clients. When a client connects,
+the \mil{ServerEventDistributor} creates a \mil{ClientHandle} for it,
+sends the current text to the new client and after that everything goes
+on as before. – The new client is immediately able to make changes of
+others and see their changes and the other clients won't notice that
+someone new has joined the editing.
 
-That means, if two copies of the same text have diverged by applying
-$o_a$ to one and $o_b$ to the other, then applying $o_b'$ after $o_a$
-and $o_a'$ after $o_b$ brings them in synch again. Any function that has
-the above property can be used as $\transform$, but most of them will
-only give consistent, but not sensible, results.
+It was also required that an editor should be able to join the network
+by contacting any of the editors part of it. We didn't have time for
+that (see section \ref{sec:notime}), put we would have done it like
+this: also clients continuously listen on some port. When an editor
+\textsc{b} contacts a client \textsc{a} in order to become part of the
+network, \textsc{a} responds with information about the current server.
+Then \textsc{b} contacts the server according to these information.
 
-The second part of operational transformation is an algorithm that
-wraps the $\transform$ function, sends operations to other parties,
-receives operations from other parties, transforms them and applies them
-locally.  All the applications mentioned above use a version of the
-so-called Jupiter algorithm, which was originally published in
-\cite{Jupiter}. By using a client-server approach it reduces the problem
-of synchronising $n$ parties to the problem of synchronising 2 parties.
+Note that the peer running in the same process as the server
+communicates with the server also through sockets rather than through a
+local data structure. We decided to do it this way, because it enables
+us to treat all clients the same.
 
-\tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
-    minimum height=2em, minimum width=11em, text centered},
-  c/.style={global, cloud, aspect=2, cloud puffs=16,},
-  n/.style={global, rectangle},
-  r/.style={n, fill=red!90!yellow!20},
-  g/.style={n, fill=green!20},
-  b/.style={n, fill=blue!20},
-  y/.style={n, fill=yellow!20},
-  l/.style={>=latex',line width=1.5pt},
-  sa/.style={l,->,shorten >=1pt},
-  st/.style={sa, red!90!black, text=black},
-  sj/.style={sa, blue!70!black, text=black,},
-  sb/.style={sa, shorten <=1pt,black!30!white!90!red},
-  jm/.style={sa, line width=1pt,shorten >=.35cm,shorten <=.35cm},
-  jr/.style={jm, red!90!black, text=black},
-  jb/.style={jm, blue!70!black, text=black, },
-  jne/.style={shift={(2pt,2pt)}},
-  jnw/.style={shift={(-2pt,2pt)}},
-  jsw/.style={shift={(-2pt,-2pt)}},
-  jse/.style={shift={(2pt,-2pt)}},
-}
-\begin{figure}[htb]
-  \centering
-  \caption{The state space in the Jupiter algorithm.}
-  \lining
-  \begin{tikzpicture}
-    \clip (.5,-3.25) rectangle (8.25,3.75); % this
-    \begin{turn}{-45}                       % and this is black-magic. 
-      \begin{scope}[rotate=45,row sep=0.5cm, column sep=0.5cm,nodes={rotate=45},]
+\chapter{Peers leaving}
 
-      \matrix (jup) [matrix of nodes] {
-        0,0 & 0,1 & 0,2 & 0,3 \\
-        1,0 & 1,1 & 1,2 & 1,3 \\
-        2,0 & 2,1 & 2,2 & 2,3 \\
-        3,0 & 3,1 & 3,2 & 3,3 \\
-      };
+As long as peers that are only clients leave, everything is fine: the
+connection is shut down in a similar way as before and the server
+removes the \mil{ClientHandle} from its records. However, when the peer
+that also runs the server disconnects, things get complicated, because
+the server has to be moved to another peer and the other clients have to
+be made aware of that. \mil{ClientEventDistributor} and
+\mil{ServerEventDistributor} therefore not only process
+\mil{TextChange}- and \mil{JupiterEvent}s, but also contain a state
+machine each for managing the process of moving the server.
 
-      \draw[jr] ([jse]jup-1-1.center) -- ([jse]jup-2-1.center);
-      \draw[jb] ([jnw]jup-1-1.center) -- ([jnw]jup-2-1.center);
+It is not feasible to describe these state machines with prose and there
+was no time to create proper digital pictures. However, this is roughly
+the procedure: The client the editor that also runs the server (called
+old server) disconnects. The old server and the other clients process
+the pending events and stop at a clean common state. The old server
+causes one client to start up a new server, the other clients disconnect
+from the old server and connect to new server.
 
-      \draw[jr] ([jne]jup-2-1.center) -- ([jne]jup-2-2.center);
-      \draw[jb] ([jsw]jup-2-1.center) -- ([jsw]jup-2-2.center);
+The users don't notice this process, because their inputs are buffered
+and sent to the new server when everything is stable again. This
+contributes to our generally high degree of distribution transparency
+(at least as long users operate within the specified bounds).
 
-      \draw[jb] (jup-2-2.center) -- (jup-3-2.center);
+\chapter{Open issues}
+\label{sec:notime}
 
-      \draw[jr] (jup-2-2.center) -- (jup-2-3.center);
+We slightly underestimated the amout of work and as a result, hadn't
+time for resolving some issues and doing proper cleanup. The following
+is a list of things we failed to do.
 
-      \draw[jb] (jup-3-2.center) -- (jup-3-3.center);
+\begin{itemize}
+\item Required feature: It was demanded that an editor can join an
+    editing session by contacting any of the existing peers. In our
+    implementation it can only do so by contacting the server. See also
+    section \ref{sec:joining}.
 
-      \draw[jr] (jup-2-3.center) -- (jup-3-3.center);
+\item Proper handling of exceptions: The whole connecting and
+    disconnecting process is much more complex than before which makes
+    it quite easy for the user to press the wrong buttons at the wrong
+    time. On such occasions the editor always crashes, because we want
+    things to fail dramatically instead of ceasing to work without
+    obvious reason.
+    
+    Worse with respect to the subject of the course – distributed
+    systems – is that we also crash on problems caused by the
+    communication between the clients.  This is not quite appropriate,
+    because we're distributed systems are generally not reliable, and
+    means that the degree of failure transparency is rather low.
 
-      \draw[jr] ([jne]jup-3-3.center) -- ([jne]jup-3-4.center);
-      \draw[jb] ([jsw]jup-3-3.center) -- ([jsw]jup-3-4.center);
+\item There is an exception that existed since the first version of the
+    editor and the cause of which we haven't yet found: When clients
+    connect again after they disconnected, an
+    \mil{IllegalArgumentException: Invalid remove} is thrown. However,
+    since the \mil{EventDisplayer} just catches and prints it and it
+    doesn't appear to have any negative effect, we just let it be.
 
-      \draw[jb, line width=1.5pt] (-1,3.5) --node[above left]{client} (-3,1.5);
-      \draw[jr, line width=1.5pt] (1,3.5) --node[above right]{server} (3,1.5);
-      \end{scope}
-    \end{turn}
-  \end{tikzpicture}
-  \oldstyle
-  \label{fig:state}
-\end{figure}
+\item Sometimes with wild concurrent editing things go wrong and wrong
+    operations are attempted to be applied. We have no time to
+    investigate this.
 
-\cite{Jupiter} and \cite{UnderstandOT} contain extensive descriptions of
-how it works, so we won't go into details here. However, figure
-\ref{fig:state} illustrates its workings. The numbers count the
-operations applied to the text on the client and server and, paired up,
-they are logical timestamps identifying the states the edited text goes
-through. The arrows correspond to operations applied to the text, the
-state of which changes after every application of an operation.
-Operations include the timestamp of the state to which they were
-applied. Both the client and the server start in state \state{0,0}.
-First, the client generates and applies an operation and the text goes
-into state \state{1,0}. The client sends the operation to the server,
-which applies it, so that its copy of the text goes into state
-\state{1,0}, too. The same happens the other way around when the server
-generates the second operation. Then the client applies an operation and
-the also server applies an operation, before receiving that of the
-client. The result are two different states of the text after the same
-total number of operations. Client and server now receive each other's
-operations, but cannot apply them because their texts are not in the
-state to which the operations where originally applied. In order to get
-from their diverged states into a common state again, client and server
-have to transform the received operations and apply the results. Then
-they proceed without conflicts.
+\item Moving the server between different physical machines doesn't work
+    properly. – Either we have misunderstandings of network programming
+    or our protocol for moving the server is insufficient, resulting in
+    timing problems that don't occur when trying things locally. Note,
+    though, that we put quite some thought in the protocol and strived
+    to make it correct (in a distributed and nonsequential systems way).
+    But it is complicated enough that we might have overlooked
+    something.
+\end{itemize}
 
-This is most of what the Jupiter algorithm does. It gets only slightly
-more difficult when client and server diverge by more than one
-operation.
+\chapter{Lessons learned}
 
+Our systems has arrived at a state where, were we to develop it further,
+throwing it away and starting over might be considered. This is not
+because it has become entirely unmodifiable, but rather because we have
+learned so many things that the necessary and sensible refactorings
+would be quite extensive.
 
-\chapter{Code Overview}
-\begin{figure}[htb]
-  \centering
-  \caption{\mil{Event}'s path through the system in the editor as
-    provided and in our version. \protect\tikz[baseline=-0.5ex]\protect\draw[st] (0,0) -- (0.5,0); denote \mil{TextChangeEvents} and \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0); denote \mil{JupiterEvents}.}
-  \begin{tikzpicture}[node distance=1cm, auto]
-    \footnotesize
-    \node[c] (net) {Network};
-    \node[b, above right=2.5em of net.north] (esen) {\texttt{EventSender}};
-    \node[g, above=2.5em of esen] (oqueue) {Outbound queue};
-    \node[r, above=12em of net] (jc) {\texttt{JupiterClient}};
-    \node[b, above left=2.5em of net.north] (erec) {\texttt{EventReceiver}};
-    \node[g, above=2.5em of erec] (iqueue) {Inbound queue};
-    \node[g, above=2.5em of jc.north east] (dqueue) {Display queue};
-    \node[r, above=2.5em of dqueue] (edis) {\texttt{EventDisplayer}};
-    \node[r, left=2.5em of jc] (dec) {};
+One of the main issues complicating development is that there is no
+separation between the code managing the connections and the code
+responsible for synchronisation. These clearly belong into two different
+layers. That was no problem in the previous versions, because barely any
+connection management was required. Now, however, this part of the
+program is substantial and should be well hidden.
 
-    \node[r, above=2.5em of dec] (ta) {Text area};
+Related with this is our choice of the synchronisation algorithm. – The
+Jupiter algorithm is derived from an algorithm which does $n$-way
+synchronisation without a central coordinator \cite{Jupiter}. The
+article claims that that made it much simpler, but this might be a
+tradeoff between simplicity in managing clients and simplicity in
+synchronisation. It clearly makes sense for them and the other
+applications mentioned in the last report to go this way, since
+they use a completely server-based approach. However, we are required to
+move the server around, which makes things different.  We should have
+investigated this more thoroughly. 
 
-    \draw[sj] (net.north west) --  (erec.south);
-    \draw[sj] (erec.north) --  (iqueue.south);
-    \draw[st] (iqueue.20) --  (jc.200);
-    \draw[sj,dashed] (iqueue.20) --  (jc.200);
-    \draw[sj] (jc.340) --  (oqueue.160);
-    \draw[sj] (oqueue.south) --  (esen.north);
-    \draw[sj] (esen.south) --  (net.north east);
-    \draw[st] (dec.320) --  (iqueue.160);
-
-    \draw[st] (jc.20) --  (dqueue.230);
-    \draw[st] (dqueue.north) --  (edis.south);
-
-    \draw[sa] (edis.south west) --  (ta.north east);
-
-    \draw[sa] (ta.220) --  (dec.140);
-
-    \draw[sa] (ta.347) --  (dec.13);
-
-
-    \draw[sa] (dec.35) --  (ta.325);
-
-    \draw[sb,out=290,in=130,] (dec.140) to  (dec.320);
-    \path[sb] (dec.13) edge[bend left=45]  (dec.35);
-    \path[sb] (ta.north east) edge[bend right=25]  (ta.347);
-    \node[n, left=2.5em of jc] (dec2) {\texttt{DocumentEventCapturer}};
-  \end{tikzpicture}
-  \label{fig:event}
-\end{figure}
-
-Thanks to the layered architecture (not very stringent) and message
-queueing, we didn't have to change much of the existing code in order to
-allow for distributed editing of the same text. -- Of course, one text
-area had to go and \mil{DocumentEventCapturer} and \mil{EventDisplayer}
-(formerly \mil{EventReplayer}) now operate on the remaining one.
-But otherwise only the \mil{JupiterClient} got plugged in between
-receiving and sending, and capturing and displaying events,
-respectively. Figure \ref{fig:event} shows the new configuration.
-
-
-\section{\mil{JupiterClient}}
-%\inmnt{35}{80}{JupiterClient.java} -- I think I won't need this.
-
-The \mil{JupiterClient} is called like that because it will be used as
-the client Jupiter class for the next handin with $n$ parties. Right
-now, there is one \mil{JupiterClient}s on each of the two editors
-running.
-
-All events go through the \mil{JupiterClient}: The user inputs in the
-form of \mil{TextChangeEvent}s and events from the other
-\mil{JupiterClient} in the form of \mil{JupiterEvent}s come in through
-the inbound queue.  If an incoming event is a \mil{TextChangeEvent}, the
-\mil{JupiterClient} wraps it in a \mil{JupiterEvent}, including a
-timestamp and sends it to the other editor. It also gives it to the
-\mil{EventReplayer}, so that the user actually sees the result of her
-input. If, on the other hand, an incoming event came from the other
-editor, the \mil{JupiterClient} transforms it, if necessary, before
-giving it to the \mil{EventReplayer}.
-
-\section{\mil{DocumentEventCapturer}}
-It is not possible to send the text directly to the text area from the
-\mil{EventDisplayer} without it going through
-\mil{DocumentEventCapturer}, witch extends \mil{DocumentFilter}. To
-circumvent this we put a switch in \mil{DocumentEventCapturer}.
-
-Before \mil{EventDisplayer} send the text to the text area, it set the
-\mil{isGenerateEvents} to \mil{false} to change the function of
-\mil{DocumentEventCapturer}. When it is set it does not generate
-event, but instead add text to the area. Afterwards it it set to
-\mil{true} again.
-
-The gray arrows on the \mil{DocumentEventCapturer} on figure
-\ref{fig:event} represent this switch.  The listing below shows how one of
-these switches is implemented in the \mil{insertString}-method in
-\mil{DocumentEventCapturer}.
-
-\inmnt{41}{51}{DocumentEventCapturer.java}
-
-\section{\mil{Transformer}}
-
-As mentioned earlier, the transformation function can be implemented
-in different ways. The Saros project, for example, uses what is
-described in \cite{Transform}. We decided for a more primitive
-approach, which covers all cases, but does not always yield
-satisfactory results.  However, we wrapped the function
-\mil{transform} in a class \mil{Transform}, so that the structure can
-easily be changed to match the strategy pattern. Thereby, different
-solutions could be interchanged without effort.
-
-\begin{figure}[htb]
-\centering
-\caption{Transformation of two overlapping remove operations}
-\label{fig:transform}
-\newcommand\ncoord[2][0,0]{\tikz[remember picture,overlay]{\path (#1) coordinate (#2);}}
-\newcommand\acoord[2][.3em]{\ncoord[#1,.8em]{#2}}
-\newcommand\remove[4]{\filldraw[#1] ($(#2) +(.15em,0em)$) -- ($(#3) +(-.15em,0em)$) -- ++(0em,-.6em) to [out=-90,in=90] ($(#4) + (.1em,0em)$) |- ++(-.2em,-.8em) --++(0em,.8em) to [out=90,in=-90] ($(#2) + (.15em,-.8em)$) --cycle;}
-\ttfamily
-… a b c\acoord{1cd} d e f\acoord{1fg} g\acoord{1gh} h i\acoord{1ij} j k …\\
-\vspace{4em}
-… a b c\acoord{2ch} h i\acoord{2ij} j k … \quad
-… a b c\acoord{3cd} d e f\acoord{3fj} j k …\\
-\vspace{4em}
-… a b c\acoord[.2em]{4cjl}\acoord[.4em]{4cjr} j k …
-
-\tikzset{
-  li/.style={opacity=.15,draw opacity=.5,},
-  dk/.style={opacity=.3,draw opacity=.7,},
-}
-\tikz[overlay,remember picture] {
-    %\draw[thick,blue] (1g) -- ++(0,-0.1em) -|  (1I);
-  \remove{blue,dk}{1fg}{1ij}{3fj}
-  \remove{blue,li}{2ch}{2ij}{4cjl}
-  \remove{red,dk}{1cd}{1gh}{2ch}
-  \remove{red,li}{3cd}{3fj}{4cjr}
-}
-\end{figure}
-
-As an example, figure \ref{fig:transform} shows what \mil{transform}
-does for two overlapping remove events: On the local machine the smaller
-removal to the right and on the remote machine the larger removal to the
-left have happened. In this case, transforming the operations amounts to
-make them delete less and possibly in a different place, because the
-respective other operation already deleted something. The following
-listing shows the piece of source code that covers this and some other
-cases. The last two assignments are the transformed operations in this
-case.
-\\
-\\
-\\
-
-\inmnt{149}{184}{Transformer.java}
+A major source of program complexity is closing threads and sockets
+properly when clients disconnect. Since this shouldn't be difficult, we
+were wondering whether there are better ways to do this in Java. Maybe
+the way we use threads and make them communicate through queues is not
+idiomatic. Maybe it's attempting to program Go in Java? If that is the
+case, it wasn't by intent, but lack of knowledge of proper Java
+programming.
 
 \chapter{Conclusion}
 
 We had an editor whose instances could connect to each other and where
-the user could see what the other was doing to her text. Now we extended
-this, enabling both users to edit the same text at the same time. For
-synchronisation we use the well-known Jupiter algorithm, one advantage
-of which is that users see their changes without delay.
+two users could edit the same text at the same time. Now an in principle
+unlimited number of users can edit the same text at the same time in a
+transparent way. For synchronisation we still use the well-known Jupiter
+algorithm without fundamental changes. – It can easily be utilised for
+$n$-way synchronisation.
 
-As usual, some issues, mainly in regard of user-friendliness, remain.
-For instance, there is no indication whether editors are connected.
-However, those things are hardly related to distributed systems and
-therefore have to stand back behind things that are. Another example is
-the relative primitivity of the \mil{transform} function. This is also
-not severe, since it only very rarely, if at all, affects sensible text
-editing actions.
+By far the greatest difficulty and largest amount of work was in
+managing connections and disconnections between clients and server and
+in moving the server from one client to the other. We are sad to say
+that it kept us from doing quite some necessary things.
 
-All in all, the architecture created for the previous version of the
-editor proved quite successful in letting us concentrate on the
-synchronisation issues central to this exercise. And using the exising
-Jupiter algorithm is, in our opinion, a much better approach than
-inventing some half-baked own synchronisation method.
+All in all, however, our concept worked out quite well, the remaining
+issues are manageable and we learned a lot.
 
 \appendix
 
 \chapter{Finding the Code and Running the Editor}
 
-The file \texttt{Code1864-ex11.zip} contains a Maven repository with the source
+The file \texttt{Code1864-ex14.zip} contains a Maven repository with the source
 code and a \textsc{jar} file being the executable editor. From the
 root directory it can be run with \texttt{./run.sh}.
 
