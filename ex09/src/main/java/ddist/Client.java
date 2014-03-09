@@ -12,10 +12,11 @@ public class Client {
     private final BlockingQueue<Event> _outQueue;
     private final ClientEventDistributor _eventDistributor;
     private boolean _isRunningServer;
+    private Server _server;
 
     public Client(BlockingQueue<Event> inQueue, BlockingQueue<Event>
             toDisplayer, Socket connectSocket, int listenPort,
-            boolean isRunningServer) {
+            boolean isRunningServer, Server server) {
         _listenPort       = listenPort;
         _connectSocket    = connectSocket;
         _inQueue          = inQueue;
@@ -28,6 +29,7 @@ public class Client {
                                 _toDisplayer
                             );
         _isRunningServer  = isRunningServer;
+        _server           = server;
     }
 
     public void start() {
@@ -83,5 +85,13 @@ public class Client {
 
     public int getListenPort() {
         return _listenPort;
+    }
+
+    public void setServer(Server server) {
+        _server = server;
+    }
+
+    public void stopServer() {
+        _server.stop();
     }
 }

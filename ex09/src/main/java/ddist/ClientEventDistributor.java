@@ -123,6 +123,7 @@ public class ClientEventDistributor implements Runnable {
                                     bse.getText(),
                                     bse.getOldClientCount()
                                 );
+                _containingClient.setServer(server);
                 server.start();
 
                 // Send NewServerOkEvent to old server

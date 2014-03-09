@@ -52,7 +52,6 @@ public class DistributedTextEditor extends JFrame {
         = new LinkedBlockingQueue<>();
 
     private Client _localClient;
-    private Server _server;
 
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
@@ -158,8 +157,8 @@ public class DistributedTextEditor extends JFrame {
                 }
                 final int listenPort = Integer.parseInt(_listenPort.getText());
                 setTitle(String.format("I'm listening on %s:%d.", listenAddress, listenPort));
-                _server = new Server(listenPort);
-                _server.start();
+                Server server = new Server(listenPort);
+                server.start();
 
                 Socket clientSocket = null;
                 try {
@@ -171,7 +170,7 @@ public class DistributedTextEditor extends JFrame {
                     return;
                 }
 
-                startClient(clientSocket, listenPort, true);
+                startClient(clientSocket, listenPort, true, server);
 
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
@@ -210,7 +209,12 @@ public class DistributedTextEditor extends JFrame {
                 }
 
                 // Set up the event sending and receiving
-                startClient(socket, Integer.parseInt(_listenPort.getText()), false);
+                startClient(
+                    socket,
+                    Integer.parseInt(_listenPort.getText()),
+                    false,
+                    null
+                );
 
                 // Give the editor a better title
                 setTitle(
@@ -230,7 +234,7 @@ public class DistributedTextEditor extends JFrame {
             private static final long serialVersionUID = 14514398L;
 
             public void actionPerformed(ActionEvent e) {
-                _server.stop();
+                _localClient.stopServer();
             }
         };
 
@@ -293,13 +297,14 @@ public class DistributedTextEditor extends JFrame {
     }
 
     private void startClient(Socket socket, int listenPort,
-            boolean isRunningServer) {
+            boolean isRunningServer, Server server) {
         _localClient = new Client(
                            _toLocalClient,
                            _localClientToDisplayer,
                            socket,
                            listenPort,
-                           isRunningServer
+                           isRunningServer,
+                           server
                        );
         _localClient.start();
         dec.enableEventGeneration();
