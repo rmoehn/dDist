@@ -43,6 +43,11 @@
 - We might introduce an EmptyTextEvent in order to replace
   TextInsertEvent(0, "") and TextRemoveEvent(0, 0).
 
+- Unrelated Connect- and DisconnectEvents during server switching are
+  not handled properly. For instance, if the new server is in the
+  process of adopting clients, an unrelated ConnectEvent would disturb
+  the counting.
+
 x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.
 

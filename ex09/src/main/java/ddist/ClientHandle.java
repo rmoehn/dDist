@@ -35,7 +35,11 @@ public class ClientHandle {
     }
 
     public void send(TextChangeEvent event) {
-        _outQueue.add(_jupiter.generate(event));
+        sendEvent(_jupiter.generate(event));
+    }
+
+    public void sendEvent(Event event) {
+        _outQueue.add(event);
     }
 
     public JupiterEvent receive(JupiterEvent event) {
