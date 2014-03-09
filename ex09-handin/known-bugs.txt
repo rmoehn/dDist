@@ -1,3 +1,4 @@
+* Bugs
 - Exceptions are propagated further or editor is killed after printing
   stacktrace. -- No error handling.
 
@@ -48,6 +49,14 @@
   process of adopting clients, an unrelated ConnectEvent would disturb
   the counting.
 
+- When we move ther server to another computer, the local changes do
+  not show up on all clients.
+
+- Forwarding of server information is not implemented.
+
+- Illigal instert if we type to fast.
+
+* Fixed bugs
 x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.
 
@@ -62,3 +71,9 @@ x Rename MyTextEvent to something
 x Make display queue and outqueue more specific
 
 x Rename *replay* to *display*
+* Future considerations
+- Seperate managing of connections and managing text
+- Other OT-algos
+- Better way to close threads
+- Queues may not be the idiomatic way of doing this in java.
+
