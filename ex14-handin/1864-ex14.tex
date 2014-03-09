@@ -131,7 +131,7 @@ manages. Also the process of moving the server between clients
 \input{fig-system}
 \input{fig-client}
 \input{fig-server}
-\
+
 The Jupiter algorithm doesn't need to change in order to accomodate
 $n$-way synchronisation \cite{Jupiter}. Instead it uses $n$ instances of
 two-way synchronisation, handled by two instances of the Jupiter
@@ -147,6 +147,9 @@ measures between the \mil{Jupiter} instances on the server unnecessary.
 Note that the number of simultaneous edits is only limited by
 computational and network resources available at the server.
 
+Figures \cref{fig:system, fig:client, fig:server} show an overview of
+the processes, the client (which didn't change much) and the server with
+the \mil{ServerEventDistributor} handling some clients.
 
 
 \chapter{Peers joining}
