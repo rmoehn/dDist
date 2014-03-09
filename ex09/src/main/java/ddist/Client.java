@@ -5,7 +5,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client {
-    private final Socket _connectSocket;
+    private Socket _connectSocket;
     private final int _listenPort;
     private final BlockingQueue<Event> _inQueue;
     private final BlockingQueue<Event> _toDisplayer;
@@ -35,6 +35,15 @@ public class Client {
         Thread eventDistributorThread = new Thread(_eventDistributor);
         eventDistributorThread.start();
 
+        startSenderReceiver();
+    }
+
+    public void startCommunication(Socket socket) {
+        _connectSocket = socket;
+        startSenderReceiver();
+    }
+
+    private void startSenderReceiver() {
         // Start thread for adding incoming events to the inqueue
         EventReceiver rec
             = new EventReceiver(_connectSocket, _inQueue, _outQueue);

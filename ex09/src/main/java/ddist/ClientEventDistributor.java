@@ -1,5 +1,6 @@
 package ddist;
 
+import java.net.Socket;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -16,6 +17,7 @@ public class ClientEventDistributor implements Runnable {
     private ClientState _state;
 
     private Client _containingClient;
+    private Socket _socket;
 
     private BlockingQueue<Event> _inQueue;
     private BlockingQueue<Event> _outQueue;
@@ -68,8 +70,17 @@ public class ClientEventDistributor implements Runnable {
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
-                // Drop if it was created in order to detach from old server
+                // When it comes back, we can connect to the new server
                 if (_state == ClientState.WaitForSending) {
+                    _containingClient.startCommunication(_socket);
+
+                    // Notify the server if we're in the same process
+                    if (_containingClient.isRunningServer()) {
+                        _outQueue.add(new ImLocalClientEvent());
+                    }
+
+                    // Create new Jupiter
+                    _jupiter = new Jupiter(false);
                     continue;
                 }
 
@@ -127,17 +138,13 @@ public class ClientEventDistributor implements Runnable {
                 // Change state
                 assert(_state == ClientState.WaitForNewServer);
                 _state = ClientState.WaitForSending;
+                ConnectToServerEvent ctse = (ConnectToServerEvent) event;
 
                 // Make the EventSender switch servers, too
                 _outQueue.add( new DisconnectEvent() );
 
-                // Notify the server if we're in the same process
-                if (_containingClient.isRunningServer()) {
-                    _outQueue.add(new ImLocalClientEvent());
-                }
-
-                // Create new Jupiter
-                _jupiter = new Jupiter(false);
+                // Store information to where to connect after disconnecting
+                _socket = ctse.getSocket();
             }
             // New server says we can send events again
             else if (event instanceof StartSendingEvent) {
