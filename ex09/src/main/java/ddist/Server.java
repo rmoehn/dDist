@@ -37,6 +37,10 @@ public class Server {
         }
     }
 
+    public void stop() {
+        _eventDistributor.stop();
+    }
+
     private void listenForConnection() {
         // Asynchronously wait for a connection
         new Thread( new Runnable() {

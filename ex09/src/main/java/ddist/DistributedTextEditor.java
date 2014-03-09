@@ -51,7 +51,8 @@ public class DistributedTextEditor extends JFrame {
     private BlockingQueue<Event> _localClientToDisplayer
         = new LinkedBlockingQueue<>();
 
-    private ClientEventDistributor _eventDistributor;
+    private Client _localClient;
+    private Server _server;
 
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
@@ -100,6 +101,7 @@ public class DistributedTextEditor extends JFrame {
         file.add(Listen);
         file.add(Connect);
         file.add(Disconnect);
+        file.add(StopServer);
         file.addSeparator();
         file.add(Save);
         file.add(SaveAs);
@@ -156,8 +158,8 @@ public class DistributedTextEditor extends JFrame {
                 }
                 final int listenPort = Integer.parseInt(_listenPort.getText());
                 setTitle(String.format("I'm listening on %s:%d.", listenAddress, listenPort));
-                Server server = new Server(listenPort);
-                server.start();
+                _server = new Server(listenPort);
+                _server.start();
 
                 Socket clientSocket = null;
                 try {
@@ -220,7 +222,15 @@ public class DistributedTextEditor extends JFrame {
             private static final long serialVersionUID = 983498L;
 
             public void actionPerformed(ActionEvent e) {
-                _eventDistributor.sendDisconnect();
+                _localClient.sendDisconnect();
+            }
+        };
+
+    Action StopServer = new AbstractAction("Stop server") {
+            private static final long serialVersionUID = 14514398L;
+
+            public void actionPerformed(ActionEvent e) {
+                _server.stop();
             }
         };
 
@@ -283,13 +293,13 @@ public class DistributedTextEditor extends JFrame {
     }
 
     private void startClient(Socket socket, int listenPort) {
-        Client client = new Client(
-                            _toLocalClient,
-                            _localClientToDisplayer,
-                            socket,
-                            listenPort
-                        );
-        client.start();
+        _localClient = new Client(
+                           _toLocalClient,
+                           _localClientToDisplayer,
+                           socket,
+                           listenPort
+                       );
+        _localClient.start();
         dec.enableEventGeneration();
     }
 

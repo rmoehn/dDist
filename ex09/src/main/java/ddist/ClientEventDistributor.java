@@ -93,28 +93,28 @@ public class ClientEventDistributor implements Runnable {
                 // Change state
                 assert(_state == ClientState.StopSending);
                 _state = ClientState.WaitForNewServer;
+            }
+            // If we should become new server
+            else if (event instanceof BecomeServerEvent) {
+                assert(_state == ClientState.WaitForNewServer);
+                BecomeServerEvent bse = (BecomeServerEvent) event;
+                // TODO: stop forwarder
 
-                // If we should become new server
-                if (event instanceof BecomeServerEvent) {
-                    BecomeServerEvent bse = (BecomeServerEvent) event;
-                    // TODO: stop forwarder
+                // Start up server
+                Server server = new Server(
+                                    _containingClient.getListenPort(),
+                                    bse.getText(),
+                                    bse.getOldClientCount()
+                                );
+                server.start();
 
-                    // Start up server
-                    Server server = new Server(
-                                        _containingClient.getListenPort(),
-                                        bse.getText(),
-                                        bse.getOldClientCount()
-                                    );
-                    server.start();
-
-                    // Send NewServerOkEvent to old server
-                    _outQueue.add(
-                        new NewServerOkEvent(
-                            server.getListenAddress(),
-                            server.getListenPort()
-                        )
-                    );
-                }
+                // Send NewServerOkEvent to old server
+                _outQueue.add(
+                    new NewServerOkEvent(
+                        server.getListenAddress(),
+                        server.getListenPort()
+                    )
+                );
             }
             // Old server says the new server is in place
             else if (event instanceof ConnectToServerEvent) {

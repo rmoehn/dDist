@@ -157,6 +157,10 @@ public class ServerEventDistributor implements Runnable {
         _serverInQueue.add(new ConnectEvent(socket));
     }
 
+    public void stop() {
+        _serverInQueue.add(new ShutdownEvent());
+    }
+
     private void broadcastToClients(Event event) {
         for (ClientHandle client : _clients.values()) {
             client.sendEvent(event);

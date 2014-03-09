@@ -50,6 +50,8 @@ public class EventSender implements Runnable {
                 // Switch servers if requested
                 if (event instanceof ConnectToServerEvent) {
                     ConnectToServerEvent ctse = (ConnectToServerEvent) event;
+                    objOut.close();
+                    _socket.close();
                     _socket = ctse.getSocket();
                     objOut
                         = new ObjectOutputStream( _socket.getOutputStream() );

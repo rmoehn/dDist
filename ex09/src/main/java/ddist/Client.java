@@ -19,7 +19,6 @@ public class Client {
         _inQueue        = inQueue;
         _toDisplayer    = toDisplayer;
         _outQueue       = new LinkedBlockingQueue<>();
-        BlockingQueue<Event> _outQueue = new LinkedBlockingQueue<Event>();
         _eventDistributor = new ClientEventDistributor(
                                 this,
                                 _inQueue,
@@ -43,6 +42,10 @@ public class Client {
         EventSender sender = new EventSender(_connectSocket, _outQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
+    }
+
+    public void sendDisconnect() {
+        _eventDistributor.sendDisconnect();
     }
 
     public BlockingQueue<Event> getInQueue() {
