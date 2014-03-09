@@ -1,0 +1,43 @@
+\begin{figure}[htb]
+  \centering
+  \caption{The whole system. \mil{Client}~1 runs a server:
+    \protect\tikz[baseline=-0]\protect\draw[r] (0,0em) rectangle
+    (.5,.6em); denote the \mil{Server}-object. It have a
+    \mil{ClientHandle} inside for each client. It is denoted by
+    \protect\tikz[baseline=-0]\protect\draw[ye] (0,0em) rectangle
+    (.5,.6em);. Details about the server is on figure
+    \ref{fig:server}. Details about the client is on figure
+    \ref{fig:client}.}
+  \begin{tikzpicture}[node distance=1cm, auto]
+    \footnotesize
+    \begin{scope}[xshift=-7em,yshift=-13em]
+      \draw[r] (0,0) rectangle (9.5em,4.5em);
+      \draw[b, opacity=.5] (-.5em,-4.5em) rectangle (10em,5em);
+      \draw[ye] (.5em,.5em) rectangle (3em,4em);
+      \draw[ye] (3.5em,.5em) rectangle (6em,4em);
+      \draw[ye] (6.5em,.5em) rectangle (9em,4em);
+    \end{scope}
+
+    \node[roundc] (net) {Network};    
+    \node[b, minimum width=9.5em] (lc) at (-2.25em,-16em) {\texttt{Client} 1};
+    \draw[sj, <->] (lc.160) --++(0,2.5em);
+
+    \node[b, minimum width=9.5em] (c1) at (-13em,5em) {\texttt{Client} 2};
+    \draw[sysa, <-, out=330,in=140,] (c1.south east) to (net.155);
+    \draw[sysa,dashed, out=320,in=95,] (net.155) to (net.250);
+    \draw[sysa, ->,out=275,in=90,] (net.250) to (-2.25em,-9em);
+
+
+    \node[b, minimum width=9.5em] (c2) at (14em,0) {\texttt{Client} 3};
+    \draw[sysa, <-] (c2.west) -- (net.0);
+    \draw[sysa,dashed, out=180,in=80,] (net.0) to (net.280);
+    \draw[sysa, ->,out=260,in=90,] (net.280) to (.75em,-9em);
+
+  \end{tikzpicture}
+  \label{fig:system}
+\end{figure}
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "1864-ex14"
+%%% End: 
