@@ -15,7 +15,6 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
-import java.util.concurrent.Semaphore;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -146,6 +145,7 @@ public class DistributedTextEditor extends JFrame {
                 SaveAs.setEnabled(false);
 
                 // Display information about the listening
+                // TODO: Retrieve address from text field
                 String listenAddress = null;
                 try {
                     listenAddress = InetAddress.getLocalHost().getHostAddress();
@@ -156,15 +156,8 @@ public class DistributedTextEditor extends JFrame {
                 }
                 final int listenPort = Integer.parseInt(_listenPort.getText());
                 setTitle(String.format("I'm listening on %s:%d.", listenAddress, listenPort));
-                Semaphore mayConnect = new Semaphore(0);
                 Server server = new Server(listenPort);
-                server.start(mayConnect);
-
-                try {
-                    mayConnect.acquire();
-                } catch (InterruptedException e1) {
-                    e1.printStackTrace();
-                }
+                server.start();
 
                 Socket clientSocket = null;
                 try {
@@ -176,7 +169,7 @@ public class DistributedTextEditor extends JFrame {
                     return;
                 }
 
-                startClient(clientSocket);
+                startClient(clientSocket, listenPort);
 
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
@@ -215,7 +208,7 @@ public class DistributedTextEditor extends JFrame {
                 }
 
                 // Set up the event sending and receiving
-                startClient(socket);
+                startClient(socket, Integer.parseInt(_listenPort.getText()));
 
                 // Give the editor a better title
                 setTitle(
@@ -289,33 +282,11 @@ public class DistributedTextEditor extends JFrame {
         }
     }
 
-    /**
-     * Start threads for handling the transportation of events between the
-     * network and the local event queues.
-     */
-    private void startClient(Socket socket) {
-        BlockingQueue<Event> outQueue = new LinkedBlockingQueue<Event>();
-        // Start thread containing the Jupiter client/server
-        _eventDistributor = new ClientEventDistributor(_toLocalClient,
-                                                       outQueue,
-                                                       _localClientToDisplayer);
-        Thread eventDistributorThread = new Thread(_eventDistributor);
-        eventDistributorThread.start();
-
-        // Start thread for adding incoming events to the inqueue
-        EventReceiver rec
-            = new EventReceiver(socket,
-                                _toLocalClient,
-                                outQueue);
-        Thread receiverThread = new Thread(rec);
-        receiverThread.start();
-
-        // Start thread for taking outgoing events from the outqueue
-        EventSender sender
-            = new EventSender(socket, outQueue);
-        Thread senderThread = new Thread(sender);
-        senderThread.start();
-
+    private void startClient(Socket socket, int listenPort) {
+        Client client = new Client(socket, listenPort);
+        client.start();
+        _toLocalClient          = client.getInQueue();
+        _localClientToDisplayer = client.getQueueToDisplayer();
         dec.enableEventGeneration();
     }
 
