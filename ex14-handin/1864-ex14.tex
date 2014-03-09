@@ -2,7 +2,7 @@
 \documentclass[a4paper,final,12pt,oneside,article,table]{memoir}
 
 %% Geometry
-\isopage[10]
+%\isopage[12]
 \setlength{\topskip}{1.6\topskip} % for \sloppybuttom
 \checkandfixthelayout
 \sloppybottom
@@ -90,7 +90,7 @@
 % \stunum{201311231, 201206106}
 \date{\today}
 \maketitle
-
+\input{styles}
 \chapter{Introduction}
 We used pairprogramming for all the code and ``pairreporting'' for the
 report, so we share the workload at 50\% each.
@@ -109,28 +109,29 @@ developing the new version of the editor. The conclusion contains a list
 of issues with the editor that still need to be addressed.
 
 \chapter{Code overview}
-
-For $n$-way synchronisation the Jupiter algorithm requires a central
-coordinater (called server) to which all editors (called clients)
-connect. One of the instances of the distributed text editor runs both
-the server and the client in different threads. 
+For $n$-way synchronisation to work the Jupiter algorithm requires a
+central coordinater (called server) to which all editors (called
+clients) connect. One of the instances of the distributed text editor
+runs both the server and the client in different threads.
 
 The changes to the previous version can be summarized as follows.  We
 separated the Jupiter algorithm from the event processing by splitting
 \mil{JupiterClient} into the classes \mil{Jupiter} and
-\mil{ClientEventDistributor} for the clients and
-\mil{ServerEventDistributor} on the server.  We introduced the classes
-\mil{Server} and \mil{Client} taking care of the server's and clients'
-\mil{EventReceiver}s, \mil{EventSender}s and \mil{EventDistributor}s,
+\mil{ClientEventDistributor} and \mil{ServerEventDistributor} for the
+client and server respevtivly. We introduced the classes \mil{Server}
+and \mil{Client} taking care of the server's and clients'
+\mil{EventReceiver}s, \mil{EventSender}s and \texttt{EventDistributor}s,
 thereby pulling out code from the main class
 \mil{DistributedTextEditor}.  We created \mil{ClientHandle}, which the
 \mil{ServerEventDistributor} uses as an interface to the clients it
-manages.  
-Also the process of moving the server between clients (described later) 
-required several new \mil{Event}s.
+manages. Also the process of moving the server between clients
+(described later) required several new \mil{Event}s.
 
 \chapter{$n$-way synchronisation}
-
+\input{fig-system}
+\input{fig-client}
+\input{fig-server}
+\
 The Jupiter algorithm doesn't need to change in order to accomodate
 $n$-way synchronisation \cite{Jupiter}. Instead it uses $n$ instances of
 two-way synchronisation, handled by two instances of the Jupiter
@@ -146,15 +147,18 @@ measures between the \mil{Jupiter} instances on the server unnecessary.
 Note that the number of simultaneous edits is only limited by
 computational and network resources available at the server.
 
+
+
 \chapter{Peers joining}
 \label{sec:joining}
 
-The server continuously listens for new clients. When a client connects,
-the \mil{ServerEventDistributor} creates a \mil{ClientHandle} for it,
-sends the current text to the new client and after that everything goes
-on as before. – The new client is immediately able to make changes of
-others and see their changes and the other clients won't notice that
-someone new has joined the editing.
+The server continuously listens for new clients on the socket. When a
+client connects, the \mil{ServerEventDistributor} creates a
+\mil{ClientHandle} for it, sends the current text to the new client
+and after that everything goes on as before. – The new client is
+immediately able to make changes of others and see their changes and
+the other clients won't notice that someone new has joined the
+editing.
 
 It was also required that an editor should be able to join the network
 by contacting any of the editors part of it. We didn't have time for

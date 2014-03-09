@@ -1,0 +1,59 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 2.3 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \sortlist{entry}{nty}
+    \entry{Jupiter}{inproceedings}{}
+      \name{labelname}{4}{}{%
+        {{hash=501344cb8d63c901f796c1fc4ac0fd0a}{Nichols}{N\bibinitperiod}{David\bibnamedelima A.}{D\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+        {{hash=12a9a6766e57daa881716935debb926f}{Curtis}{C\bibinitperiod}{Pavel}{P\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a19b34694eb982427d14514c648dfc}{Dixon}{D\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=c6e554dc87c0f338dab6ba18e7c359f7}{Lamping}{L\bibinitperiod}{John}{J\bibinitperiod}{}{}{}{}}%
+      }
+      \name{author}{4}{}{%
+        {{hash=501344cb8d63c901f796c1fc4ac0fd0a}{Nichols}{N\bibinitperiod}{David\bibnamedelima A.}{D\bibinitperiod\bibinitdelim A\bibinitperiod}{}{}{}{}}%
+        {{hash=12a9a6766e57daa881716935debb926f}{Curtis}{C\bibinitperiod}{Pavel}{P\bibinitperiod}{}{}{}{}}%
+        {{hash=d1a19b34694eb982427d14514c648dfc}{Dixon}{D\bibinitperiod}{Michael}{M\bibinitperiod}{}{}{}{}}%
+        {{hash=c6e554dc87c0f338dab6ba18e7c359f7}{Lamping}{L\bibinitperiod}{John}{J\bibinitperiod}{}{}{}{}}%
+      }
+      \list{location}{1}{%
+        {Pittsburgh, Pennsylvania, USA}%
+      }
+      \list{publisher}{1}{%
+        {ACM}%
+      }
+      \strng{namehash}{7894cf14c3b28b64ca4fefd107f14dd5}
+      \strng{fullhash}{ef1f9b1ed43761665a32170652d81363}
+      \field{sortinit}{N}
+      \field{labeltitle}{High-Latency, Low-Bandwidth Windowing in the Jupiter Collaboration System}
+      \field{booktitle}{Proceedings of the 8th Annual ACM Symposium on User Interface and Software Technology}
+      \field{isbn}{0-89791-709-X}
+      \field{series}{UIST '95}
+      \field{title}{High-Latency, Low-Bandwidth Windowing in the Jupiter Collaboration System}
+      \field{year}{1995}
+      \field{pages}{111\bibrangedash 120}
+      \verb{doi}
+      \verb 10.1145/215585.215706
+      \endverb
+      \keyw{CSCW,UIMS,groupware toolkits,optimistic currency control,window toolkits}
+    \endentry
+  \endsortlist
+\endrefsection
+\endinput
+

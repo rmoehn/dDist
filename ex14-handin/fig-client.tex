@@ -1,4 +1,4 @@
-\begin{figure}[htb]
+\begin{figure}[htbp]
   \centering
   \caption{\mil{Event}'s path through the system in the editor as
     provided and in our
@@ -6,7 +6,7 @@
     (0.5,0); denote \mil{TextChangeEvents} and
     \protect\tikz[baseline=-0.5ex]\protect\draw[sj] (0,0) -- (0.5,0);
     denote \mil{JupiterEvents}.}
-  \begin{tikzpicture}[node distance=1cm, auto]
+  \begin{tikzpicture}[node distance=1cm, auto, scale=.7]
     \footnotesize
     \node[c] (net) {Network};
     \node[b, above right=2.5em of net.north] (esen) {\texttt{EventSender}};
