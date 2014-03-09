@@ -13,7 +13,8 @@ import java.util.concurrent.LinkedBlockingQueue;
  */
 public class ServerEventDistributor implements Runnable {
     private enum ServerState {
-        Normal, WaitForEndOfEventses, WaitForNewServerOk, InitAfterSwitch };
+        Normal, WaitForEndOfEventses, WaitForNewServerOk, InitAfterSwitch,
+        WaitForClientsDisconnect };
 
     private ServerState _state;
     private final BlockingQueue<Event> _serverInQueue;
@@ -23,6 +24,7 @@ public class ServerEventDistributor implements Runnable {
     private final int _oldClientCount;
     private int _adoptedClientCount;
     private int _finishedClientsCount;
+    private int _remainingClientsCount;
 
     public ServerEventDistributor(String initialText, int oldClientCount) {
         _serverInQueue  = new LinkedBlockingQueue<Event>();
@@ -104,7 +106,15 @@ public class ServerEventDistributor implements Runnable {
             	int senderId = ((IdEvent) event).getSenderId();
                 _clients.get(senderId).disconnect((DisconnectEvent) event);
                 _clients.remove(senderId);
-                //break;
+
+                // Make sure all clients are gone before dying
+                if (_state == ServerState.WaitForClientsDisconnect) {
+                    --_remainingClientsCount;
+
+                    if (_remainingClientsCount == 0) {
+                        break;
+                    }
+                }
             }
             // Server should shut down
             else if (event instanceof ShutdownEvent) {
@@ -153,7 +163,11 @@ public class ServerEventDistributor implements Runnable {
             }
             // New server is ready
             else if (event instanceof NewServerOkEvent) {
+                // Change state and prepare for counting client disconnects
                 assert(_state == ServerState.WaitForNewServerOk);
+                _state = ServerState.WaitForClientsDisconnect;
+                _remainingClientsCount = _clients.size();
+
                 NewServerOkEvent nsoe = (NewServerOkEvent) event;
 
                 broadcastToClients(
@@ -162,9 +176,6 @@ public class ServerEventDistributor implements Runnable {
                         nsoe.getListenPort()
                     )
                 );
-
-                // TODO: Close sockets properly
-                break;
             }
             else {
                 throw new IllegalArgumentException("Got unknown event.");

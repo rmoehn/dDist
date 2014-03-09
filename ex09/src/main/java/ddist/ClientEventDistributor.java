@@ -68,7 +68,12 @@ public class ClientEventDistributor implements Runnable {
             }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
-                // Postpone disconnecting if in server change process
+                // Drop if it was created in order to detach from old server
+                if (_state == ClientState.WaitForSending) {
+                    continue;
+                }
+
+                // Postpone disconnecting if elsewhere in server change process
                 if (_state != ClientState.Normal) {
                     _newServerBuffer.add(event);
                     continue;
@@ -124,7 +129,7 @@ public class ClientEventDistributor implements Runnable {
                 _state = ClientState.WaitForSending;
 
                 // Make the EventSender switch servers, too
-                _outQueue.add(event);
+                _outQueue.add( new DisconnectEvent() );
 
                 // Notify the server if we're in the same process
                 if (_containingClient.isRunningServer()) {
