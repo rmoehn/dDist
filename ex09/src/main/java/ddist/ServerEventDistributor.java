@@ -104,7 +104,15 @@ public class ServerEventDistributor implements Runnable {
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
             	int senderId = ((IdEvent) event).getSenderId();
-                _clients.get(senderId).disconnect((DisconnectEvent) event);
+                ClientHandle client = _clients.get(senderId);
+                client.disconnect((DisconnectEvent) event);
+
+                // If the local client has disconnected
+                if (client.isRunningServer()) {
+                    // Initiate stopping in the next iteration
+                    this.stop();
+                }
+
                 _clients.remove(senderId);
 
                 // Make sure all clients are gone before dying

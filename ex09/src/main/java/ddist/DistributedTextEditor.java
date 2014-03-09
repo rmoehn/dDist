@@ -234,6 +234,7 @@ public class DistributedTextEditor extends JFrame {
             private static final long serialVersionUID = 14514398L;
 
             public void actionPerformed(ActionEvent e) {
+                _localClient.sendDisconnect();
                 _localClient.stopServer();
             }
         };
