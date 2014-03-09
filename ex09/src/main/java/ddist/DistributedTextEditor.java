@@ -283,10 +283,13 @@ public class DistributedTextEditor extends JFrame {
     }
 
     private void startClient(Socket socket, int listenPort) {
-        Client client = new Client(socket, listenPort);
+        Client client = new Client(
+                            _toLocalClient,
+                            _localClientToDisplayer,
+                            socket,
+                            listenPort
+                        );
         client.start();
-        _toLocalClient          = client.getInQueue();
-        _localClientToDisplayer = client.getQueueToDisplayer();
         dec.enableEventGeneration();
     }
 

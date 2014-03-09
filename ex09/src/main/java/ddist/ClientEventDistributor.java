@@ -30,6 +30,7 @@ public class ClientEventDistributor implements Runnable {
         _inQueue          = inQueue;
         _outQueue         = outQueue;
         _toDisplayer      = toDisplayer;
+        _state            = ClientState.Normal;
     }
 
     public void run() {

@@ -12,17 +12,18 @@ public class Client {
     private final BlockingQueue<Event> _outQueue;
     private final ClientEventDistributor _eventDistributor;
 
-    public Client(Socket connectSocket, int listenPort) {
+    public Client(BlockingQueue<Event> inQueue, BlockingQueue<Event>
+            toDisplayer, Socket connectSocket, int listenPort) {
         _listenPort     = listenPort;
         _connectSocket  = connectSocket;
-        _inQueue        = new LinkedBlockingQueue<>();
-        _toDisplayer    = new LinkedBlockingQueue<>();
+        _inQueue        = inQueue;
+        _toDisplayer    = toDisplayer;
         _outQueue       = new LinkedBlockingQueue<>();
-        BlockingQueue<Event> outQueue = new LinkedBlockingQueue<Event>();
+        BlockingQueue<Event> _outQueue = new LinkedBlockingQueue<Event>();
         _eventDistributor = new ClientEventDistributor(
                                 this,
                                 _inQueue,
-                                outQueue,
+                                _outQueue,
                                 _toDisplayer
                             );
     }
@@ -51,7 +52,7 @@ public class Client {
     public BlockingQueue<Event> getQueueToDisplayer() {
         return _toDisplayer;
     }
-    
+
     public int getListenPort() {
         return _listenPort;
     }

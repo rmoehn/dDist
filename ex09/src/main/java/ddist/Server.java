@@ -7,19 +7,22 @@ import java.net.Socket;
 import java.util.concurrent.Semaphore;
 
 public class Server {
-    private int _port;
+    private final int _port;
     private InetAddress _address;
-    ServerEventDistributor _eventDistributor;
-    private Semaphore _readyForAccepting = new Semaphore(0);
+    final ServerEventDistributor _eventDistributor;
+    private final Semaphore _readyForAccepting = new Semaphore(0);
 
     public Server(int port, String initialText, int oldClientsCount) {
         _port             = port;
         _eventDistributor = new ServerEventDistributor(
-                                initialText, oldClientsCount);
+                                initialText,
+                                oldClientsCount
+                            );
     }
 
     public Server(int port) {
-        this(port, "", 0);
+        _port             = port;
+        _eventDistributor = new ServerEventDistributor();
     }
 
     public void start() {
