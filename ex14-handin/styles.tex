@@ -1,0 +1,42 @@
+\tikzset{ global/.style={draw=black,line width=1pt, inner sep=.5em,
+    minimum height=2em, minimum width=11em, text centered},
+  c/.style={global, cloud, aspect=2, cloud puffs=16, fill=black!3},
+  n/.style={global, rectangle},
+  r/.style={n, fill=red!20!white},
+  g/.style={n, fill=green!20!white},
+  b/.style={n, fill=blue!20!white},
+  ye/.style={n, ,fill=yellow!80!orange!60!white},
+  l/.style={>=latex',line width=1.5pt},
+  sa/.style={l,->,shorten >=1pt},
+  st/.style={sa, red!90!black, text=black},
+  sj/.style={sa, blue!70!black, text=black,},
+  sb/.style={sa, shorten <=1pt,black!30!white!90!red},
+  jm/.style={sa, line width=1pt,shorten >=.35cm,shorten <=.35cm},
+  jr/.style={jm, red!90!black, text=black},
+  jb/.style={jm, blue!70!black, text=black, },
+  jne/.style={shift={(2pt,2pt)}},
+  jnw/.style={shift={(-2pt,2pt)}},
+  jsw/.style={shift={(-2pt,-2pt)}},
+  jse/.style={shift={(2pt,-2pt)}},
+  handle/.style={minimum width=6em},
+  bigc/.style={c, path fading=fade1, minimum width=30em, minimum height=6em, cloud puffs=36},
+  roundc/.style={c, minimum width=15em, minimum height=13em, cloud puffs=24},
+  sysa/.style={l,blue!70!black, text=black}
+}
+
+\tikzfading[name=none,
+left color=transparent!0,
+right color=transparent!0]
+
+\tikzfading[name=fade1,
+left color=transparent!0,
+right color=transparent!100,
+middle color=transparent!0,]
+
+\tikzfading[name=fade2,
+left color=transparent!30,
+right color=transparent!100]
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "1864-ex14"
+%%% End: 
