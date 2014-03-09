@@ -171,7 +171,7 @@ public class DistributedTextEditor extends JFrame {
                     return;
                 }
 
-                startClient(clientSocket, listenPort);
+                startClient(clientSocket, listenPort, true);
 
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
@@ -210,7 +210,7 @@ public class DistributedTextEditor extends JFrame {
                 }
 
                 // Set up the event sending and receiving
-                startClient(socket, Integer.parseInt(_listenPort.getText()));
+                startClient(socket, Integer.parseInt(_listenPort.getText()), false);
 
                 // Give the editor a better title
                 setTitle(
@@ -292,12 +292,14 @@ public class DistributedTextEditor extends JFrame {
         }
     }
 
-    private void startClient(Socket socket, int listenPort) {
+    private void startClient(Socket socket, int listenPort,
+            boolean isRunningServer) {
         _localClient = new Client(
                            _toLocalClient,
                            _localClientToDisplayer,
                            socket,
-                           listenPort
+                           listenPort,
+                           isRunningServer
                        );
         _localClient.start();
         dec.enableEventGeneration();

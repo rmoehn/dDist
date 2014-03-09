@@ -11,20 +11,23 @@ public class Client {
     private final BlockingQueue<Event> _toDisplayer;
     private final BlockingQueue<Event> _outQueue;
     private final ClientEventDistributor _eventDistributor;
+    private boolean _isRunningServer;
 
     public Client(BlockingQueue<Event> inQueue, BlockingQueue<Event>
-            toDisplayer, Socket connectSocket, int listenPort) {
-        _listenPort     = listenPort;
-        _connectSocket  = connectSocket;
-        _inQueue        = inQueue;
-        _toDisplayer    = toDisplayer;
-        _outQueue       = new LinkedBlockingQueue<>();
+            toDisplayer, Socket connectSocket, int listenPort,
+            boolean isRunningServer) {
+        _listenPort       = listenPort;
+        _connectSocket    = connectSocket;
+        _inQueue          = inQueue;
+        _toDisplayer      = toDisplayer;
+        _outQueue         = new LinkedBlockingQueue<>();
         _eventDistributor = new ClientEventDistributor(
                                 this,
                                 _inQueue,
                                 _outQueue,
                                 _toDisplayer
                             );
+        _isRunningServer  = isRunningServer;
     }
 
     public void start() {
@@ -42,6 +45,19 @@ public class Client {
         EventSender sender = new EventSender(_connectSocket, _outQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
+
+        // If we're in the same process as the server, tell it
+        if (_isRunningServer) {
+            _outQueue.add( new ImLocalClientEvent() );
+        }
+    }
+
+    public void setIsRunningServer() {
+        _isRunningServer = true;
+    }
+
+    public boolean isRunningServer() {
+        return _isRunningServer;
     }
 
     public void sendDisconnect() {

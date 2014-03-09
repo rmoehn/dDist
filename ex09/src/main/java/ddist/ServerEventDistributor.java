@@ -93,6 +93,12 @@ public class ServerEventDistributor implements Runnable {
                         throw new AssertionError();
                 }
             }
+            // Clients says it runs on the same process as server
+            else if (event instanceof ImLocalClientEvent) {
+                // TODO: Think of whether this is safe.
+                ImLocalClientEvent ilce = (ImLocalClientEvent) event;
+                _clients.get( ilce.getSenderId() ).setIsRunningServer();
+            }
             // Want to disconnect
             else if (event instanceof DisconnectEvent) {
             	int senderId = ((IdEvent) event).getSenderId();
@@ -123,10 +129,23 @@ public class ServerEventDistributor implements Runnable {
                     broadcastToClients( new CleanStateEvent() );
 
                     // Assign duty of being server to one of them
-                    ClientHandle designatedServer
-                        = _clients.values().iterator().next();
+                    ClientHandle designatedServer = null;
+                    for (ClientHandle client : _clients.values()) {
+                        if (! client.isRunningServer()) {
+                            designatedServer = client;
+                            break;
+                        }
+                    }
+                    if (designatedServer == null) {
+                        throw new IllegalStateException(
+                            "Lacking client to move server to.");
+                    }
                     designatedServer.sendEvent(
-                        new BecomeServerEvent(_clients.size(), _currentText));
+                        new BecomeServerEvent(
+                            _clients.size(),
+                            _currentText
+                        )
+                    );
 
                     // Change state
                     _state = ServerState.WaitForNewServerOk;

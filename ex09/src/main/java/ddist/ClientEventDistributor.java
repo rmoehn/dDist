@@ -98,6 +98,7 @@ public class ClientEventDistributor implements Runnable {
             else if (event instanceof BecomeServerEvent) {
                 assert(_state == ClientState.WaitForNewServer);
                 BecomeServerEvent bse = (BecomeServerEvent) event;
+                _containingClient.setIsRunningServer();
                 // TODO: stop forwarder
 
                 // Start up server
@@ -124,6 +125,11 @@ public class ClientEventDistributor implements Runnable {
 
                 // Make the EventSender switch servers, too
                 _outQueue.add(event);
+
+                // Notify the server if we're in the same process
+                if (_containingClient.isRunningServer()) {
+                    _outQueue.add(new ImLocalClientEvent());
+                }
 
                 // Create new Jupiter
                 _jupiter = new Jupiter(false);

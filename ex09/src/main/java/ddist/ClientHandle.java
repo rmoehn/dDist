@@ -5,7 +5,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ClientHandle {
-
     private BlockingQueue<Event> _serverInQueue;
     private BlockingQueue<Event> _outQueue;
 
@@ -14,6 +13,8 @@ public class ClientHandle {
 
     private Thread _receiverThread;
     private Thread _senderThread;
+
+    private boolean _isRunningServer;
 
     public ClientHandle(BlockingQueue<Event> serverInQueue, Socket socket, int clientId) {
         _serverInQueue = serverInQueue;
@@ -44,6 +45,14 @@ public class ClientHandle {
 
     public JupiterEvent receive(JupiterEvent event) {
         return _jupiter.receive(event);
+    }
+
+    public void setIsRunningServer() {
+        _isRunningServer = true;
+    }
+
+    public boolean isRunningServer() {
+        return _isRunningServer;
     }
 
     public void disconnect(DisconnectEvent event) {
