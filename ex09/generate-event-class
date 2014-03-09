@@ -1,0 +1,26 @@
+#!/usr/bin/perl
+
+use 5.10.0;
+use warnings;
+use strict;
+
+use Math::Random;
+
+my $event_name = $ARGV[0];
+my $path       = "$ENV{HOME}/n/dDist/ex09/src/main/java/ddist";
+my $svuid      = random_uniform_integer(1, -2**15, 2**15 - 1);
+
+open my $javafile, '>', "$path/$event_name.java";
+
+print { $javafile } <<"EOF";
+package ddist;
+
+/**
+ *
+ */
+public class $event_name implements Event {
+    private final static long serialVersionUID = ${svuid}L;
+
+    public $event_name() { }
+}
+EOF
