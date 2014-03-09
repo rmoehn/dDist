@@ -69,6 +69,13 @@ public class EventReceiver implements Runnable {
                     }
                     break;
                 }
+
+                // Switch servers if requested
+                if (event instanceof ConnectToServerEvent) {
+                    ConnectToServerEvent ctse = (ConnectToServerEvent) event;
+                    _socket = ctse.getSocket();
+                    objIn = new ObjectInputStream( _socket.getInputStream() );
+                }
             }
         }
         catch (IOException | InterruptedException | ClassNotFoundException e) {

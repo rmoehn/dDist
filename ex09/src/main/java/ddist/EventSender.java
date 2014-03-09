@@ -46,6 +46,14 @@ public class EventSender implements Runnable {
 
                     break;
                 }
+
+                // Switch servers if requested
+                if (event instanceof ConnectToServerEvent) {
+                    ConnectToServerEvent ctse = (ConnectToServerEvent) event;
+                    _socket = ctse.getSocket();
+                    objOut
+                        = new ObjectOutputStream( _socket.getOutputStream() );
+                }
             }
         }
         catch (IOException | InterruptedException e) {
