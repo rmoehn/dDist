@@ -12,17 +12,19 @@ public class Server {
     final ServerEventDistributor _eventDistributor;
     private final Semaphore _readyForAccepting = new Semaphore(0);
 
-    public Server(int port, String initialText, int oldClientsCount) {
+    public Server(int port, String initialText, int oldClientsCount, Callbacks
+            callbacks) {
         _port             = port;
         _eventDistributor = new ServerEventDistributor(
                                 initialText,
-                                oldClientsCount
+                                oldClientsCount,
+                                callbacks
                             );
     }
 
-    public Server(int port) {
+    public Server(int port, Callbacks callbacks) {
         _port             = port;
-        _eventDistributor = new ServerEventDistributor();
+        _eventDistributor = new ServerEventDistributor(callbacks);
     }
 
     public void start() {

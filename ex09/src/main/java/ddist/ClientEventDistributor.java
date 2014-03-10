@@ -18,6 +18,7 @@ public class ClientEventDistributor implements Runnable {
 
     private Client _containingClient;
     private Socket _socket;
+    private final Callbacks _callbacks;
 
     private BlockingQueue<Event> _inQueue;
     private BlockingQueue<Event> _outQueue;
@@ -27,12 +28,13 @@ public class ClientEventDistributor implements Runnable {
 
     public ClientEventDistributor(Client containingClient,
             BlockingQueue<Event> inQueue, BlockingQueue<Event> outQueue,
-            BlockingQueue<Event> toDisplayer) {
+            BlockingQueue<Event> toDisplayer, Callbacks callbacks) {
         _containingClient = containingClient;
         _inQueue          = inQueue;
         _outQueue         = outQueue;
         _toDisplayer      = toDisplayer;
         _state            = ClientState.Normal;
+        _callbacks        = callbacks;
     }
 
     public void run() {
@@ -87,6 +89,7 @@ public class ClientEventDistributor implements Runnable {
 
                 // Pass event on and stop work
                 _toDisplayer.add(event);
+                _callbacks.disconnectedFromServer();
                 break;
             }
             // Server goes away
@@ -116,7 +119,8 @@ public class ClientEventDistributor implements Runnable {
                 Server server = new Server(
                                     _containingClient.getListenPort(),
                                     bse.getText(),
-                                    bse.getOldClientCount()
+                                    bse.getOldClientCount(),
+                                    _callbacks
                                 );
                 _containingClient.setServer(server);
                 server.start();

@@ -12,20 +12,23 @@ public class Client {
     private final BlockingQueue<Event> _outQueue;
     private final ClientEventDistributor _eventDistributor;
     private boolean _isRunningServer;
+    private final Callbacks _callbacks;
 
     public Client(BlockingQueue<Event> inQueue, BlockingQueue<Event>
             toDisplayer, Socket connectSocket, int listenPort,
-            boolean isRunningServer) {
+            boolean isRunningServer, Callbacks callbacks) {
         _listenPort       = listenPort;
         _connectSocket    = connectSocket;
         _inQueue          = inQueue;
         _toDisplayer      = toDisplayer;
         _outQueue         = new LinkedBlockingQueue<>();
+        _callbacks        = callbacks;
         _eventDistributor = new ClientEventDistributor(
                                 this,
                                 _inQueue,
                                 _outQueue,
-                                _toDisplayer
+                                _toDisplayer,
+                                callbacks
                             );
         _isRunningServer  = isRunningServer;
     }
@@ -54,6 +57,9 @@ public class Client {
         EventSender sender = new EventSender(_connectSocket, _outQueue);
         Thread senderThread = new Thread(sender);
         senderThread.start();
+
+        _callbacks.connectedToServer(
+            _connectSocket.getInetAddress(), _connectSocket.getPort());
 
         // If we're in the same process as the server, tell it
         if (_isRunningServer) {

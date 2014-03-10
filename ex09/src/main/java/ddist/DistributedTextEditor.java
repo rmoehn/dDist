@@ -36,7 +36,7 @@ import javax.swing.text.DefaultEditorKit;
 public class DistributedTextEditor extends JFrame {
     private static final long serialVersionUID = 4813L;
 
-    private JTextArea area1 = new JTextArea(10,120);
+    private JTextArea area1 = new JTextArea(9,120);
     private JTextField _listenIp = new JTextField("localhost", 15);
     private JTextField _listenPort = new JTextField("20000", 5);
 
@@ -52,6 +52,7 @@ public class DistributedTextEditor extends JFrame {
         = new LinkedBlockingQueue<>();
 
     private Client _localClient;
+    private final Callbacks _callbacks;
 
     private EventDisplayer eventDisplayer;
     private Thread eventDisplayerThread;
@@ -90,6 +91,44 @@ public class DistributedTextEditor extends JFrame {
         addressPanel.add(new JLabel(":"));
         addressPanel.add(_remotePort);
 
+        JPanel statusBar
+            = new JPanel( new FlowLayout(FlowLayout.LEFT, 1, 0) );
+        content.add(statusBar, BorderLayout.SOUTH);
+
+        statusBar.add(new JLabel("Server: "));
+        final JLabel serverStatus = new JLabel("no");
+        statusBar.add(serverStatus);
+        statusBar.add(new JLabel("         Client: ")); // There it is again.
+        final JLabel clientStatus = new JLabel("Not connected.");
+        statusBar.add(clientStatus);
+
+        _callbacks = new Callbacks() {
+            public void serverShutDown() {
+                serverStatus.setText("no");
+            }
+
+            public void clientConnected(int clientCnt) {
+                serverStatus.setText("" + clientCnt + " client(s)");
+            }
+
+            public void clientDisconnected(int clientCnt) {
+                serverStatus.setText("" + clientCnt + " client(s)");
+            }
+
+            public void connectedToServer(InetAddress address, int port) {
+                clientStatus.setText(
+                    String.format("Connected to %s:%d.",
+                        address.toString(),
+                        port
+                    )
+                );
+            }
+
+            public void disconnectedFromServer() {
+                clientStatus.setText("Not connected.");
+            }
+        };
+
         JMenuBar JMB = new JMenuBar();
         setJMenuBar(JMB);
         JMenu file = new JMenu("File");
@@ -117,12 +156,13 @@ public class DistributedTextEditor extends JFrame {
         this.setLocationByPlatform(true);
         pack();
         area1.addKeyListener(k1);
-        setTitle( makeTitle("Disconnected") );
+        setTitle( makeTitle("Static") );
         setVisible(true);
 
         eventDisplayer = new EventDisplayer(dec, _localClientToDisplayer, area1, this);
         eventDisplayerThread = new Thread(eventDisplayer);
         eventDisplayerThread.start();
+
     }
 
     private KeyListener k1 = new KeyAdapter() {
@@ -156,16 +196,7 @@ public class DistributedTextEditor extends JFrame {
                     System.exit(1);
                 }
                 final int listenPort = Integer.parseInt(_listenPort.getText());
-                setTitle(
-                    makeTitle(
-                        String.format(
-                            "I'm listening on %s:%d.",
-                            listenAddress,
-                            listenPort
-                        )
-                    )
-                );
-                Server server = new Server(listenPort);
+                Server server = new Server(listenPort, _callbacks);
                 server.start();
 
                 Socket clientSocket = null;
@@ -179,11 +210,6 @@ public class DistributedTextEditor extends JFrame {
                 }
 
                 startClient(clientSocket, listenPort, true);
-
-                // Give the editor a better title
-                /*                setTitle(String.format("Connected to %s:%d.",
-                                  socket.getInetAddress().toString(),
-                                  socket.getPort()));*/
             }
         };
 
@@ -201,8 +227,6 @@ public class DistributedTextEditor extends JFrame {
                 // Find out with whom to connect
                 String address = _remoteIp.getText();
                 int port = Integer.parseInt(_remotePort.getText() );
-                setTitle( makeTitle(
-                    String.format("Connecting to %s:%d...", address, port)));
 
                 // Initiate connection with other editor
                 Socket socket = null;
@@ -221,10 +245,6 @@ public class DistributedTextEditor extends JFrame {
                     Integer.parseInt(_listenPort.getText()),
                     false
                 );
-
-                // Give the editor a better title
-                setTitle( makeTitle(
-                     String.format("Connected to %s:%d.", address, port)));
             }
         };
 
@@ -305,7 +325,8 @@ public class DistributedTextEditor extends JFrame {
                            _localClientToDisplayer,
                            socket,
                            listenPort,
-                           isRunningServer
+                           isRunningServer,
+                           _callbacks
                        );
         _localClient.start();
         dec.enableEventGeneration();

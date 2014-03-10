@@ -25,18 +25,21 @@ public class ServerEventDistributor implements Runnable {
     private int _adoptedClientCount;
     private int _finishedClientsCount;
     private int _remainingClientsCount;
+    private final Callbacks _callbacks;
 
-    public ServerEventDistributor(String initialText, int oldClientCount) {
+    public ServerEventDistributor(String initialText, int oldClientCount,
+            Callbacks callbacks) {
         _serverInQueue  = new LinkedBlockingQueue<Event>();
         _clients        = new HashMap<>();
         _nextID         = 0;
         _currentText    = initialText;
         _oldClientCount = oldClientCount;
         _state          = ServerState.InitAfterSwitch;
+        _callbacks      = callbacks;
     }
 
-    public ServerEventDistributor() {
-        this("", 0);
+    public ServerEventDistributor(Callbacks callbacks) {
+        this("", 0, callbacks);
         _state = ServerState.Normal;
     }
 
@@ -75,6 +78,7 @@ public class ServerEventDistributor implements Runnable {
                                                        _nextID);
                 _clients.put(_nextID, handle);
                 _nextID++;
+                _callbacks.clientConnected( _clients.size() );
 
                 switch (_state) {
                     case Normal:
@@ -114,12 +118,14 @@ public class ServerEventDistributor implements Runnable {
                 }
 
                 _clients.remove(senderId);
+                _callbacks.clientDisconnected( _clients.size() );
 
                 // Make sure all clients are gone before dying
                 if (_state == ServerState.WaitForClientsDisconnect) {
                     --_remainingClientsCount;
 
                     if (_remainingClientsCount == 0) {
+                        _callbacks.serverShutDown();
                         break;
                     }
                 }
