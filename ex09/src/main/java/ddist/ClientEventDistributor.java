@@ -24,7 +24,7 @@ public class ClientEventDistributor implements Runnable {
     private BlockingQueue<Event> _outQueue;
     private BlockingQueue<Event> _toDisplayer;
 
-    private BlockingQueue<Event> _newServerBuffer;
+    private BlockingQueue<TextChangeEvent> _newServerBuffer;
 
     public ClientEventDistributor(Client containingClient,
             BlockingQueue<Event> inQueue, BlockingQueue<Event> outQueue,
@@ -49,19 +49,18 @@ public class ClientEventDistributor implements Runnable {
 
             // Generate(op)
             if (event instanceof TextChangeEvent) {
-                // Buffer events if server transition in progress
-                if (_state != ClientState.Normal) {
-                    _newServerBuffer.add(event);
-                    continue;
-                }
-
                 // apply op locally
                 TextChangeEvent localOp = (TextChangeEvent) event;
                 _toDisplayer.add(localOp);
 
+                // Buffer events if server transition in progress
+                if (_state != ClientState.Normal) {
+                    _newServerBuffer.add(localOp);
+                    continue;
+                }
+
                 // send(op, my Msgs, otherMsgs)
-                JupiterEvent jupiterEvent = _jupiter.generate(localOp);
-                _outQueue.add(jupiterEvent);
+                transformAndSend(localOp);
             }
             // Receive(msg)
             else if (event instanceof JupiterEvent) {
@@ -81,9 +80,8 @@ public class ClientEventDistributor implements Runnable {
                     continue;
                 }
 
-                // Postpone disconnecting if elsewhere in server change process
+                // Ignore disconnecting if elsewhere in server change process
                 if (_state != ClientState.Normal) {
-                    _newServerBuffer.add(event);
                     continue;
                 }
 
@@ -153,8 +151,8 @@ public class ClientEventDistributor implements Runnable {
                 _state = ClientState.Normal;
 
                 // Put events from buffer into inqueue
-                for (Event bufEv : _newServerBuffer) {
-                    _inQueue.add(bufEv);
+                for (TextChangeEvent bufEv : _newServerBuffer) {
+                    transformAndSend(bufEv);
                 }
                 _newServerBuffer = null;
             }
@@ -167,5 +165,10 @@ public class ClientEventDistributor implements Runnable {
     public void sendDisconnect() {
         _outQueue.add(new DisconnectEvent());
         return;
+    }
+
+    public void transformAndSend(TextChangeEvent event) {
+        JupiterEvent jupiterEvent = _jupiter.generate(event);
+        _outQueue.add(jupiterEvent);
     }
 }
