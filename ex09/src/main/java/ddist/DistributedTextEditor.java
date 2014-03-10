@@ -114,9 +114,10 @@ public class DistributedTextEditor extends JFrame {
         SaveAs.setEnabled(false);
 
         setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setLocationByPlatform(true);
         pack();
         area1.addKeyListener(k1);
-        setTitle("Disconnected");
+        setTitle( makeTitle("Disconnected") );
         setVisible(true);
 
         eventDisplayer = new EventDisplayer(dec, _localClientToDisplayer, area1, this);
@@ -155,7 +156,15 @@ public class DistributedTextEditor extends JFrame {
                     System.exit(1);
                 }
                 final int listenPort = Integer.parseInt(_listenPort.getText());
-                setTitle(String.format("I'm listening on %s:%d.", listenAddress, listenPort));
+                setTitle(
+                    makeTitle(
+                        String.format(
+                            "I'm listening on %s:%d.",
+                            listenAddress,
+                            listenPort
+                        )
+                    )
+                );
                 Server server = new Server(listenPort);
                 server.start();
 
@@ -192,9 +201,8 @@ public class DistributedTextEditor extends JFrame {
                 // Find out with whom to connect
                 String address = _remoteIp.getText();
                 int port = Integer.parseInt(_remotePort.getText() );
-                setTitle(String.format("Connecting to %s:%d...",
-                                       address,
-                                       port));
+                setTitle( makeTitle(
+                    String.format("Connecting to %s:%d...", address, port)));
 
                 // Initiate connection with other editor
                 Socket socket = null;
@@ -215,8 +223,8 @@ public class DistributedTextEditor extends JFrame {
                 );
 
                 // Give the editor a better title
-                setTitle(
-                         String.format("Connected to %s:%d.", address, port));
+                setTitle( makeTitle(
+                     String.format("Connected to %s:%d.", address, port)));
             }
         };
 
@@ -284,6 +292,10 @@ public class DistributedTextEditor extends JFrame {
         }
         catch(IOException e) {
         }
+    }
+
+    private String makeTitle(String title) {
+        return "DTE: " + title;
     }
 
     private void startClient(Socket socket, int listenPort,
