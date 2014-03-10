@@ -100,7 +100,6 @@ public class DistributedTextEditor extends JFrame {
         file.add(Listen);
         file.add(Connect);
         file.add(Disconnect);
-        file.add(StopServer);
         file.addSeparator();
         file.add(Save);
         file.add(SaveAs);
@@ -170,7 +169,7 @@ public class DistributedTextEditor extends JFrame {
                     return;
                 }
 
-                startClient(clientSocket, listenPort, true, server);
+                startClient(clientSocket, listenPort, true);
 
                 // Give the editor a better title
                 /*                setTitle(String.format("Connected to %s:%d.",
@@ -212,8 +211,7 @@ public class DistributedTextEditor extends JFrame {
                 startClient(
                     socket,
                     Integer.parseInt(_listenPort.getText()),
-                    false,
-                    null
+                    false
                 );
 
                 // Give the editor a better title
@@ -227,15 +225,6 @@ public class DistributedTextEditor extends JFrame {
 
             public void actionPerformed(ActionEvent e) {
                 _localClient.sendDisconnect();
-            }
-        };
-
-    Action StopServer = new AbstractAction("Stop server") {
-            private static final long serialVersionUID = 14514398L;
-
-            public void actionPerformed(ActionEvent e) {
-                _localClient.sendDisconnect();
-                _localClient.stopServer();
             }
         };
 
@@ -298,14 +287,13 @@ public class DistributedTextEditor extends JFrame {
     }
 
     private void startClient(Socket socket, int listenPort,
-            boolean isRunningServer, Server server) {
+            boolean isRunningServer) {
         _localClient = new Client(
                            _toLocalClient,
                            _localClientToDisplayer,
                            socket,
                            listenPort,
-                           isRunningServer,
-                           server
+                           isRunningServer
                        );
         _localClient.start();
         dec.enableEventGeneration();
