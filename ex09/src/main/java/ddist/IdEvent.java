@@ -21,4 +21,9 @@ public class IdEvent implements Event {
         }
         return _senderId;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s, ID: %d", super.toString(), _senderId);
+    }
 }

@@ -74,11 +74,6 @@ public class ClientEventDistributor implements Runnable {
                 if (_state == ClientState.WaitForSending) {
                     _containingClient.startCommunication(_socket);
 
-                    // Notify the server if we're in the same process
-                    if (_containingClient.isRunningServer()) {
-                        _outQueue.add(new ImLocalClientEvent());
-                    }
-
                     // Create new Jupiter
                     _jupiter = new Jupiter(false);
                     continue;
