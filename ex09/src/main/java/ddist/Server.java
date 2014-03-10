@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketTimeoutException;
 import java.util.concurrent.Semaphore;
 
 public class Server {
@@ -11,6 +12,8 @@ public class Server {
     private InetAddress _address;
     final ServerEventDistributor _eventDistributor;
     private final Semaphore _readyForAccepting = new Semaphore(0);
+    private static final int ACCEPT_TIMEOUT = 500;
+    private Thread _connectionListener;
 
     public Server(int port, String initialText, int oldClientsCount, Callbacks
             callbacks) {
@@ -18,13 +21,14 @@ public class Server {
         _eventDistributor = new ServerEventDistributor(
                                 initialText,
                                 oldClientsCount,
-                                callbacks
+                                callbacks,
+                                this
                             );
     }
 
     public Server(int port, Callbacks callbacks) {
         _port             = port;
-        _eventDistributor = new ServerEventDistributor(callbacks);
+        _eventDistributor = new ServerEventDistributor(callbacks, this);
     }
 
     public void start() {
@@ -41,20 +45,29 @@ public class Server {
 
     private void listenForConnection() {
         // Asynchronously wait for a connection
-        new Thread( new Runnable() {
+        _connectionListener = new Thread( new Runnable() {
                 public void run() {
                     try {
-                        @SuppressWarnings("resource")
                         ServerSocket servSock = new ServerSocket(_port);
+                        servSock.setSoTimeout( ACCEPT_TIMEOUT  );
                         _address = servSock.getInetAddress();
                         _readyForAccepting.release();
 
-                        while (true) {
+                        while (! Thread.interrupted()) {
                             // Wait for an incoming connection
                             Socket socket = null;
-                            socket = servSock.accept();
+                            try {
+                                socket = servSock.accept();
+                            }
+                            catch (SocketTimeoutException _) {
+                                // Timout only for periodical interrupt checks
+                                continue;
+                            }
+
                             _eventDistributor.addClient(socket);
                         }
+
+                        servSock.close();
                     }
                     catch (IOException ex) {
                         System.out.println("Cannot listen."); //TODO: GUI
@@ -62,7 +75,17 @@ public class Server {
                         return;
                     }
                 }
-            } ).start();
+            } );
+        _connectionListener.start();
+    }
+
+    public void stopConnectionListener() {
+        _connectionListener.interrupt();
+        try {
+            _connectionListener.join();
+        } catch (InterruptedException e) {
+            throw new AssertionError();
+        }
     }
 
     public InetAddress getListenAddress() {

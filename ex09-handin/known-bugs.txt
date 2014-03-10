@@ -7,7 +7,9 @@
 - Sometimes upon connecting after a disconnect:
   IllegalArgumentException: Invalid remove
   -- Does area.setText("") trigger TextRemoveEvent? Make an event
-  instead, but also difficult.
+  instead, but also difficult. Somehow there are remove events there at
+  the beginning that shouldn't be there. Seems as if there was residual
+  stuff in some queue.
 
 - Some of the queue stuff would be better done with observer pattern.
   -- Thread.interrupt() might be interesting.
@@ -54,7 +56,20 @@
 
 - Forwarding of server information is not implemented.
 
-- Illigal instert if we type to fast.
+- Illegal insert if we type too fast.
+
+- In order to stop the connection listener when the server shuts down I
+  had to add a timeout with periodical check of the interrupt status.
+  This is ugly. Furthermore, the dying server currently waits for that
+  timeout to time out, so the server moving time might be longer than
+  ACCEPT_TIMEOUT.
+
+- When the server is moved from editor A to editor B, editor B will make
+  it listen on the port that was in the listen port text field when the
+  client at editor B was started. Thus, one cannot change the listen
+  port as long as the client is in a session. Instead, the listening
+  should always start on the port that is *currently* specified in the
+  text field.
 
 * Fixed bugs
 x When listening, the menu doesn't hang around anymore, but the

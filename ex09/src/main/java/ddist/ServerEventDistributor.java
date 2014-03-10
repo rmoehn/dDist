@@ -26,20 +26,23 @@ public class ServerEventDistributor implements Runnable {
     private int _finishedClientsCount;
     private int _remainingClientsCount;
     private final Callbacks _callbacks;
+    private final Server _containingServer;
 
     public ServerEventDistributor(String initialText, int oldClientCount,
-            Callbacks callbacks) {
-        _serverInQueue  = new LinkedBlockingQueue<Event>();
-        _clients        = new HashMap<>();
-        _nextID         = 0;
-        _currentText    = initialText;
-        _oldClientCount = oldClientCount;
-        _state          = ServerState.InitAfterSwitch;
-        _callbacks      = callbacks;
+            Callbacks callbacks, Server containingServer) {
+        _serverInQueue    = new LinkedBlockingQueue<Event>();
+        _clients          = new HashMap<>();
+        _nextID           = 0;
+        _currentText      = initialText;
+        _oldClientCount   = oldClientCount;
+        _state            = ServerState.InitAfterSwitch;
+        _callbacks        = callbacks;
+        _containingServer = containingServer;
     }
 
-    public ServerEventDistributor(Callbacks callbacks) {
-        this("", 0, callbacks);
+    public ServerEventDistributor(Callbacks callbacks,
+            Server containingServer) {
+        this("", 0, callbacks, containingServer);
         _state = ServerState.Normal;
     }
 
@@ -136,9 +139,20 @@ public class ServerEventDistributor implements Runnable {
                 assert(_state == ServerState.Normal);
                 _state = ServerState.WaitForEndOfEventses;
 
-                // Make clients stop sending events
+                // Make the clients stop sending events
                 broadcastToClients( new StopSendingEvent() );
+
+                // Make thread listening for new connections stop
+                _containingServer.stopConnectionListener();
+                    // Might take more than Server.ACCEPT_TIMEOUT milliseconds
+                    //
+                // Shut down now if the local client left as the last one
+                if (_clients.size() == 0) {
+                    _callbacks.serverShutDown();
+                    break;
+                }
             }
+
             // Clients says I gave thee all, I can no more
             else if (event instanceof EndOfEventsEvent) {
                 // Count up

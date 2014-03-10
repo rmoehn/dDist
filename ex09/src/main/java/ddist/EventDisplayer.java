@@ -95,8 +95,7 @@ public class EventDisplayer implements Runnable {
                     EventQueue.invokeLater(new Runnable() {
                             public void run() {
                                 JOptionPane.showMessageDialog(
-                                                              frame, "Disconnected.");
-                                frame.setTitle("Disconnected");
+                                    frame, "Disconnected.");
                                 area.setText("");
                                 documentEventCapturer.disableEventGeneration();
                             }
