@@ -40,8 +40,8 @@ public class DistributedTextEditor extends JFrame {
     private JTextField _listenIp = new JTextField("localhost", 15);
     private JTextField _listenPort = new JTextField("20000", 5);
 
-    private JTextField _remoteIp = new JTextField("localhost");
-    private JTextField _remotePort = new JTextField("20000", 15);
+    private JTextField _remoteIp = new JTextField("localhost", 15);
+    private JTextField _remotePort = new JTextField("20000", 5);
 
     /*
      * Queue for holding events coming in from the upper text area or the
