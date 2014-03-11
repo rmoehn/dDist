@@ -26,6 +26,8 @@ public class ClientEventDistributor implements Runnable {
 
     private BlockingQueue<TextChangeEvent> _newServerBuffer;
 
+    private ConnectToServerEvent _ctse;
+
     public ClientEventDistributor(Client containingClient,
             BlockingQueue<Event> inQueue, BlockingQueue<Event> outQueue,
             BlockingQueue<Event> toDisplayer, Callbacks callbacks) {
@@ -73,6 +75,7 @@ public class ClientEventDistributor implements Runnable {
             else if (event instanceof DisconnectEvent) {
                 // When it comes back, we can connect to the new server
                 if (_state == ClientState.WaitForSending) {
+                    _socket = _ctse.getSocket();
                     _containingClient.startCommunication(_socket);
 
                     // Create new Jupiter
@@ -142,7 +145,7 @@ public class ClientEventDistributor implements Runnable {
                 _outQueue.add( new DisconnectEvent() );
 
                 // Store information to where to connect after disconnecting
-                _socket = ctse.getSocket();
+                _ctse = ctse;
             }
             // New server says we can send events again
             else if (event instanceof StartSendingEvent) {
