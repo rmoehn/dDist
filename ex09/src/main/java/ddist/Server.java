@@ -15,9 +15,10 @@ public class Server {
     private static final int ACCEPT_TIMEOUT = 500;
     private Thread _connectionListener;
 
-    public Server(int port, String initialText, int oldClientsCount, Callbacks
+    public Server(String initialText, int oldClientsCount, Callbacks
             callbacks) {
-        _port             = port;
+        _port             = callbacks.getListenPort();
+        _address          = callbacks.getListenAddress();
         _eventDistributor = new ServerEventDistributor(
                                 initialText,
                                 oldClientsCount,
@@ -26,8 +27,9 @@ public class Server {
                             );
     }
 
-    public Server(int port, Callbacks callbacks) {
-        _port             = port;
+    public Server(Callbacks callbacks) {
+        _port             = callbacks.getListenPort();
+        _address          = callbacks.getListenAddress();
         _eventDistributor = new ServerEventDistributor(callbacks, this);
     }
 
@@ -48,9 +50,13 @@ public class Server {
         _connectionListener = new Thread( new Runnable() {
                 public void run() {
                     try {
-                        ServerSocket servSock = new ServerSocket(_port);
+                        ServerSocket servSock
+                            = new ServerSocket(
+                                  _port,
+                                  50,
+                                  _address
+                              );
                         servSock.setSoTimeout( ACCEPT_TIMEOUT  );
-                        _address = servSock.getInetAddress();
                         _readyForAccepting.release();
 
                         while (! Thread.interrupted()) {

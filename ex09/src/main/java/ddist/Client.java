@@ -6,7 +6,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class Client {
     private Socket _connectSocket;
-    private final int _listenPort;
     private final BlockingQueue<Event> _inQueue;
     private final BlockingQueue<Event> _toDisplayer;
     private final BlockingQueue<Event> _outQueue;
@@ -15,9 +14,7 @@ public class Client {
     private final Callbacks _callbacks;
 
     public Client(BlockingQueue<Event> inQueue, BlockingQueue<Event>
-            toDisplayer, Socket connectSocket, int listenPort,
-            boolean isRunningServer, Callbacks callbacks) {
-        _listenPort       = listenPort;
+            toDisplayer, Socket connectSocket, boolean isRunningServer, Callbacks callbacks) {
         _connectSocket    = connectSocket;
         _inQueue          = inQueue;
         _toDisplayer      = toDisplayer;
@@ -85,10 +82,6 @@ public class Client {
 
     public BlockingQueue<Event> getQueueToDisplayer() {
         return _toDisplayer;
-    }
-
-    public int getListenPort() {
-        return _listenPort;
     }
 
     public void setServer(Server server) {

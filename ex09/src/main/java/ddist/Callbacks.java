@@ -8,4 +8,6 @@ public interface Callbacks {
     public void clientDisconnected(int clientCnt);
     public void connectedToServer(InetAddress address, int port);
     public void disconnectedFromServer();
+    public InetAddress getListenAddress();
+    public int getListenPort();
 }

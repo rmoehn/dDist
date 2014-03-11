@@ -118,7 +118,6 @@ public class ClientEventDistributor implements Runnable {
 
                 // Start up server
                 Server server = new Server(
-                                    _containingClient.getListenPort(),
                                     bse.getText(),
                                     bse.getOldClientCount(),
                                     _callbacks

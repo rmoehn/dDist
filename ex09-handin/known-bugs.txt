@@ -71,6 +71,10 @@
   should always start on the port that is *currently* specified in the
   text field.
 
+- Look at the changes in the commit which introduced this line (and
+  maybe the commit after that) and think about whether they didn't do
+  anything problematic.
+
 * Fixed bugs
 x When listening, the menu doesn't hang around anymore, but the
   interface freezes nonetheless.

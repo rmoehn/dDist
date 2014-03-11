@@ -127,6 +127,24 @@ public class DistributedTextEditor extends JFrame {
             public void disconnectedFromServer() {
                 clientStatus.setText("Not connected.");
             }
+
+            public InetAddress getListenAddress() {
+                InetAddress res = null;
+                
+                try {
+                    return InetAddress.getByName( _listenIp.getText() );
+                }
+                catch (UnknownHostException e) {
+                    e.printStackTrace();
+                    System.exit(1);
+                }
+                
+                return res;
+            }
+
+            public int getListenPort() {
+                return Integer.parseInt( _listenPort.getText() );
+            }
         };
 
         JMenuBar JMB = new JMenuBar();
@@ -187,21 +205,12 @@ public class DistributedTextEditor extends JFrame {
 
                 // Display information about the listening
                 // TODO: Retrieve address from text field
-                String listenAddress = null;
-                try {
-                    listenAddress = InetAddress.getLocalHost().getHostAddress();
-                }
-                catch (UnknownHostException ex) {
-                    ex.printStackTrace();
-                    System.exit(1);
-                }
-                final int listenPort = Integer.parseInt(_listenPort.getText());
-                Server server = new Server(listenPort, _callbacks);
+                Server server = new Server(_callbacks);
                 server.start();
 
                 Socket clientSocket = null;
                 try {
-                    clientSocket = new Socket(listenAddress, Integer.parseInt(_remotePort.getText()));
+                    clientSocket = new Socket(_remoteIp.getText(), Integer.parseInt(_remotePort.getText()));
                 } catch (IOException ex) {
                     JOptionPane.showMessageDialog(DistributedTextEditor.this,
                                                   "Connecting failed.");
@@ -209,7 +218,7 @@ public class DistributedTextEditor extends JFrame {
                     return;
                 }
 
-                startClient(clientSocket, listenPort, true);
+                startClient(clientSocket, true);
             }
         };
 
@@ -240,11 +249,7 @@ public class DistributedTextEditor extends JFrame {
                 }
 
                 // Set up the event sending and receiving
-                startClient(
-                    socket,
-                    Integer.parseInt(_listenPort.getText()),
-                    false
-                );
+                startClient(socket, false);
             }
         };
 
@@ -318,13 +323,11 @@ public class DistributedTextEditor extends JFrame {
         return "DTE: " + title;
     }
 
-    private void startClient(Socket socket, int listenPort,
-            boolean isRunningServer) {
+    private void startClient(Socket socket, boolean isRunningServer) {
         _localClient = new Client(
                            _toLocalClient,
                            _localClientToDisplayer,
                            socket,
-                           listenPort,
                            isRunningServer,
                            _callbacks
                        );

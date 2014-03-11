@@ -35,4 +35,9 @@ public class ConnectToServerEvent implements Event {
 
         return _socket;
     }
+    
+    @Override
+    public String toString() {
+        return super.toString() + ": " + _serverAddress.toString() + ":" + _serverPort;
+    }
 }
