@@ -1,0 +1,480 @@
+\documentclass[xcolor=svgnames]{beamer}
+
+\usepackage{xltxtra}
+\usepackage{polyglossia}
+\setdefaultlanguage{german}
+\setsansfont{Universalis ADF Std}
+\setmonofont[Scale=MatchLowercase]{DejaVuSansMono}
+\usepackage{textcomp}
+
+\usepackage{pstricks}
+
+\usepackage[german=guillemets]{csquotes}
+\usepackage[backend=biber, style=ieee]{biblatex}
+\addbibresource{../literatur.bib}
+
+\mode<presentation>
+{
+  \usetheme{Madrid}
+  \usecolortheme{dolphin}
+  \usecolortheme{rose}
+  \setbeamertemplate{footline}{\hfill\insertpagenumber~}
+
+  \setbeamercovered{transparent}
+}
+
+\newcommand*{\beffont}{\ttfamily}
+\usepackage[final]{listings}
+\lstloadlanguages{C,[5.1]Lua}
+\lstdefinestyle{default}{
+    captionpos=b,
+    escapeinside={--+}{+--},
+    tabsize=4,
+    showstringspaces=false,
+    breaklines=true,
+    basicstyle=\beffont,
+    rulecolor=\color{gray},
+    commentstyle=\color{DarkBlue},
+    stringstyle=\color{DarkRed},
+    keywordstyle=[1]\color{DarkGreen},
+    keywordstyle=[2]\color{DarkSlateGrey},
+}
+\lstdefinestyle{clisting}{
+    escapeinside={/*+}{+*/},
+    language=C,
+    basicstyle=\beffont,
+    breaklines=false,
+}
+\lstdefinestyle{lualisting}{
+    escapeinside={--+}{+--},
+    language=[5.1]Lua,
+}
+\lstset{style=default}
+
+\usepackage[
+    copy-decimal-marker,
+    exponent-product=\cdot,
+    binary-units
+]{siunitx}
+\newcommand*{\uB}[1]{\SI{#1}{\byte}}
+\newcommand*{\ukB}[1]{\SI{#1}{\kilo\byte}}
+\newcommand*{\uMB}[1]{\SI{#1}{\mega\byte}}
+\newcommand*{\ubit}[1]{\SI{#1}{\bit}}
+\newcommand*{\uMHz}[1]{\SI{#1}{\mega\hertz}}
+\newcommand*{\uGHz}[1]{\SI{#1}{\giga\hertz}}
+\newcommand*{\uMbps}[1]{\SI{#1}{\mega\bit\per\second}}
+
+\usepackage{xcolor}
+
+\newcommand*{\vspmin}{\vspace{-\baselineskip}}
+\newcommand*{\vspplus}{\vspace{\baselineskip}}
+
+
+\newcommand*{\bild}[1]{../bach/bilder/#1}
+
+
+\begin{document}
+
+\defverbatim[colored]\simpleblink{%
+\lstset{style=lualisting}
+\begin{lstlisting}
+local ledpin = pio.PB_8
+
+pio.pin.setdir(pio.OUTPUT, ledpin)
+
+while true do
+    pio.pin.setlow(ledpin)
+    tmr.delay(tmr.SYS_TIMER, 500000)
+
+    pio.pin.sethigh(ledpin)
+    tmr.delay(tmr.SYS_TIMER, 500000)
+end
+\end{lstlisting}%
+}
+
+\defverbatim[colored]\narrowblink{%
+\lstset{style=lualisting, xleftmargin=3em}
+\begin{lstlisting}
+local l = pio.PB_8
+local t = 500000
+
+pio.pin.setdir(pio.OUTPUT, l)
+
+while true do
+  pio.pin.setlow(l)
+  tmr.delay(tmr.SYS_TIMER, t)
+
+  pio.pin.sethigh(l)
+  tmr.delay(tmr.SYS_TIMER, t)
+end
+\end{lstlisting}%
+}
+
+% - http://www.inf.fu-berlin.de/w/SE/VortragsTipps
+% - http://www.inf.fu-berlin.de/w/SE/VortragBewertungskriterien
+% 
+% 
+% What do you want them to learn?
+% - was eLua und Lua sind 
+% - was ich in meiner Arbeit gemacht habe
+% - dass es sich lohnt, eLua weiter zu untersuchen
+% 
+% What is their interest in what you've got to say?
+% - forschen an Sensornetzwerken und IoT -- Alternativen zur
+%   Programmierung und Programmverteilung
+% - haben MSB-IOT entwickelt -- tollet Jerät, wa?
+% - lehren -- wollen Studenten vielleicht auch Hardwareprogrammierung
+%   näherbringen
+% - murksen mit Hardwarezeugs rum und wollen mal was anderes sehen
+% 
+% How sophisticated are they?
+% - Quite sophisticated.
+% - Wissenschaftler und Studenten
+% 
+% How much detail do they want?
+% - nicht zu viel
+% - Arbeit selber geht auch nicht sehr ins Detail
+% - wollen grob wissen, was ich gemacht habe
+% - wollen hauptsächlich wissen, was diese Sachen sind und was man damit
+%   anstellen kann
+% 
+% Whom do you want to own the information?
+% - Habe ich noch nie verstanden.
+% 
+% How can you motivate them to listen to you?
+% - nicht schwafeln, keine Slogans -- klare Fakten, klare Gedankenketten
+% - ein paar Beispiele
+
+\title{Evaluation einer Umgebung für die Skriptsprache Lua auf dem
+Sensorboard MSB-IOT}
+
+\author{Richard Möhn}
+
+\date{Präsentation der Bachelorarbeit, 13. Januar 2014}
+
+\subject{Informatik}
+
+% - Begrüßung
+% - Titel ...
+% - Begriffe: Sensorboard, Skriptsprache -- eher selten zusammen, denn
+% Sensorboards meist mit kleiner Hardware und Skriptsprachen mit
+% automatischer Speicherbereinigung und so recht hungrig
+% - deswegen Erprobung
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{Überblick}
+% - Zielsetzung der Arbeit -- Was wollte ich machen?
+% - Durchführung -- Was habe ich gemacht?
+\tableofcontents
+\end{frame}
+
+\section{Motivation}
+
+\begin{frame}[fragile]
+\frametitle{Ein Beispiel zur Motivation}
+
+\simpleblink
+\end{frame}
+
+% Motivation:
+% - LED-Blink-Skript
+% - und das auf Embedded-Hardware!
+% - Erstrebenswert, einen Großteil der Programme so schreiben zu können
+
+\section{Zielsetzung}
+
+% Zielsetzung der Arbeit:
+% - Portierung
+% - Einbindung zweier Treiber
+% => Orientierung für Umgang mit eLua auf MSB-IOT
+% => Grundlage für weitere Arbeiten
+
+\begin{frame}{Ziel der Arbeit}
+\begin{itemize}
+\item Lua-Skripte auf dem MSB-IOT    
+\item Zugriff auf Funk-Transceiver
+\item Zugriff auf WLAN-Modul
+\end{itemize}
+
+\vspplus
+
+\quad $\Rightarrow$ Orientierung und Arbeitsgrundlage für Folgendes
+\end{frame}
+
+\section{Grundlagen}
+ 
+% Vorstellung des MSB-IOT
+% - Hardware
+% - CC1101
+% - CC3000
+% - Sensornetzwerke, Internet of Things
+
+\begin{frame}{\emph{M}odular \emph{S}ensor \emph{B}oard – \emph{I}nternet \emph{o}f \emph{T}hings}
+
+\begin{columns}
+\begin{column}{0.55\textwidth}
+\begin{itemize}
+\item STM32F415RG, Cortex-M4, \ubit{32}, bis zu \uMHz{168}
+\item \ukB{196} RAM, \uMB{1} ROM
+\item CC1101: Sub-\uGHz{1}-Funk-Transceiver
+\item CC3000: WLAN-Modul, Netzwerkprozessor
+\item ähnlich STM32F4 Discovery-Board
+\end{itemize}
+\end{column}
+
+\begin{column}{0.4\textwidth}
+\includegraphics[width=\textwidth]{\bild{msbiot-draufsicht.png}}
+\end{column}
+\end{columns}
+    
+\end{frame}
+
+% Vorstellung von Lua und eLua
+% - noch mal das Programm vom Anfang
+% - powerful, fast, lightweight, embeddable scripting language
+% - interaktives Programmieren durch REPL
+% - haben schon was gesehen: MSB-IOT führt irgendwie Lua-Skripte aus
+% - Wie geht das? -- Interpreter läuft direkt auf der Hardware und hat das
+%   Sagen.
+% - weitere Highlights:
+%     - weitere Module wie gpio und tmr oben
+%     - Programme von der SD-Karte
+%     - neben autorun (Bsp.) auch eLua-Shell auf dem Gerät
+%     - RPC: REPL von Ferne
+
+\begin{frame}[fragile]{Lua und eLua}
+\begin{columns}[T,totalwidth=0.98\textwidth]
+\begin{column}{0.45\textwidth}
+
+\begin{block}{Lua}
+\begin{itemize}
+\item \enquote{powerful, fast, lightweight, embeddable}
+\item erweiterbar
+\end{itemize}
+\end{block}
+
+\begin{block}{eLua}
+\begin{itemize}
+\item direkt auf der Hardware
+\item Module zum Hardwarezugriff
+\item Autorun oder Shell
+\end{itemize}
+\end{block}
+\end{column}
+
+\begin{column}{0.35\textwidth}
+\narrowblink 
+\end{column}
+\end{columns}
+\end{frame}
+
+\begin{frame}{Einige Bytes}
+% total, verbatim: 245760
+%  wlan-test.lua                 1006 bytes
+%  uart-test.lua                 79 bytes
+%  demoblink.lua                 826 bytes
+%  blink.lua                     672 bytes
+%  radio-test.lua                1887 bytes
+%Total on /rom: 4470 bytes
+% PMs: 78032
+% ohne PMs und Treiber: 227672 => PMs: 18088
+
+% total, compress: 243032 (243029 wenn nur Skripte)
+%  wlan-test.lua                 469 bytes
+%  uart-test.lua                 67 bytes
+%  demoblink.lua                 305 bytes
+%  blink.lua                     194 bytes
+%  radio-test.lua                704 bytes
+%Total on /rom: 1739 bytes
+
+% total, compile: 244344 (244346)
+%   wlan-test.lc                  804 bytes
+%   uart-test.lc                  208 bytes
+%   demoblink.lc                  492 bytes
+%   blink.lc                      396 bytes
+%   radio-test.lc                 1156 bytes
+% Total on /rom: 3056 bytes
+
+% FAQ, 2014-01-12
+\begin{tabular}{lr}
+eLua RAM (minimal)          &   \num{32000}     \\
+eLua RAM (empfohlen)        &   \num{64000}     \\
+MSB-IOT RAM                 &   \num{196000}    \\
+\\
+eLua ROM (minimal)          &   \num{128000}    \\
+eLua ROM (empfohlen)        &   \num{256000}    \\
+MSB-IOT ROM                 &   \num{1000000}   \\
+\\
+eLua-Portierung             &   \num{245760}    \\
+%davon Lua-Interpreter (?)   &   \num{182000}    \\
+davon Plattformmodule       &   \num{18088}     \\
+davon Skripte               &   \num{4470}      \\
+davon Skripte (komprimiert) &   \num{1156}      \\
+\end{tabular}
+\end{frame}
+ 
+\section{Durchführung}
+
+% - Portierung: Bild mit Pfeilen
+% 
+% - CC1101:
+%     - Schichtenbild
+%     - Ausschnitt aus Minimalplattformmodul
+% 
+% - CC3000:
+%     - evtl. auch Schichtenbild
+%     - Beispielskript
+
+\begin{frame}{Ansteuerung von CC1101 und CC3000}
+\begin{columns}[b]
+\begin{column}{0.5\textwidth}
+\centering
+\begin{pspicture}(0,0)(5,5.5)
+\psTextFrame(0,6)(5,7){Endbenutzer}
+
+\only<3->{
+\psline{->}(2.5,6)(2.5,5.5)
+\psTextFrame(0,4.5)(5,5.5){Plattformmodul}
+\psline{->}(2.5,4.5)(2.5,4)
+}
+
+\only<2->{
+\psTextFrame(0,1.5)(5,4){CC1101-Treiberbibliothek}
+\psline{->}(2.5,1.5)(2.5,1)
+}
+
+\psTextFrame(0,0)(5,1){CC1101}
+\end{pspicture}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\centering
+\begin{pspicture}(0,0)(4,7)
+\psTextFrame(0,6)(4,7){Endbenutzer}
+
+\only<3->{
+\psline{->}(2,6)(2,5.5)
+\psTextFrame(0,4.5)(4,5.5){Plattformmodul}
+\psline{->}(2,4.5)(2,4)
+}
+
+\only<2->{
+\psTextFrame(0,3)(4,4){CC3000-Bibliothek}
+\psline{->}(2,3)(2,2.5)
+
+\psTextFrame(0,1.5)(4,2.5){SPI-Funktionen u. a.}
+\psline{->}(2,1.5)(2,1)
+}
+
+\psTextFrame(0,0)(4,1){CC3000}
+\end{pspicture}
+\end{column}
+\end{columns}    
+\end{frame}
+
+\begin{frame}[fragile]{Eine Funktion des CC3000-Plattformmoduls}
+\lstset{style=clisting}
+\begin{lstlisting}
+static int msbiot_cc3000_socket(lua_State *L) {
+    int sock_type = luaL_checkint(L, 1);
+    if (sock_type != ELUA_NET_SOCK_DGRAM) {
+        return luaL_error(L, "Only UDP socket supported.");
+    }
+
+    int sock_fd = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
+
+    lua_pushinteger(L, sock_fd);
+    return 1;
+}
+\end{lstlisting}
+
+\vspplus
+\lstset{style=lualisting}
+$\Rightarrow$ \lstinline{sock = msbiot.cc3000.socket( msbiot.cc3000.SOCK_DGRAM )}
+\end{frame}
+
+\section{Ergebnisse}
+
+\begin{frame}[fragile]{Ein nützlicheres Lua-Skript}
+\lstset{style=lualisting}
+\begin{lstlisting}
+local wlan  = msbiot.cc3000
+
+wlan.init("essid", "passwort")
+
+local sock = wlan.socket(wlan.SOCK_DGRAM)
+wlan.connect(sock, wlan.packip("196.168.0.3"), 20000)
+
+wlan.send(sock, "Hello, server!")
+
+local data, err = wlan.recv(sock, 1024)
+print( string.format('The server sent "%s"', data) )
+
+wlan.close(sock)
+wlan.shut_down()
+\end{lstlisting}
+\end{frame}
+
+\section{Zusammenfassung}
+
+\begin{frame}[t,fragile]{Zusammenfassung}
+
+\vspplus
+
+\begin{columns}[T]
+\begin{column}{0.47\textwidth}
+\begin{block}{Fazit}
+\begin{itemize}
+\item Skriptsprachen, MSB-IOT, eLua
+\item Portierung, CC1101, CC3000
+\end{itemize}    
+\end{block}
+
+Grundlage, Orientierung für:
+
+\begin{block}{Agenda}
+\begin{itemize}
+\item quantitative Auswertung
+\item Anpassung, Erweiterung
+\end{itemize}    
+\end{block}
+\end{column}
+
+\begin{column}{0.5\textwidth}
+\lstset{style=lualisting, xleftmargin=2em}
+\begin{onlyenv}<1>
+\begin{lstlisting}
+local l = pio.PB_8
+local t = 500000
+
+pio.pin.setdir(pio.OUTPUT, l)
+
+while true do
+  pio.pin.sethigh(l)
+  tmr.delay(tmr.SYS_TIMER, t)
+  pio.pin.setlow(l)
+end
+\end{lstlisting}    
+\end{onlyenv}
+
+\begin{onlyenv}<2>
+\begin{lstlisting}
+local l = pio.PB_8
+local t = 500000
+
+pio.pin.setdir(pio.OUTPUT, l)
+
+msbiot.scratch.asymblink()
+\end{lstlisting}    
+\end{onlyenv}
+\end{column}
+\end{columns}
+\end{frame}
+
+% - Zusammenfassung und Ausblick
+%     - LED-Blink-Skript noch mal -- jetzt Taste drücken!
+%     - noch viel Arbeit nötig, aber wahrscheinlich lohnend
+
+\end{document}
