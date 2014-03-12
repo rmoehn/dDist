@@ -7,7 +7,7 @@
       \node[r, minimum width=5em] (j\num) {\texttt{Jupiter}};
       \node[g, handle, right=.5em of j\num] (o\num) {Out queue};
       \node[b, handle, below=2em of o\num] (s\num) {\texttt{EventSender}};
-      \node[b, handle, above=10em of o\num] (r\num) {\texttt{EventReciver}};
+      \node[b, handle, above=10em  of o\num,xshift=-.5em] (r\num) {\texttt{EventReceiver}};
       \node[] (c\num) at (1em,10.1em) {\texttt{ClientHandle} \num};
       \draw[sj] (o\num) --  (s\num);
       \draw[sj] (r\num.south) --++(0,-2em);
@@ -15,7 +15,7 @@
       \draw[sj, <->] (j\num.north) ++(0,2em) -- (j\num.north);
     \end{scope}}
 
-    \node[r, path fading=fade1, minimum width=40em] (sed) {\texttt{ServerEventDristributor}};
+    \node[r, path fading=fade1, minimum width=40em] (sed) {\texttt{ServerEventDistributor}};
     \node[g, path fading=fade1, minimum width=40em, above=2em of sed] (iqueue) {\texttt{ServerInQueue}};
       \draw[sj] (iqueue) -- (sed);
       
