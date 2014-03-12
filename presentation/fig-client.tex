@@ -1,0 +1,49 @@
+  \begin{tikzpicture}[node distance=1cm, auto, scale=.7]
+    \footnotesize
+    \useasboundingbox (-33em,-2em) rectangle (20em,33em);
+    \node[c] (net) {Network};
+    \node[b, above right=2.5em of net.north] (esen) {\texttt{EventSender}};
+    \node[g, above=2.5em of esen] (oqueue) {Outbound queue};
+    \node[r, above=12em of net] (ced) {\texttt{ClientEventDristributor}};
+    \node[b, above left=2.5em of net.north] (erec) {\texttt{EventReceiver}};
+    \node[g, above=2.5em of erec] (iqueue) {Inbound queue};
+    \node[g, above=2.5em of ced.north east] (dqueue) {Display queue};
+    \node[r, above=2.5em of dqueue] (edis) {\texttt{EventDisplayer}};
+    \node[r, left=2.5em of ced] (dec) {};
+    \node[r, right=3.5em of ced] (jc) {\texttt{Jupiter}};
+
+    \node[r, above=2.5em of dec] (ta) {Text area};
+
+    \draw[st,<->,shorten <=1pt] (jc) --  (ced);
+    \draw[sj,<->,shorten <=1pt,dashed,] (jc) --  (ced);
+
+    \draw[sj] (net.north west) --  (erec.south);
+    \draw[sj] (erec.north) --  (iqueue.south);
+    \draw[st] (iqueue.20) --  (ced.200);
+    \draw[sj,dashed] (iqueue.20) --  (ced.200);
+    \draw[sj] (ced.340) --  (oqueue.160);
+    \draw[sj] (oqueue.south) --  (esen.north);
+    \draw[sj] (esen.south) --  (net.north east);
+    \draw[st] (dec.320) --  (iqueue.160);
+
+    \draw[st] (ced.20) --  (dqueue.230);
+    \draw[st] (dqueue.north) --  (edis.south);
+
+    \draw[sa] (edis.south west) --  (ta.north east);
+
+    \draw[sa] (ta.220) --  (dec.140);
+
+    \draw[sa] (ta.347) --  (dec.13);
+
+
+    \draw[sa] (dec.35) --  (ta.325);
+
+    \draw[sb,out=290,in=130,] (dec.140) to  (dec.320);
+    \path[sb] (dec.13) edge[bend left=45]  (dec.35);
+    \path[sb] (ta.north east) edge[bend right=25]  (ta.347);
+    \node[n, left=2.5em of ced] (dec2) {\texttt{DocumentEventCapturer}};
+  \end{tikzpicture}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "1864-ex14"
+%%% End: 

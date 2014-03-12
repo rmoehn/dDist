@@ -1,0 +1,38 @@
+  \begin{tikzpicture}[node distance=1cm, auto]
+    \footnotesize
+    \useasboundingbox (-24em,12em) rectangle (20.5em,-15em);
+    \foreach \num/\dim/\sty in {1/-17em/none, 2/-3em/none, 3/11em/fade2} {
+    \begin{scope}[xshift=\dim, yshift=-4em]
+      \draw[ye,scope fading=\sty] (-3.5em,-5.5em) rectangle (9.5em,13.5em);
+      \node[r, minimum width=5em] (j\num) {\texttt{Jupiter}};
+      \node[g, handle, right=.5em of j\num] (o\num) {Out queue};
+      \node[b, handle, below=2em of o\num] (s\num) {\texttt{EventSender}};
+      \node[b, handle, above=10em of o\num] (r\num) {\texttt{EventReciver}};
+      \node[] (c\num) at (1em,10.1em) {\texttt{ClientHandle} \num};
+      \draw[sj] (o\num) --  (s\num);
+      \draw[sj] (r\num.south) --++(0,-2em);
+      \draw[sj] (o\num.north) ++(0,2em) -- (o\num.north);
+      \draw[sj, <->] (j\num.north) ++(0,2em) -- (j\num.north);
+    \end{scope}}
+
+    \node[r, path fading=fade1, minimum width=40em] (sed) {\texttt{ServerEventDristributor}};
+    \node[g, path fading=fade1, minimum width=40em, above=2em of sed] (iqueue) {\texttt{ServerInQueue}};
+      \draw[sj] (iqueue) -- (sed);
+      
+    \node[bigc] (net) at (0,-15em) {Network};
+
+      \draw[sj] (s1.south) -- (net.169);
+      \draw[sj] (s2.south) -- (net.50);
+      \draw[sj,path fading=fade2] (s3.south) -- (net.5);
+
+    \node[bigc] (net2) at (0,15em) {Network};
+
+      \draw[sj] (net2.191) -- (r1.north);
+      \draw[sj] (net2.310) -- (r2.north);
+      \draw[sj,path fading=fade2] (net2.-5) -- (r3.north);
+
+  \end{tikzpicture}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "1864-ex14"
+%%% End: 
