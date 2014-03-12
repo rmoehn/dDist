@@ -1,0 +1,14 @@
+PC1: 1 server, 1 client
+--
+PC2: connect client
+--
+PC2: disconnect client
+--
+PC2: connect client
+PC2: connect client
+--
+PC1: disconnect client
+--
+PC1: disconnect client (server mode to PC2)
+--
+PC1: connect client?
